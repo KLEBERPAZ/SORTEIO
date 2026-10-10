@@ -49602,7 +49602,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
     };
     this.WebFormCreate = function (Sender) {
       this.SetCaption("Sorteador Mega Sena e Loto Fácil - TMS Web Core");
-      this.WebLabel1.SetCaption("Sorteador de Números - Mega Sena e Loto Fácil");
+      this.WebLabel1.SetCaption("Aposte Sorteador de Números - Mega Sena e Loto Fácil");
       this.WebLabel4.SetCaption("Escolha o tipo de jogo:");
       this.WebLabel2.SetCaption("Quantidade de dezenas:");
       this.WebLabel3.SetCaption("Números sorteados:");
@@ -49620,6 +49620,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       var Quantidade = 0;
       var Numeros = [];
       var TipoJogo = 0;
+      var i = 0;
       Quantidade = pas.SysUtils.StrToIntDef(this.WebEdit1.GetText(),0);
       TipoJogo = this.WebComboBox1.GetItemIndex();
       if (TipoJogo === 0) {
@@ -49628,16 +49629,28 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
           this.WebMemo1.FLines.Add("Erro: Para a Mega Sena, a quantidade deve ser entre 6 e 15 dezenas.");
           return;
         };
-        Numeros = this.GerarJogoMegaSena(Quantidade);
-        this.ExibirNumeros(Numeros,"Mega Sena");
+        this.WebMemo1.FLines.Clear();
+        this.WebMemo1.FLines.Add("===== MEGA SENA =====");
+        this.WebMemo1.FLines.Add("");
+        for (i = 1; i <= 2; i++) {
+          Numeros = this.GerarJogoMegaSena(Quantidade);
+          this.ExibirNumeros(Numeros,"Mega Sena - Jogo " + pas.SysUtils.IntToStr(i));
+          this.WebMemo1.FLines.Add("");
+        };
       } else {
         if ((Quantidade < 15) || (Quantidade > 20)) {
           this.WebMemo1.FLines.Clear();
           this.WebMemo1.FLines.Add("Erro: Para a Loto Fácil, a quantidade deve ser entre 15 e 20 dezenas.");
           return;
         };
-        Numeros = this.GerarJogoLotoFacil(Quantidade);
-        this.ExibirNumeros(Numeros,"Loto Fácil");
+        this.WebMemo1.FLines.Clear();
+        this.WebMemo1.FLines.Add("===== LOTO FÁCIL =====");
+        this.WebMemo1.FLines.Add("");
+        for (i = 1; i <= 2; i++) {
+          Numeros = this.GerarJogoLotoFacil(Quantidade);
+          this.ExibirNumeros(Numeros,"Loto Fácil - Jogo " + pas.SysUtils.IntToStr(i));
+          this.WebMemo1.FLines.Add("");
+        };
       };
     };
     this.WebComboBox1Change = function (Sender) {
@@ -49719,7 +49732,6 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
     this.ExibirNumeros = function (Numeros, Titulo) {
       var i = 0;
       var Linha = "";
-      this.WebMemo1.FLines.Clear();
       Linha = "";
       for (var $l = 0, $end = rtl.length(Numeros) - 1; $l <= $end; $l++) {
         i = $l;
@@ -49728,7 +49740,6 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       };
       this.WebMemo1.FLines.Add("Jogo: " + Titulo);
       this.WebMemo1.FLines.Add(Linha);
-      this.WebMemo1.FLines.Add("");
       this.WebMemo1.FLines.Add("Total de dezenas: " + pas.SysUtils.IntToStr(rtl.length(Numeros)));
     };
     this.AplicarCoresDoJogo = function (TipoJogo) {
@@ -49766,7 +49777,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.SetName("Form1");
         this.SetWidth(640);
         this.SetHeight(520);
-        this.SetCaption("Sorteador Mega Sena e Loto Fácil - TMS Web Core");
+        this.SetCaption("Aposte Sorteador de Números - Mega Sena e Loto Fácil - TMS Web Core");
         this.SetColor(15329769);
         this.FFont.FCharset = 1;
         this.FFont.SetColor(65793);
@@ -49779,9 +49790,9 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebLabel1.SetName("WebLabel1");
         this.WebLabel1.SetLeft(24);
         this.WebLabel1.SetTop(16);
-        this.WebLabel1.SetWidth(426);
+        this.WebLabel1.SetWidth(493);
         this.WebLabel1.SetHeight(25);
-        this.WebLabel1.SetCaption("Sorteador de Números - Mega Sena e Loto Fácil");
+        this.WebLabel1.SetCaption("Aposte Sorteador de Números - Mega Sena e Loto Fácil");
         this.WebLabel1.SetColorEx(15790320);
         this.WebLabel1.FFont.FCharset = 1;
         this.WebLabel1.FFont.SetColor(32768);
