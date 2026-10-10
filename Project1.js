@@ -49632,7 +49632,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebMemo1.FLines.Clear();
         this.WebMemo1.FLines.Add("===== MEGA SENA =====");
         this.WebMemo1.FLines.Add("");
-        for (i = 1; i <= 2; i++) {
+        for (i = 1; i <= 3; i++) {
           Numeros = this.GerarJogoMegaSena(Quantidade);
           this.ExibirNumeros(Numeros,"Mega Sena - Jogo " + pas.SysUtils.IntToStr(i));
           this.WebMemo1.FLines.Add("");
@@ -49646,7 +49646,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebMemo1.FLines.Clear();
         this.WebMemo1.FLines.Add("===== LOTO FÁCIL =====");
         this.WebMemo1.FLines.Add("");
-        for (i = 1; i <= 2; i++) {
+        for (i = 1; i <= 3; i++) {
           Numeros = this.GerarJogoLotoFacil(Quantidade);
           this.ExibirNumeros(Numeros,"Loto Fácil - Jogo " + pas.SysUtils.IntToStr(i));
           this.WebMemo1.FLines.Add("");
