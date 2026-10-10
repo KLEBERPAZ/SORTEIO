@@ -49614,6 +49614,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       this.WebButton1.SetCaption("Sortear Números");
       this.WebMemo1.SetReadOnly(true);
       this.WebMemo1.FLines.Clear();
+      this.AplicarCoresDoJogo(this.WebComboBox1.GetItemIndex());
     };
     this.WebButton1Click = function (Sender) {
       var Quantidade = 0;
@@ -49643,6 +49644,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       if (this.WebComboBox1.GetItemIndex() === 0) {
         this.WebEdit1.SetText("6")}
        else this.WebEdit1.SetText("15");
+      this.AplicarCoresDoJogo(this.WebComboBox1.GetItemIndex());
     };
     this.GerarJogoMegaSena = function (QuantidadeNumeros) {
       var Result = [];
@@ -49729,6 +49731,19 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       this.WebMemo1.FLines.Add("");
       this.WebMemo1.FLines.Add("Total de dezenas: " + pas.SysUtils.IntToStr(rtl.length(Numeros)));
     };
+    this.AplicarCoresDoJogo = function (TipoJogo) {
+      if (TipoJogo === 0) {
+        this.SetColor(0xE8F5E9);
+        this.WebMemo1.SetColor(0xC8E6C9);
+        this.WebMemo1.FFont.SetColor(0x4D00);
+        this.WebLabel1.FFont.SetColor(0x8000);
+      } else {
+        this.SetColor(0xF3E5F5);
+        this.WebMemo1.SetColor(0xE1BEE7);
+        this.WebMemo1.FFont.SetColor(0x4A148C);
+        this.WebLabel1.FFont.SetColor(0x6A1B9A);
+      };
+    };
     this.LoadDFMValues = function () {
       pas["WEBLib.Forms"].TCustomForm.LoadDFMValues.call(this);
       this.WebLabel1 = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
@@ -49750,9 +49765,9 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       try {
         this.SetName("Form1");
         this.SetWidth(640);
-        this.SetHeight(480);
+        this.SetHeight(520);
         this.SetCaption("Sorteador Mega Sena e Loto Fácil - TMS Web Core");
-        this.SetColor(15790320);
+        this.SetColor(15329769);
         this.FFont.FCharset = 1;
         this.FFont.SetColor(65793);
         this.FFont.SetHeight(-13);
@@ -49769,7 +49784,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebLabel1.SetCaption("Sorteador de Números - Mega Sena e Loto Fácil");
         this.WebLabel1.SetColorEx(15790320);
         this.WebLabel1.FFont.FCharset = 1;
-        this.WebLabel1.FFont.SetColor(8388608);
+        this.WebLabel1.FFont.SetColor(32768);
         this.WebLabel1.FFont.SetHeight(-19);
         this.WebLabel1.FFont.SetName("Segoe UI");
         this.WebLabel1.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
@@ -49848,7 +49863,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebMemo1.SetLeft(24);
         this.WebMemo1.SetTop(224);
         this.WebMemo1.SetWidth(560);
-        this.WebMemo1.SetHeight(225);
+        this.WebMemo1.SetHeight(265);
         this.WebMemo1.SetHeightPercent(100.000000000000000000);
         this.WebMemo1.FLines.BeginUpdate();
         try {
