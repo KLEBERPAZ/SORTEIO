@@ -52704,6 +52704,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       var Linha = "";
       var Nome = "";
       var DataHora = "";
+      var Tipo = "";
       Historico = this.ObterHistorico();
       if (Historico === "") {
         this.WebHTMLDivComparacao.FHTML.SetTextStr('<div style="text-align:center; font-family:Arial,sans-serif; color:#C62828; ' + 'padding-top:120px; font-weight:bold;">' + "Nenhum sorteio salvo para comparar.<br>" + '<span style="font-weight:normal;">Faça um sorteio e clique em "Salvar Sorteio".</span>' + "</div>");
@@ -52731,8 +52732,9 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         if (rtl.length(JogoSalvo) === 0) continue;
         Nome = this.ExtrairNomeDaLinha(Linha);
         DataHora = this.ExtrairDataHoraDaLinha(Linha);
+        Tipo = this.ExtrairTipoDaLinha(Linha);
         Acertos = this.ContarAcertos(JogoSalvo,ResultadoDia);
-        HTML = HTML + this.GerarHTMLLinhaComparada(Nome,DataHora,JogoSalvo,ResultadoDia,Acertos);
+        HTML = HTML + this.GerarHTMLLinhaComparada(Nome,DataHora,Tipo,JogoSalvo,ResultadoDia,Acertos);
       };
       HTML = HTML + "</div>";
       this.WebHTMLDivComparacao.FHTML.SetTextStr(HTML);
@@ -53101,6 +53103,18 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       if ((P > 1) && (Linha.charAt(0) === "[")) Result = pas.System.Copy(Linha,2,P - 2);
       return Result;
     };
+    this.ExtrairTipoDaLinha = function (Linha) {
+      var Result = "";
+      var P1 = 0;
+      var P2 = 0;
+      Result = "";
+      P1 = pas.System.Pos("|",Linha);
+      if (P1 === 0) return Result;
+      P2 = pas.System.Pos("->",Linha);
+      if (P2 === 0) return Result;
+      if (P2 > P1) Result = pas.SysUtils.Trim(pas.System.Copy(Linha,P1 + 1,P2 - P1 - 1));
+      return Result;
+    };
     this.PertenceAoResultado = function (Numero, ResultadoDia) {
       var Result = false;
       var i = 0;
@@ -53129,23 +53143,46 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       Result = Result + "</div>";
       return Result;
     };
-    this.GerarHTMLLinhaComparada = function (Nome, DataHora, JogoSalvo, ResultadoDia, Acertos) {
+    this.GerarHTMLLinhaComparada = function (Nome, DataHora, Tipo, JogoSalvo, ResultadoDia, Acertos) {
       var Result = "";
       var CorPrefixo = "";
       var Prefixo = "";
       var Bolinhas = "";
       var NomeSeguro = "";
-      if (Acertos > 0) {
+      var Faixa = "";
+      var Ganhou = false;
+      var Borda = "";
+      var Fundo = "";
+      var FaixaHTML = "";
+      Ganhou = this.EhGanhador(Tipo,Acertos);
+      if (Ganhou) {
+        CorPrefixo = "#B8860B";
+        Prefixo = "GANHOU! " + pas.SysUtils.IntToStr(Acertos) + " ACERTOS";
+        Faixa = this.NomeFaixaPremio(Tipo,Acertos);
+        Borda = "3px solid #FFD700";
+        Fundo = "#FFF8DC";
+      } else if (Acertos > 0) {
         CorPrefixo = "#2E7D32";
         Prefixo = "ACERTOU " + pas.SysUtils.IntToStr(Acertos);
+        Faixa = "";
+        Borda = "1px solid #ccc";
+        Fundo = "#fafafa";
       } else {
         CorPrefixo = "#C62828";
         Prefixo = "ZERO ACERTOS";
+        Faixa = "";
+        Borda = "1px solid #ccc";
+        Fundo = "#fafafa";
       };
       NomeSeguro = Nome;
       if (NomeSeguro === "") NomeSeguro = "Apostador";
       Bolinhas = this.GerarBolinhasHTML(JogoSalvo,ResultadoDia,true);
-      Result = '<div style="border:1px solid #ccc; border-radius:6px; padding:5px 8px; ' + 'margin:5px auto; max-width:740px; background:#fafafa;">' + '<div style="font-size:13px; color:#444; font-weight:bold; ' + 'margin-bottom:3px; text-align:center;">' + "👤 " + NomeSeguro + "</div>" + '<div style="font-size:12px; color:' + CorPrefixo + "; " + 'font-weight:bold; margin-bottom:3px; text-align:center;">' + Prefixo + " &nbsp;|&nbsp; " + DataHora + "</div>" + Bolinhas + "</div>";
+      if (Ganhou && (Faixa !== "")) {
+        FaixaHTML = '<div style="background:#FFD700; color:#000; font-weight:bold; ' + "font-size:14px; padding:4px 8px; border-radius:4px; " + 'display:inline-block; margin-bottom:4px;">' + "🏆 GANHOU - " + Faixa + " 🏆" + "</div>"}
+       else if (Ganhou) {
+        FaixaHTML = '<div style="background:#FFD700; color:#000; font-weight:bold; ' + "font-size:14px; padding:4px 8px; border-radius:4px; " + 'display:inline-block; margin-bottom:4px;">' + "🏆 GANHOU! 🏆" + "</div>"}
+       else FaixaHTML = "";
+      Result = '<div style="border:' + Borda + "; border-radius:6px; padding:5px 8px; " + "margin:5px auto; max-width:740px; background:" + Fundo + ';">' + '<div style="font-size:13px; color:#444; font-weight:bold; ' + 'margin-bottom:3px; text-align:center;">' + "👤 " + NomeSeguro + "</div>" + FaixaHTML + '<div style="font-size:12px; color:' + CorPrefixo + "; " + 'font-weight:bold; margin-bottom:3px; text-align:center;">' + Prefixo + " &nbsp;|&nbsp; " + DataHora + "</div>" + Bolinhas + "</div>";
       return Result;
     };
     this.CorBolinha = function (Numero, ResultadoDia, ModoComparacao) {
@@ -53211,10 +53248,6 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
     };
     this.ExcluirApostaSelecionada = function () {
       var LinhaSelecionada = "";
-      var Historico = "";
-      var NovoHistorico = "";
-      var Linhas = [];
-      var i = 0;
       var Removido = false;
       if (this.WebComboBoxApostas.GetItemIndex() < 0) {
         this.WebMemo1.FLines.Clear();
@@ -53241,7 +53274,6 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       var Historico = "";
       var Linhas = [];
       var i = 0;
-      var Total = 0;
       var NovoLote = "";
       var LinhaAtual = "";
       var Encontrado = false;
@@ -53254,7 +53286,6 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
           Historico = v;
         }},["\n"]);
       NovoLote = "";
-      Total = 0;
       Encontrado = false;
       for (var $l = 0, $end = rtl.length(Linhas) - 1; $l <= $end; $l++) {
         i = $l;
@@ -53267,11 +53298,47 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         if (NovoLote === "") {
           NovoLote = LinhaAtual}
          else NovoLote = NovoLote + "\n" + LinhaAtual;
-        Total += 1;
       };
       if (!Encontrado) return Result;
       this.SalvarHistorico(NovoLote);
       Result = true;
+      return Result;
+    };
+    this.EhGanhador = function (Tipo, Acertos) {
+      var Result = false;
+      var TipoUp = "";
+      TipoUp = pas.SysUtils.UpperCase(Tipo);
+      if (pas.System.Pos("MEGA",TipoUp) > 0) {
+        Result = (Acertos >= 4) && (Acertos <= 6)}
+       else if (pas.System.Pos("LOTO",TipoUp) > 0) {
+        Result = (Acertos >= 11) && (Acertos <= 15)}
+       else Result = false;
+      return Result;
+    };
+    this.NomeFaixaPremio = function (Tipo, Acertos) {
+      var Result = "";
+      var TipoUp = "";
+      Result = "";
+      TipoUp = pas.SysUtils.UpperCase(Tipo);
+      if (pas.System.Pos("MEGA",TipoUp) > 0) {
+        var $tmp = Acertos;
+        if ($tmp === 6) {
+          Result = "SENA"}
+         else if ($tmp === 5) {
+          Result = "QUINA"}
+         else if ($tmp === 4) Result = "QUADRA";
+      } else if (pas.System.Pos("LOTO",TipoUp) > 0) {
+        var $tmp1 = Acertos;
+        if ($tmp1 === 15) {
+          Result = "15 ACERTOS"}
+         else if ($tmp1 === 14) {
+          Result = "14 ACERTOS"}
+         else if ($tmp1 === 13) {
+          Result = "13 ACERTOS"}
+         else if ($tmp1 === 12) {
+          Result = "12 ACERTOS"}
+         else if ($tmp1 === 11) Result = "11 ACERTOS";
+      };
       return Result;
     };
     this.LoadDFMValues = function () {
