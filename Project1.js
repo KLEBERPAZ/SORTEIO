@@ -52717,7 +52717,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       if (TipoJogo === 0) {
         ResultadoDia = this.GerarJogoMegaSenaComSemente(6,Semente)}
        else ResultadoDia = this.GerarJogoLotoFacilComSemente(15,Semente);
-      HTML = '<div style="font-family: Arial, sans-serif; text-align:center; padding:6px;">';
+      HTML = '<div style="font-family: Arial, sans-serif; text-align:center; padding:6px; ' + "max-height: 520px; overflow-y: auto; overflow-x: hidden; " + 'border: 1px solid #ddd; border-radius: 6px; background: #fff;">';
       HTML = HTML + '<div style="font-size:15px; font-weight:bold; margin-bottom:6px; color:#333;">' + "Comparação com Jogos Salvos</div>";
       HTML = HTML + '<div style="font-size:12px; color:#666; margin-bottom:10px;">' + "Resultado do Dia: " + this.FormatarNumeros(ResultadoDia) + "</div>";
       HTML = HTML + '<hr style="border:none; border-top:1px dashed #999; margin:8px 0;">';
