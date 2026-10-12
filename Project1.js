@@ -2408,6 +2408,7 @@ rtl.module("System",[],function () {
   this.$rtti.$DynArray("TArray<RTTI.TRttiProperty>",{});
   this.$rtti.$DynArray("TArray<Classes.TPersistentClass>",{});
   this.$rtti.$DynArray("TArray<System.Longint>",{eltype: rtl.longint});
+  this.$rtti.$DynArray("TArray<System.String>",{eltype: rtl.string});
   $mod.$implcode = function () {
     $mod.$rtti.$ExtClass("TJSObj",{jsclass: "Object"});
     $mod.$rtti.$ExtClass("TJSArray",{jsclass: "Array"});
@@ -49574,7 +49575,2936 @@ rtl.module("WEBLib.StdCtrls",["System","Classes","WEBLib.Controls","SysUtils","W
     return Result;
   };
 });
-rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","WEBLib.Controls","WEBLib.Forms","WEBLib.Dialogs","WEBLib.StdCtrls","WEBLib.Controls","WEBLib.StdCtrls"],function () {
+rtl.module("WEBLib.WebCtrls",["System","Classes","WEBLib.Controls","WEBLib.Graphics","SysUtils","Web","JS","WEBLib.Menus"],function () {
+  "use strict";
+  var $mod = this;
+  var $impl = $mod.$impl;
+  this.TBrowserSandboxType = {"0": "stAllowForms", stAllowForms: 0, "1": "stAllowModals", stAllowModals: 1, "2": "stAllowOrientationLock", stAllowOrientationLock: 2, "3": "stAllowPointerLock", stAllowPointerLock: 3, "4": "stAllowPopups", stAllowPopups: 4, "5": "stAllowPopupsToEscapeSandbox", stAllowPopupsToEscapeSandbox: 5, "6": "stAllowPresentation", stAllowPresentation: 6, "7": "stAllowSameOrigin", stAllowSameOrigin: 7, "8": "stAllowScripts", stAllowScripts: 8, "9": "stAllowTopNavigation", stAllowTopNavigation: 9, "10": "stAllowTopNavigationByUserActivation", stAllowTopNavigationByUserActivation: 10};
+  this.$rtti.$Enum("TBrowserSandboxType",{minvalue: 0, maxvalue: 10, ordtype: 1, enumtype: this.TBrowserSandboxType});
+  this.$rtti.$Set("TBrowserSandboxTypes",{comptype: this.$rtti["TBrowserSandboxType"]});
+  this.TBrowserReferrerPolicy = {"0": "rfNone", rfNone: 0, "1": "rfNoReferrer", rfNoReferrer: 1, "2": "rfNoReferrerWhenDowngrade", rfNoReferrerWhenDowngrade: 2, "3": "rfOrigin", rfOrigin: 3, "4": "rfOriginWhenCrossOrigin", rfOriginWhenCrossOrigin: 4, "5": "rfUnsafeUrl", rfUnsafeUrl: 5};
+  this.$rtti.$Enum("TBrowserReferrerPolicy",{minvalue: 0, maxvalue: 5, ordtype: 1, enumtype: this.TBrowserReferrerPolicy});
+  this.$rtti.$MethodVar("TBrowserLoadEvent",{procsig: rtl.newTIProcSig([["Sender",pas.System.$rtti["TObject"]],["AEvent",pas.Web.$rtti["TJSEvent"]]]), methodkind: 0});
+  rtl.createClass(this,"TBrowserControl",pas["WEBLib.Controls"].TCustomControl,function () {
+    this.$init = function () {
+      pas["WEBLib.Controls"].TCustomControl.$init.call(this);
+      this.FURL = "";
+      this.FSandbox = {};
+      this.FReferrerPolicy = 0;
+      this.FLoadPtr = null;
+      this.FOnLoad = null;
+    };
+    this.$final = function () {
+      this.FSandbox = undefined;
+      this.FOnLoad = undefined;
+      pas["WEBLib.Controls"].TCustomControl.$final.call(this);
+    };
+    this.SetURL = function (Value) {
+      var el = null;
+      this.FURL = Value;
+      el = this.GetElementHandle();
+      el.setAttribute("src",Value);
+    };
+    this.SetSandbox = function (Value) {
+      this.FSandbox = rtl.refSet(Value);
+      this.UpdateElementVisual();
+    };
+    this.SetReferrerPolicy = function (Value) {
+      this.FReferrerPolicy = Value;
+      this.UpdateElementVisual();
+    };
+    this.DoLoad = function (Event) {
+      if (this.FOnLoad != null) this.FOnLoad(this,Event);
+    };
+    this.CreateElement = function () {
+      var Result = null;
+      Result = document.createElement("IFRAME");
+      return Result;
+    };
+    this.UpdateElementVisual = function () {
+      var $Self = this;
+      var SandboxStr = "";
+      function AppendStr(s, appstr) {
+        if (s.get() === "") {
+          s.set(appstr)}
+         else s.set(s.get() + " " + appstr);
+      };
+      pas["WEBLib.Controls"].TCustomControl.UpdateElementVisual.call(this);
+      if (this.FBorderStyle === pas["WEBLib.Controls"].TBorderStyle.bsSingle) {
+        this.GetElementHandle().style.setProperty("border","1px solid silver")}
+       else this.GetElementHandle().style.setProperty("border","0px");
+      SandboxStr = "";
+      if ($mod.TBrowserSandboxType.stAllowForms in this.FSandbox) AppendStr({get: function () {
+          return SandboxStr;
+        }, set: function (v) {
+          SandboxStr = v;
+        }},"allow-forms");
+      if ($mod.TBrowserSandboxType.stAllowModals in this.FSandbox) AppendStr({get: function () {
+          return SandboxStr;
+        }, set: function (v) {
+          SandboxStr = v;
+        }},"allow-modals");
+      if ($mod.TBrowserSandboxType.stAllowOrientationLock in this.FSandbox) AppendStr({get: function () {
+          return SandboxStr;
+        }, set: function (v) {
+          SandboxStr = v;
+        }},"allow-orientation-lock");
+      if ($mod.TBrowserSandboxType.stAllowPointerLock in this.FSandbox) AppendStr({get: function () {
+          return SandboxStr;
+        }, set: function (v) {
+          SandboxStr = v;
+        }},"allow-pointer-lock");
+      if ($mod.TBrowserSandboxType.stAllowPopups in this.FSandbox) AppendStr({get: function () {
+          return SandboxStr;
+        }, set: function (v) {
+          SandboxStr = v;
+        }},"allow-popups");
+      if ($mod.TBrowserSandboxType.stAllowPopupsToEscapeSandbox in this.FSandbox) AppendStr({get: function () {
+          return SandboxStr;
+        }, set: function (v) {
+          SandboxStr = v;
+        }},"allow-popups-to-escape-sandbox");
+      if ($mod.TBrowserSandboxType.stAllowPresentation in this.FSandbox) AppendStr({get: function () {
+          return SandboxStr;
+        }, set: function (v) {
+          SandboxStr = v;
+        }},"allow-presentation");
+      if ($mod.TBrowserSandboxType.stAllowSameOrigin in this.FSandbox) AppendStr({get: function () {
+          return SandboxStr;
+        }, set: function (v) {
+          SandboxStr = v;
+        }},"allow-same-origin");
+      if ($mod.TBrowserSandboxType.stAllowScripts in this.FSandbox) AppendStr({get: function () {
+          return SandboxStr;
+        }, set: function (v) {
+          SandboxStr = v;
+        }},"allow-scripts");
+      if ($mod.TBrowserSandboxType.stAllowTopNavigation in this.FSandbox) AppendStr({get: function () {
+          return SandboxStr;
+        }, set: function (v) {
+          SandboxStr = v;
+        }},"allow-top-navigation");
+      if ($mod.TBrowserSandboxType.stAllowTopNavigationByUserActivation in this.FSandbox) AppendStr({get: function () {
+          return SandboxStr;
+        }, set: function (v) {
+          SandboxStr = v;
+        }},"allow-top-navigation-by-user-activation");
+      if (SandboxStr !== "") {
+        this.GetElementHandle().setAttribute("sandbox",SandboxStr);
+      };
+      var $tmp = this.FReferrerPolicy;
+      if ($tmp === $mod.TBrowserReferrerPolicy.rfNoReferrer) {
+        this.GetElementHandle().setAttribute("referrerpolicy","no-referrer")}
+       else if ($tmp === $mod.TBrowserReferrerPolicy.rfNoReferrerWhenDowngrade) {
+        this.GetElementHandle().setAttribute("referrerpolicy","no-referrer-when-downgrade")}
+       else if ($tmp === $mod.TBrowserReferrerPolicy.rfOrigin) {
+        this.GetElementHandle().setAttribute("referrerpolicy","origin")}
+       else if ($tmp === $mod.TBrowserReferrerPolicy.rfOriginWhenCrossOrigin) {
+        this.GetElementHandle().setAttribute("referrerpolicy","origin-when-cross-origin")}
+       else if ($tmp === $mod.TBrowserReferrerPolicy.rfUnsafeUrl) this.GetElementHandle().setAttribute("referrerpolicy","unsafe-url");
+    };
+    this.BindEvents = function () {
+      var eh = null;
+      pas["WEBLib.Controls"].TCustomControl.BindEvents.call(this);
+      if (this.GetElementBindHandle() != null) {
+        eh = this.GetElementBindHandle();
+        eh.addEventListener("load",this.FLoadPtr);
+      };
+    };
+    this.UnbindEvents = function () {
+      var eh = null;
+      pas["WEBLib.Controls"].TControl.UnbindEvents.call(this);
+      if (this.GetElementBindHandle() != null) {
+        eh = this.GetElementBindHandle();
+        eh.removeEventListener("load",this.FLoadPtr);
+      };
+    };
+    this.ClearMethodPointers = function () {
+      pas["WEBLib.Controls"].TControl.ClearMethodPointers.call(this);
+      this.FLoadPtr = null;
+    };
+    this.GetMethodPointers = function () {
+      pas["WEBLib.Controls"].TControl.GetMethodPointers.call(this);
+      this.FLoadPtr = rtl.createCallback(this,"DoLoad");
+    };
+    this.CreateInitialize = function () {
+      pas["WEBLib.Controls"].TCustomControl.CreateInitialize.call(this);
+      this.SetWidth(400);
+      this.SetHeight(300);
+    };
+    this.Navigate = function (AURL) {
+      this.SetURL(AURL);
+    };
+    this.CurrentURL = function () {
+      var Result = "";
+      var url = "";
+      var el = null;
+      el = this.GetElementHandle();
+      url = el.contentWindow.location;
+      Result = url;
+      return Result;
+    };
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+    var $r = this.$rtti;
+    $r.addProperty("Align",2,pas["WEBLib.Controls"].$rtti["TAlign"],"FAlign","SetAlign",4,{Default: pas["WEBLib.Controls"].TAlign.alNone});
+    $r.addProperty("AlignWithMargins",2,rtl.boolean,"FAlignWithMargins","SetAlignWithMargins",4,{Default: false});
+    $r.addProperty("Anchors",2,pas["WEBLib.Controls"].$rtti["TAnchors"],"FAnchors","SetAnchors",4,{Default: rtl.createSet(pas["WEBLib.Controls"].TAnchorKind.akLeft,pas["WEBLib.Controls"].TAnchorKind.akTop)});
+    $r.addProperty("BorderStyle",2,pas["WEBLib.Controls"].$rtti["TBorderStyle"],"FBorderStyle","SetBorderStyle",4,{Default: pas["WEBLib.Controls"].TBorderStyle.bsSingle});
+    $r.addProperty("ReferrerPolicy",2,$mod.$rtti["TBrowserReferrerPolicy"],"FReferrerPolicy","SetReferrerPolicy");
+    $r.addProperty("Sandbox",2,$mod.$rtti["TBrowserSandboxTypes"],"FSandbox","SetSandbox");
+    $r.addProperty("URL",2,rtl.string,"FURL","SetURL");
+    $r.addProperty("Visible",2,rtl.boolean,"FVisible","SetVisible",4,{Default: true});
+    $r.addProperty("OnClick",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnClick","FOnClick");
+    $r.addProperty("OnDblClick",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnDblClick","FOnDblClick");
+    $r.addProperty("OnLoad",0,$mod.$rtti["TBrowserLoadEvent"],"FOnLoad","FOnLoad");
+    $r.addProperty("OnMouseDown",0,pas["WEBLib.Controls"].$rtti["TMouseEvent"],"FOnMouseDown","FOnMouseDown");
+    $r.addProperty("OnMouseMove",0,pas["WEBLib.Controls"].$rtti["TMouseMoveEvent"],"FOnMouseMove","FOnMouseMove");
+    $r.addProperty("OnMouseUp",0,pas["WEBLib.Controls"].$rtti["TMouseEvent"],"FOnMouseUp","FOnMouseUp");
+  });
+  rtl.createClass(this,"TWebBrowserControl",this.TBrowserControl,function () {
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+  });
+  rtl.createClass(this,"TYoutube",pas["WEBLib.Controls"].TCustomControl,function () {
+    this.$init = function () {
+      pas["WEBLib.Controls"].TCustomControl.$init.call(this);
+      this.FVideoID = "";
+      this.FAllowFullScreen = false;
+      this.FAutoPlay = false;
+    };
+    this.SetAllowFullScreen = function (Value) {
+      this.FAllowFullScreen = Value;
+      this.UpdateElement();
+    };
+    this.SetVideoID = function (Value) {
+      this.FVideoID = Value;
+      this.UpdateElement();
+    };
+    this.CreateElement = function () {
+      var Result = null;
+      var LDiv = null;
+      if (pas.Classes.TComponentStateItem.csDesigning in this.FComponentState) {
+        LDiv = document.createElement("DIV");
+        LDiv.style.setProperty("background-color","slategray");
+        LDiv.style.setProperty("background-repeat","no-repeat");
+        LDiv.style.setProperty("background-position-y","center");
+        LDiv.style.setProperty("background-image","url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAuNDc5OTk5OTU5NDY4ODQyIDE2OS43MDk4Njkz" + "ODQ3NjYgMTE5LjA4NTYyODA5MjI4OSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PG" + "RlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJkZWYwIiB4MT0iMC41IiB4Mj0iMC41IiB5MT0iMSIgeTI9IjMuMTAwNzJFLTA2Ij48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNG" + "RjAwMDAiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNGRjZCMDAiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48Zz48cGF0aCBkPSJNMzEuMDI5MywxLjc3NzM0QzEzLj" + "E0MjcsMi45OTQ2Nyw0LjE1NDY3LDYuMTIsMS40ODgsMjguNzkzM0wxLjQ4OCwyOC43OTMzQzAuNTA2NjY3LDM3LjEzNiwwLjAwOTMzMzMzLDQ4LjQwMTMsMCw1OS42OTg3TDAsNjAu" + "MzQ1M0MwLjAwOTMzMzMzLDcxLjYyOTMsMC41MDQsODIuODg5MywxLjQ4OCw5MS4yNTA3TDEuNDg4LDkxLjI1MDdDNC4xNTQ2NywxMTMuOTI3LDEzLjE0MjcsMTE3LjA1MiwzMS4wMj" + "kzLDExOC4yNjdMMzEuMDI5MywxMTguMjY3QzU2LjQ3NzMsMTIwLDExMy4yNTEsMTE5Ljk5NywxMzguNjgsMTE4LjI2N0wxMzguNjgsMTE4LjI2N0MxNTYuNTY4LDExNy4wNTIsMTY1" + "LjU1NSwxMTMuOTI3LDE2OC4yMjMsOTEuMjUwN0wxNjguMjIzLDkxLjI1MDdDMTcwLjIwMyw3NC40MTczLDE3MC4yMDgsNDUuNjg2NywxNjguMjIzLDI4Ljc5MzNMMTY4LjIyMywyOC" + "43OTMzQzE2NS41NTUsNi4xMTg2OCwxNTYuNTY4LDIuOTk0NjcsMTM4LjY4LDEuNzc3MzRMMTM4LjY4LDEuNzc3MzRDMTI1Ljk2MywwLjkxMjAxLDEwNS4zOTcsMC40ODAwMDMsODQu" + "ODQsMC40ODAwMDNMODQuODQsMC40ODAwMDNDNjQuMjkyLDAuNDc4Njc2LDQzLjc1MDcsMC45MTIwMSwzMS4wMjkzLDEuNzc3MzR6IiBmaWxsPSJ1cmwoI2RlZjApIi8+PHBhdGggZD" + "0iTTEwOC40MjUsNjAuMDIyN0w2Mi4yNDE5LDkxLjk0NjcgNjIuMjQxOSwyOC4wOTg3IDEwOC40MjUsNjAuMDIyN3oiIGZpbGw9IiNGRkZGRkYiLz48L2c+PC9zdmc+)");
+        LDiv.style.setProperty("background-position-x","center");
+        LDiv.style.setProperty("background-size","128px");
+        Result = LDiv;
+      } else {
+        Result = document.createElement("IFRAME");
+        Result.setAttribute("id",this.GetID());
+        Result.setAttribute("frameborder","0");
+      };
+      return Result;
+    };
+    this.UpdateElement = function () {
+      var FURL = "";
+      pas["WEBLib.Controls"].TControl.UpdateElement.call(this);
+      if (this.IsUpdating()) return;
+      if (pas.Classes.TComponentStateItem.csDesigning in this.FComponentState) {
+        if (this.GetElementHandle() != null) {
+          this.GetElementHandle().style.setProperty("background-color","slategray");
+        };
+      };
+      if (this.GetContainer() != null) {
+        if (this.FVideoID !== "") {
+          FURL = "https://www.youtube.com/embed/" + this.FVideoID;
+          if (this.FAutoPlay) FURL = FURL + "?autoplay=1";
+          this.GetContainer().setAttribute("src",FURL);
+        };
+        if (this.FAllowFullScreen) {
+          this.GetContainer().setAttribute("allowfullscreen","allowfullscreen")}
+         else this.GetContainer().removeAttribute("allowfullscreen");
+      };
+    };
+    this.UpdateElementVisual = function () {
+      pas["WEBLib.Controls"].TCustomControl.UpdateElementVisual.call(this);
+      if (this.IsUpdating()) return;
+      if (pas.Classes.TComponentStateItem.csDesigning in this.FComponentState) {
+        if (this.GetElementHandle() != null) {
+          this.GetElementHandle().style.setProperty("background-color","slategray");
+        };
+      };
+    };
+    this.CreateInitialize = function () {
+      pas["WEBLib.Controls"].TCustomControl.CreateInitialize.call(this);
+      this.SetWidth(400);
+      this.SetHeight(300);
+    };
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+    var $r = this.$rtti;
+    $r.addProperty("Align",2,pas["WEBLib.Controls"].$rtti["TAlign"],"FAlign","SetAlign",4,{Default: pas["WEBLib.Controls"].TAlign.alNone});
+    $r.addProperty("AllowFullScreen",2,rtl.boolean,"FAllowFullScreen","SetAllowFullScreen");
+    $r.addProperty("AutoPlay",0,rtl.boolean,"FAutoPlay","FAutoPlay");
+    $r.addProperty("Center",0,pas["WEBLib.Controls"].$rtti["TCenter"],"FCenter","");
+    $r.addProperty("VideoID",2,rtl.string,"FVideoID","SetVideoID");
+  });
+  rtl.createClass(this,"TWebYoutube",this.TYoutube,function () {
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+  });
+  this.$rtti.$MethodVar("TMapClickEvent",{procsig: rtl.newTIProcSig([["Sender",pas.System.$rtti["TObject"]],["Lon",rtl.double],["Lat",rtl.double]]), methodkind: 0});
+  this.$rtti.$MethodVar("TMapZoomEvent",{procsig: rtl.newTIProcSig([["Sender",pas.System.$rtti["TObject"]],["ZoomLevel",rtl.longint]]), methodkind: 0});
+  this.$rtti.$MethodVar("TMapMarkerClickEvent",{procsig: rtl.newTIProcSig([["Sender",pas.System.$rtti["TObject"]],["AIndex",rtl.longint],["AMarker",pas["WEBLib.Controls"].$rtti["TJSObjectRecord"]]]), methodkind: 0});
+  this.$rtti.$MethodVar("TMapPolygonClickEvent",{procsig: rtl.newTIProcSig([["Sender",pas.System.$rtti["TObject"]],["AIndex",rtl.longint],["APolygon",pas["WEBLib.Controls"].$rtti["TJSObjectRecord"]]]), methodkind: 0});
+  this.$rtti.$MethodVar("TMapPolylineClickEvent",{procsig: rtl.newTIProcSig([["Sender",pas.System.$rtti["TObject"]],["AIndex",rtl.longint],["APolyline",pas["WEBLib.Controls"].$rtti["TJSObjectRecord"]]]), methodkind: 0});
+  this.$rtti.$MethodVar("TMapCircleClickEvent",{procsig: rtl.newTIProcSig([["Sender",pas.System.$rtti["TObject"]],["AIndex",rtl.longint],["ACircle",pas["WEBLib.Controls"].$rtti["TJSObjectRecord"]]]), methodkind: 0});
+  this.$rtti.$MethodVar("TMapRectangleClickEvent",{procsig: rtl.newTIProcSig([["Sender",pas.System.$rtti["TObject"]],["AIndex",rtl.longint],["ARectangle",pas["WEBLib.Controls"].$rtti["TJSObjectRecord"]]]), methodkind: 0});
+  this.$rtti.$MethodVar("TMapKMLClickEvent",{procsig: rtl.newTIProcSig([["Sender",pas.System.$rtti["TObject"]],["AIndex",rtl.longint],["AKML",pas["WEBLib.Controls"].$rtti["TJSObjectRecord"]]]), methodkind: 0});
+  this.$rtti.$MethodVar("TDirectionsShownEvent",{procsig: rtl.newTIProcSig([["Sender",pas.System.$rtti["TObject"]],["Routes",pas.JS.$rtti["TJSObject"]]]), methodkind: 0});
+  this.TGoogleMarkerColor = {"0": "mcDefault", mcDefault: 0, "1": "mcRed", mcRed: 1, "2": "mcBlue", mcBlue: 2, "3": "mcGreen", mcGreen: 3, "4": "mcPurple", mcPurple: 4, "5": "mcYellow", mcYellow: 5};
+  this.$rtti.$Enum("TGoogleMarkerColor",{minvalue: 0, maxvalue: 5, ordtype: 1, enumtype: this.TGoogleMarkerColor});
+  this.TGoogleMarkerShape = {"0": "msPin", msPin: 0, "1": "msPinDot", msPinDot: 1, "2": "msFlag", msFlag: 2, "3": "msBookmark", msBookmark: 3, "4": "msFlagSmall", msFlagSmall: 4, "5": "msHome", msHome: 5, "6": "msFavorite", msFavorite: 6, "7": "msStar", msStar: 7, "8": "msCustom", msCustom: 8};
+  this.$rtti.$Enum("TGoogleMarkerShape",{minvalue: 0, maxvalue: 8, ordtype: 1, enumtype: this.TGoogleMarkerShape});
+  this.TGoogleTravelMode = {"0": "tmDriving", tmDriving: 0, "1": "tmWalking", tmWalking: 1, "2": "tmBicycling", tmBicycling: 2, "3": "tmTransit", tmTransit: 3};
+  this.$rtti.$Enum("TGoogleTravelMode",{minvalue: 0, maxvalue: 3, ordtype: 1, enumtype: this.TGoogleTravelMode});
+  this.TGoogleMapType = {"0": "mtDefault", mtDefault: 0, "1": "mtSatellite", mtSatellite: 1, "2": "mtHybrid", mtHybrid: 2, "3": "mtTerrain", mtTerrain: 3};
+  this.$rtti.$Enum("TGoogleMapType",{minvalue: 0, maxvalue: 3, ordtype: 1, enumtype: this.TGoogleMapType});
+  this.TGoogleMapStyle = {"0": "mstDefault", mstDefault: 0, "1": "mstNightMode", mstNightMode: 1, "2": "mstCustom", mstCustom: 2};
+  this.$rtti.$Enum("TGoogleMapStyle",{minvalue: 0, maxvalue: 2, ordtype: 1, enumtype: this.TGoogleMapStyle});
+  this.$rtti.$Class("TGoogleMaps");
+  rtl.createClass(this,"TGoogleMapsOptions",pas.Classes.TPersistent,function () {
+    this.$init = function () {
+      pas.Classes.TPersistent.$init.call(this);
+      this.FOwner = null;
+      this.FCustomStyle = null;
+      this.FMapStyle = 0;
+      this.FDefaultLongitude = 0.0;
+      this.FDefaultLatitude = 0.0;
+      this.FDefaultZoomLevel = 0;
+    };
+    this.$final = function () {
+      this.FOwner = undefined;
+      this.FCustomStyle = undefined;
+      pas.Classes.TPersistent.$final.call(this);
+    };
+    this.SetCustomStyle = function (Value) {
+      this.FCustomStyle.Assign(Value);
+    };
+    this.SetMapStyle = function (Value) {
+      var map = null;
+      var cstyle = "";
+      var ostyle = null;
+      this.FMapStyle = Value;
+      map = this.FOwner.GetMap();
+      if (!(map != null)) return;
+      if (this.FMapStyle === $mod.TGoogleMapStyle.mstNightMode) {
+        var myStyle =
+              [
+                {
+                  "elementType": "geometry",
+                  "stylers": [
+                    {
+                      "color": "#242f3e"
+                    }
+                  ]
+                },
+                {
+                  "elementType": "labels.text.fill",
+                  "stylers": [
+                    {
+                      "color": "#746855"
+                    }
+                  ]
+                },
+                {
+                  "elementType": "labels.text.stroke",
+                  "stylers": [
+                    {
+                      "color": "#242f3e"
+                    }
+                  ]
+                },
+                {
+                  "featureType": "administrative.locality",
+                  "elementType": "labels.text.fill",
+                  "stylers": [
+                    {
+                      "color": "#d59563"
+                    }
+                  ]
+                },
+                {
+                  "featureType": "poi",
+                  "elementType": "labels.text.fill",
+                  "stylers": [
+                    {
+                      "color": "#d59563"
+                    }
+                  ]
+                },
+                {
+                  "featureType": "poi.park",
+                  "elementType": "geometry",
+                  "stylers": [
+                    {
+                      "color": "#263c3f"
+                    }
+                  ]
+                },
+                {
+                  "featureType": "poi.park",
+                  "elementType": "labels.text.fill",
+                  "stylers": [
+                    {
+                      "color": "#6b9a76"
+                    }
+                  ]
+                },
+                {
+                  "featureType": "road",
+                  "elementType": "geometry",
+                  "stylers": [
+                    {
+                      "color": "#38414e"
+                    }
+                  ]
+                },
+                {
+                  "featureType": "road",
+                  "elementType": "geometry.stroke",
+                  "stylers": [
+                    {
+                      "color": "#212a37"
+                    }
+                  ]
+                },
+                {
+                  "featureType": "road",
+                  "elementType": "labels.text.fill",
+                  "stylers": [
+                    {
+                      "color": "#9ca5b3"
+                    }
+                  ]
+                },
+                {
+                  "featureType": "road.highway",
+                  "elementType": "geometry",
+                  "stylers": [
+                    {
+                      "color": "#746855"
+                    }
+                  ]
+                },
+                {
+                  "featureType": "road.highway",
+                  "elementType": "geometry.stroke",
+                  "stylers": [
+                    {
+                      "color": "#1f2835"
+                    }
+                  ]
+                },
+                {
+                  "featureType": "road.highway",
+                  "elementType": "labels.text.fill",
+                  "stylers": [
+                    {
+                      "color": "#f3d19c"
+                    }
+                  ]
+                },
+                {
+                  "featureType": "transit",
+                  "elementType": "geometry",
+                  "stylers": [
+                    {
+                      "color": "#2f3948"
+                    }
+                  ]
+                },
+                {
+                  "featureType": "transit.station",
+                  "elementType": "labels.text.fill",
+                  "stylers": [
+                    {
+                      "color": "#d59563"
+                    }
+                  ]
+                },
+                {
+                  "featureType": "water",
+                  "elementType": "geometry",
+                  "stylers": [
+                    {
+                      "color": "#17263c"
+                    }
+                  ]
+                },
+                {
+                  "featureType": "water",
+                  "elementType": "labels.text.fill",
+                  "stylers": [
+                    {
+                      "color": "#515c6d"
+                    }
+                  ]
+                },
+                {
+                  "featureType": "water",
+                  "elementType": "labels.text.stroke",
+                  "stylers": [
+                    {
+                      "color": "#17263c"
+                    }
+                  ]
+                }
+              ];
+        
+              map.setOptions({styles: myStyle});
+      } else if ((this.FMapStyle === $mod.TGoogleMapStyle.mstCustom) && (this.FCustomStyle.GetTextStr() !== "")) {
+        cstyle = this.FCustomStyle.GetTextStr();
+        try {
+          ostyle = JSON.parse(cstyle);
+          map.setOptions({styles: ostyle});
+        } catch ($e) {
+        };
+      } else {
+        map.setOptions({styles: []});
+      };
+    };
+    this.SetDefaultLatitude = function (Value) {
+      if (this.FDefaultLatitude !== Value) {
+        this.FDefaultLatitude = Value;
+        this.FOwner.UpdateElement();
+        this.FOwner.PanTo(this.FDefaultLatitude,this.FDefaultLongitude);
+      };
+    };
+    this.SetDefaultLongitude = function (Value) {
+      if (this.FDefaultLongitude !== Value) {
+        this.FDefaultLongitude = Value;
+        this.FOwner.UpdateElement();
+        this.FOwner.PanTo(this.FDefaultLatitude,this.FDefaultLongitude);
+      };
+    };
+    this.SetDefaultZoomLevel = function (Value) {
+      if ((this.FDefaultZoomLevel !== Value) && (Value >= 0) && (Value <= 21)) {
+        this.FDefaultZoomLevel = Value;
+        this.FOwner.UpdateElement();
+        this.FOwner.SetZoom(Value);
+      };
+    };
+    this.Create$1 = function (AGoogleMaps) {
+      pas.System.TObject.Create.call(this);
+      this.FCustomStyle = pas.Classes.TStringList.$create("Create$1");
+      this.FMapStyle = $mod.TGoogleMapStyle.mstDefault;
+      this.FDefaultLatitude = -34.397;
+      this.FDefaultLongitude = 150.644;
+      this.FDefaultZoomLevel = 8;
+      this.FOwner = AGoogleMaps;
+      return this;
+    };
+    this.Destroy = function () {
+      rtl.free(this,"FCustomStyle");
+      pas.System.TObject.Destroy.call(this);
+    };
+    this.Assign = function (Source) {
+      pas.Classes.TPersistent.Assign.apply(this,arguments);
+      this.FCustomStyle = rtl.as(Source,$mod.TGoogleMapsOptions).FCustomStyle;
+      this.FMapStyle = rtl.as(Source,$mod.TGoogleMapsOptions).FMapStyle;
+      this.FDefaultLatitude = rtl.as(Source,$mod.TGoogleMapsOptions).FDefaultLatitude;
+      this.FDefaultLongitude = rtl.as(Source,$mod.TGoogleMapsOptions).FDefaultLongitude;
+      this.FDefaultZoomLevel = rtl.as(Source,$mod.TGoogleMapsOptions).FDefaultZoomLevel;
+    };
+    var $r = this.$rtti;
+    $r.addProperty("CustomStyle",2,pas.Classes.$rtti["TStringList"],"FCustomStyle","SetCustomStyle");
+    $r.addProperty("MapStyle",2,$mod.$rtti["TGoogleMapStyle"],"FMapStyle","SetMapStyle",4,{Default: $mod.TGoogleMapStyle.mstDefault});
+    $r.addProperty("DefaultLatitude",2,rtl.double,"FDefaultLatitude","SetDefaultLatitude",4,{Default: -34.397});
+    $r.addProperty("DefaultLongitude",2,rtl.double,"FDefaultLongitude","SetDefaultLongitude",4,{Default: 150.644});
+    $r.addProperty("DefaultZoomLevel",2,rtl.longint,"FDefaultZoomLevel","SetDefaultZoomLevel",4,{Default: 8});
+  });
+  this.TGoogleMapsRender = {"0": "mrRaster", mrRaster: 0, "1": "mrVector", mrVector: 1};
+  this.$rtti.$Enum("TGoogleMapsRender",{minvalue: 0, maxvalue: 1, ordtype: 1, enumtype: this.TGoogleMapsRender});
+  rtl.createClass(this,"TGoogleMaps",pas["WEBLib.Controls"].TCustomControl,function () {
+    this.$init = function () {
+      pas["WEBLib.Controls"].TCustomControl.$init.call(this);
+      this.FUpdateCount$1 = 0;
+      this.FReq = null;
+      this.FAPIKey = "";
+      this.FOldAPIKey = "";
+      this.FMap = null;
+      this.FDirectionsService = null;
+      this.FDirectionsDisplay = null;
+      this.FCode = false;
+      this.FBound = false;
+      this.FOnMapClick = null;
+      this.FOnMapDblClick = null;
+      this.FOnMapZoom = null;
+      this.FOnMapPan = null;
+      this.FOnGeoCoded = null;
+      this.FOnMapIdle = null;
+      this.FOnMapLoaded = null;
+      this.FOnMarkerClick = null;
+      this.FOnPolygonClick = null;
+      this.FOnPolylineClick = null;
+      this.FOnCircleClick = null;
+      this.FOnRectangleClick = null;
+      this.FOnKMLClick = null;
+      this.FOptions = null;
+      this.FMapID = "";
+      this.FOldMapID = "";
+      this.FMapRender = 0;
+      this.FOnDirectionsShown = null;
+      this.FRoutes = null;
+    };
+    this.$final = function () {
+      this.FReq = undefined;
+      this.FMap = undefined;
+      this.FDirectionsService = undefined;
+      this.FDirectionsDisplay = undefined;
+      this.FOnMapClick = undefined;
+      this.FOnMapDblClick = undefined;
+      this.FOnMapZoom = undefined;
+      this.FOnMapPan = undefined;
+      this.FOnGeoCoded = undefined;
+      this.FOnMapIdle = undefined;
+      this.FOnMapLoaded = undefined;
+      this.FOnMarkerClick = undefined;
+      this.FOnPolygonClick = undefined;
+      this.FOnPolylineClick = undefined;
+      this.FOnCircleClick = undefined;
+      this.FOnRectangleClick = undefined;
+      this.FOnKMLClick = undefined;
+      this.FOptions = undefined;
+      this.FOnDirectionsShown = undefined;
+      this.FRoutes = undefined;
+      pas["WEBLib.Controls"].TCustomControl.$final.call(this);
+    };
+    this.SetAPIKey = function (Value) {
+      if (this.FAPIKey !== Value) {
+        this.FAPIKey = Value;
+        this.UpdateElement();
+      };
+    };
+    this.GetMarker = function (AIndex) {
+      var Result = null;
+      var res = null;
+      res = this.FMarkers[AIndex];
+      Result = res;
+      return Result;
+    };
+    this.GetCircle = function (AIndex) {
+      var Result = null;
+      var res = null;
+      res = this.FCircles[AIndex];
+      Result = res;
+      return Result;
+    };
+    this.GetRectangle = function (AIndex) {
+      var Result = null;
+      var res = null;
+      res = this.FGetRectangle[AIndex];
+      Result = res;
+      return Result;
+    };
+    this.GetPolygon = function (AIndex) {
+      var Result = null;
+      var res = null;
+      res = this.FPolygon[AIndex];
+      Result = res;
+      return Result;
+    };
+    this.GetPolyline = function (AIndex) {
+      var Result = null;
+      var res = null;
+      res = this.FPolyline[AIndex];
+      Result = res;
+      return Result;
+    };
+    this.SetMapID = function (Value) {
+      if (this.FMapID !== Value) {
+        this.FMapID = Value;
+        this.UpdateElement();
+      };
+    };
+    this.SetMapRender = function (Value) {
+      if (this.FMapRender !== Value) {
+        this.FMapRender = Value;
+        this.UpdateElement();
+      };
+    };
+    this.GetMap = function () {
+      var Result = null;
+      var map = null;
+      var id = "";
+      if (this.FMap != null) {
+        Result = this.FMap}
+       else {
+        map = null;
+        id = this.GetID();
+        var el = document.getElementById(id);
+        if (el != null) {
+          map = el.gMap;
+        };
+        Result = map;
+        if (map != null) this.FMap = Result;
+      };
+      return Result;
+    };
+    this.CreateElement = function () {
+      var Result = null;
+      this.FDirectionsService = null;
+      this.FDirectionsDisplay = null;
+      Result = document.createElement("DIV");
+      Result.setAttribute("id",this.GetID());
+      this.FMap = null;
+      return Result;
+    };
+    this.UpdateElement = function () {
+      var map = null;
+      var id = "";
+      var srcurl = "";
+      var scriptsrc = "";
+      var mapidstr = "";
+      var mapbeta = "";
+      var scr = null;
+      var scro = null;
+      var sp = null;
+      pas["WEBLib.Controls"].TControl.UpdateElement.call(this);
+      if (this.IsUpdating()) return;
+      if (this.FUpdateCount$1 > 0) return;
+      if (this.GetIsLinked() && (pas.Classes.TComponentStateItem.csLoading in this.FComponentState)) return;
+      if ((!this.FCode && (this.FAPIKey !== "")) || (this.FAPIKey !== this.FOldAPIKey) || ((this.FAPIKey !== "") && (this.FMapID !== this.FOldMapID))) {
+        this.FCode = true;
+        id = this.GetID();
+        this.FOldAPIKey = this.FAPIKey;
+        this.FOldMapID = this.FMapID;
+        scr = document.getElementById("scrgooglemaps");
+        if (scr != null) {
+          document.head.removeChild(scr);
+        };
+        scro = document.getElementById("scrogooglemaps");
+        if (scro != null) {
+          document.head.removeChild(scro);
+        };
+        if ((this.FMapRender === $mod.TGoogleMapsRender.mrVector) && (this.FMapID !== "")) mapbeta = "v=beta&";
+        mapidstr = "";
+        if (this.FMapID !== "") mapidstr = "mapId:'" + this.FMapID + "'," + "\r\n";
+        srcurl = "https://maps.googleapis.com/maps/api/js?" + mapbeta + "key=" + this.FAPIKey + "&libraries=marker&loading=async&callback=initMap" + id;
+        // need a reference to this object
+        document.obj = this;
+        scriptsrc = "var gmapserror = false;" + "\r\n" + "function initMap" + id + "() { " + "\r\n" + 'var el = document.getElementById("' + id + '");' + "\r\n" + 'if (el == null) { alert("Google Maps DIV element not found!"); return; }' + "\r\n" + "map = new google.maps.Map(el, {" + "\r\n" + "center: {lat: " + pas.SysUtils.StringReplace(pas.SysUtils.FloatToStr(this.FOptions.FDefaultLatitude),",",".",rtl.createSet(pas.SysUtils.TStringReplaceFlag.rfReplaceAll)) + ", lng: " + pas.SysUtils.StringReplace(pas.SysUtils.FloatToStr(this.FOptions.FDefaultLongitude),",",".",rtl.createSet(pas.SysUtils.TStringReplaceFlag.rfReplaceAll)) + "}," + "\r\n" + mapidstr + "zoom: " + pas.SysUtils.IntToStr(this.FOptions.FDefaultZoomLevel) + "});" + "\r\n" + "el.gMap = map;" + "\r\n" + "document.obj.DoLoaded();" + "\r\n" + "}";
+        scr = document.createElement("script");
+        scr.addEventListener("load",rtl.createSafeCallback(this,"DoLoaded"));
+        scr.src = srcurl;
+        scr.type = 'text/javascript';
+        document.head.appendChild(scr);
+        scr.setAttribute("id","scrgooglemaps");
+        scro = document.createElement("script");
+        scro.innerHTML = scriptsrc;
+        document.head.appendChild(scro);
+        scro.setAttribute("id","scrogooglemaps");
+      } else if (this.GetElementHandle() != null) {
+        this.GetElementHandle().style.setProperty("border","1px solid gray");
+        this.GetElementHandle().style.setProperty("background-color","#eee");
+        if (this.GetElementHandle().childElementCount === 0) {
+          sp = document.createElement("SPAN");
+          srcurl = "<br>Set the Google Maps JavaScript API key via WebGoogleMaps.APIKey in order to see the map.<br>" + 'Request the key via <a href="https://developers.google.com/maps/documentation/javascript/get-api-key">this page</a>';
+          sp.innerHTML = srcurl;
+          this.GetElementHandle().appendChild(sp);
+        };
+      };
+    };
+    this.SetControlCursor = function (Value) {
+      var map = null;
+      var s = "";
+      pas["WEBLib.Controls"].TControl.SetControlCursor.apply(this,arguments);
+      map = this.GetMap();
+      if (Value === 0) {
+        s = "''"}
+       else s = pas["WEBLib.Controls"].GetHTMLCursorName(Value);
+      if (map != null) {
+        map.setOptions({draggableCursor: s});
+      };
+    };
+    this.BindEvents = function () {
+      var map = null;
+      var ptr1 = null;
+      var ptr2 = null;
+      var ptr3 = null;
+      var ptr4 = null;
+      var ptr5 = null;
+      var dirsvc = null;
+      var dirdispl = null;
+      pas["WEBLib.Controls"].TCustomControl.BindEvents.call(this);
+      if (this.IsUpdating()) return;
+      map = this.GetMap();
+      if ((map != null) && !this.FBound && !(pas.Classes.TComponentStateItem.csDesigning in this.FComponentState)) {
+        ptr1 = rtl.createCallback(this,"HandleMapClick");
+        ptr2 = rtl.createCallback(this,"HandleMapDblClick");
+        ptr3 = rtl.createCallback(this,"HandleMapPan");
+        ptr4 = rtl.createCallback(this,"HandleMapZoom");
+        ptr5 = rtl.createCallback(this,"HandleMapIdle");
+        this.FMarkers = [];
+        this.FPolygons = [];
+        this.FPolylines = [];
+        this.FCircles = [];
+        this.FRectangles = [];
+        this.FKMLs = [];
+        dirsvc = new google.maps.DirectionsService;
+        dirdispl = new google.maps.DirectionsRenderer;
+        dirdispl.setMap(map);
+        map.addListener('click', ptr1);
+        map.addListener('dblclick', ptr2);
+        map.addListener('center_changed',ptr3);
+        map.addListener('zoom_changed',ptr4);
+        map.addListener('tilesloaded',ptr5);
+        this.FDirectionsService = dirsvc;
+        this.FDirectionsDisplay = dirdispl;
+        this.FBound = true;
+      };
+    };
+    this.HandleMapClick = function (e) {
+      var lon = 0.0;
+      var lat = 0.0;
+      lon = e.latLng.lng();
+      lat = e.latLng.lat();
+      if (this.FOnMapClick != null) this.FOnMapClick(this,lon,lat);
+    };
+    this.HandleMapDblClick = function (e) {
+      var lon = 0.0;
+      var lat = 0.0;
+      lon = e.latLng.lng();
+      lat = e.latLng.lat();
+      if (this.FOnMapDblClick != null) this.FOnMapDblClick(this,lon,lat);
+    };
+    this.HandleMapPan = function (e) {
+      var lon = 0.0;
+      var lat = 0.0;
+      var c = map.getCenter();
+      lon = c.lng();
+      lat = c.lat();
+      if (this.FOnMapPan != null) this.FOnMapPan(this,lon,lat);
+    };
+    this.HandleMapZoom = function (e) {
+      var map = null;
+      var zoom = 0;
+      map = this.GetMap();
+      zoom = map.getZoom();
+      if (this.FOnMapZoom != null) this.FOnMapZoom(this,zoom);
+    };
+    this.HandleMapIdle = function (e) {
+      if (this.FOnMapIdle != null) this.FOnMapIdle(this);
+    };
+    this.HandleMarkerClick = function (e) {
+      var idx = 0;
+      var LObjRec = pas["WEBLib.Controls"].TJSObjectRecord.$new();
+      idx = e.idx;
+      if (this.FOnMarkerClick != null) {
+        LObjRec.jsobject = e;
+        this.FOnMarkerClick(this,idx,pas["WEBLib.Controls"].TJSObjectRecord.$clone(LObjRec));
+      };
+    };
+    this.HandlePolygonClick = function (e) {
+      var idx = 0;
+      var LObjRec = pas["WEBLib.Controls"].TJSObjectRecord.$new();
+      idx = e.idx;
+      if (this.FOnPolygonClick != null) {
+        LObjRec.jsobject = e;
+        this.FOnPolygonClick(this,idx,pas["WEBLib.Controls"].TJSObjectRecord.$clone(LObjRec));
+      };
+    };
+    this.HandlePolylineClick = function (e) {
+      var idx = 0;
+      var LObjRec = pas["WEBLib.Controls"].TJSObjectRecord.$new();
+      idx = e.idx;
+      if (this.FOnPolylineClick != null) {
+        LObjRec.jsobject = e;
+        this.FOnPolylineClick(this,idx,pas["WEBLib.Controls"].TJSObjectRecord.$clone(LObjRec));
+      };
+    };
+    this.HandleCircleClick = function (e) {
+      var idx = 0;
+      var LObjRec = pas["WEBLib.Controls"].TJSObjectRecord.$new();
+      idx = e.idx;
+      if (this.FOnCircleClick != null) {
+        LObjRec.jsobject = e;
+        this.FOnCircleClick(this,idx,pas["WEBLib.Controls"].TJSObjectRecord.$clone(LObjRec));
+      };
+    };
+    this.HandleRectangleClick = function (e) {
+      var idx = 0;
+      var LObjRec = pas["WEBLib.Controls"].TJSObjectRecord.$new();
+      idx = e.idx;
+      if (this.FOnRectangleClick != null) {
+        LObjRec.jsobject = e;
+        this.FOnRectangleClick(this,idx,pas["WEBLib.Controls"].TJSObjectRecord.$clone(LObjRec));
+      };
+    };
+    this.HandleKMLClick = function (e) {
+      var idx = 0;
+      var LObjRec = pas["WEBLib.Controls"].TJSObjectRecord.$new();
+      idx = e.idx;
+      if (this.FOnKMLClick != null) {
+        LObjRec.jsobject = e;
+        this.FOnKMLClick(this,idx,pas["WEBLib.Controls"].TJSObjectRecord.$clone(LObjRec));
+      };
+    };
+    this.HandleResponse = function (Event) {
+      var Result = false;
+      var fnd = false;
+      var reslat = 0.0;
+      var reslon = 0.0;
+      Result = true;
+      fnd = false;
+      var s = Event.target.responseText;
+      var js = JSON.parse(s);
+      if (js.status == "OK") {
+        fnd = true;
+        var lat = js.results[0].geometry.location.lat;
+        var lng = js.results[0].geometry.location.lng;
+        reslon = lng;
+        reslat = lat;
+      };
+      if (fnd && (this.FOnGeoCoded != null)) {
+        this.FOnGeoCoded(this,reslon,reslat);
+      };
+      return Result;
+    };
+    this.HandleAbort = function (Event) {
+      var Result = false;
+      Result = true;
+      return Result;
+    };
+    this.TravelModeStr = function (ATravelMode) {
+      var Result = "";
+      Result = "DRIVING";
+      var $tmp = ATravelMode;
+      if ($tmp === $mod.TGoogleTravelMode.tmDriving) {
+        Result = "DRIVING"}
+       else if ($tmp === $mod.TGoogleTravelMode.tmWalking) {
+        Result = "WALKING"}
+       else if ($tmp === $mod.TGoogleTravelMode.tmBicycling) {
+        Result = "BICYCLING"}
+       else if ($tmp === $mod.TGoogleTravelMode.tmTransit) Result = "TRANSIT";
+      return Result;
+    };
+    this.DoLoaded = function (Event) {
+      var Result = false;
+      this.BindEvents();
+      Result = true;
+      if (this.FMapID === "") this.FOptions.SetMapStyle(this.FOptions.FMapStyle);
+      if (this.FCursor !== 0) this.SetControlCursor(this.FCursor);
+      if (this.FOnMapLoaded != null) this.FOnMapLoaded(this);
+      return Result;
+    };
+    this.DoDirections = function (ARoutes) {
+      var Result = false;
+      Result = true;
+      this.FRoutes = ARoutes;
+      if (this.FOnDirectionsShown != null) this.FOnDirectionsShown(this,this.FRoutes);
+      return Result;
+    };
+    this.Loaded = function () {
+      pas["WEBLib.Controls"].TCustomControl.Loaded.call(this);
+    };
+    this.GoogleLoaded = function () {
+      var Result = false;
+      var res = false;
+      res = false;
+      if (typeof google === 'object' && typeof google.maps === 'object')
+      {
+        res = true;
+      };
+      Result = res;
+      return Result;
+    };
+    this.CreateInitialize = function () {
+      pas["WEBLib.Controls"].TCustomControl.CreateInitialize.call(this);
+      this.FOptions = $mod.TGoogleMapsOptions.$create("Create$1",[this]);
+      this.SetWidth(400);
+      this.SetHeight(300);
+    };
+    this.SetCenter = function (Lat, Lon) {
+      var map = null;
+      map = this.GetMap();
+      if (map != null) {
+        map.setCenter(new google.maps.LatLng(Lat, Lon));
+      };
+    };
+    this.GetCenter = function (Lat, Lon) {
+      var Result = false;
+      var sLon = "";
+      var sLat = "";
+      Result = false;
+      Lon.set(-1);
+      Lat.set(-1);
+      sLon = map.getCenter().lng().toString();
+      sLat = map.getCenter().lat().toString();
+      if ((sLon !== "") && (sLat !== "")) {
+        Lon.set(pas.SysUtils.StrToFloat(sLon));
+        Lat.set(pas.SysUtils.StrToFloat(sLat));
+        Result = true;
+      };
+      return Result;
+    };
+    this.GetBounds = function (NorthEastLat, NorthEastLon, SouthWestLat, SouthWestLon) {
+      var Result = false;
+      var neLon = "";
+      var neLat = "";
+      var swLon = "";
+      var swLat = "";
+      Result = false;
+      NorthEastLon.set(-1);
+      NorthEastLat.set(-1);
+      SouthWestLon.set(-1);
+      SouthWestLat.set(-1);
+      neLon = map.getBounds().getNorthEast().lng().toString();
+      neLat = map.getBounds().getNorthEast().lat().toString();
+      swLon = map.getBounds().getSouthWest().lng().toString();
+      swLat = map.getBounds().getSouthWest().lat().toString();
+      if ((neLon !== "") && (neLat !== "") && (swLon !== "") && (swLat !== "")) {
+        NorthEastLon.set(pas.SysUtils.StrToFloat(swLon));
+        NorthEastLat.set(pas.SysUtils.StrToFloat(swLat));
+        SouthWestLon.set(pas.SysUtils.StrToFloat(swLon));
+        SouthWestLat.set(pas.SysUtils.StrToFloat(swLat));
+        Result = true;
+      };
+      return Result;
+    };
+    this.SetDoubleClickZoom = function (AValue) {
+      var map = null;
+      map = this.GetMap();
+      if (map != null) {
+        map.setOptions( {disableDoubleClickZoom:!AValue} );
+      };
+    };
+    this.SetDraggable = function (AValue) {
+      var map = null;
+      map = this.GetMap();
+      if (map != null) {
+        map.setOptions( {draggable:AValue} );
+      };
+    };
+    this.SetScrollWheel = function (AValue) {
+      var map = null;
+      map = this.GetMap();
+      map.setOptions( {scrollWheel:AValue} );
+    };
+    this.SetMapType = function (AMapType) {
+      var map = null;
+      var smt = "";
+      map = this.GetMap();
+      var $tmp = AMapType;
+      if ($tmp === $mod.TGoogleMapType.mtDefault) {
+        smt = "roadmap"}
+       else if ($tmp === $mod.TGoogleMapType.mtSatellite) {
+        smt = "satellite"}
+       else if ($tmp === $mod.TGoogleMapType.mtHybrid) {
+        smt = "hybrid"}
+       else if ($tmp === $mod.TGoogleMapType.mtTerrain) smt = "terrain";
+      map.setMapTypeId(smt);
+    };
+    this.SetZoom = function (Zoom) {
+      var map = null;
+      map = this.GetMap();
+      if (map != null) {
+        map.setZoom(Zoom);
+      };
+    };
+    this.SetHeading = function (AHeading) {
+      var map = null;
+      map = this.GetMap();
+      if (map != null) {
+        map.setHeading(AHeading);
+      };
+    };
+    this.SetTilt = function (ATilt) {
+      var map = null;
+      map = this.GetMap();
+      if (map != null) {
+        map.setTitle(ATilt);
+      };
+    };
+    this.PanTo = function (Lat, Lon) {
+      var map = null;
+      map = this.GetMap();
+      if ((map != null) && this.GoogleLoaded()) {
+        map.panTo(new google.maps.LatLng(Lat, Lon));
+      };
+    };
+    this.PanToBounds = function (Lat1, Lon1, Lat2, Lon2) {
+      var bounds = undefined;
+      var map = null;
+      map = this.GetMap();
+      if ((map != null) && this.GoogleLoaded()) {
+        bounds = this.GetBBox(Lon1,Lat1,Lon2,Lat2);
+        map.panToBounds(bounds);
+      };
+    };
+    this.AddGPX = function (AGPX, AColor, AWidth, AOpacity) {
+      var Points = null;
+      var LatMax = 0.0;
+      var LonMax = 0.0;
+      var LatMin = 0.0;
+      var LonMin = 0.0;
+      Points = new Array();
+      var parser = new DOMParser();
+          var doc = parser.parseFromString(AGPX, 'text/xml');
+          var trk = doc.getElementsByTagName("trk")[0];
+          var name = trk.getElementsByTagName("name")[0];
+          var trkseg = doc.getElementsByTagName("trkseg")[0];
+          var i = trkseg.getElementsByTagName("trkpt").length;
+          var trkpt;
+          var j;
+          var lat;
+          var lon;
+          var bounds = new google.maps.LatLngBounds ();
+      
+          for (j= 0; j < i; j++)
+          {
+            trkpt = trkseg.getElementsByTagName("trkpt")[j];
+            lat = trkpt.getAttribute('lat');
+            lon = trkpt.getAttribute('lon');
+      
+            var p = new google.maps.LatLng(lat, lon);
+            Points.push(p);
+            bounds.extend(p);
+          }
+          LatMax = bounds.getNorthEast().lat();
+          LonMax = bounds.getNorthEast().lng();
+      
+          LatMin = bounds.getSouthWest().lat();
+          LonMin = bounds.getSouthWest().lng();
+      this.AddPolyLine(Points,AColor,AWidth,AOpacity);
+      this.FitBounds(LatMin,LonMin,LatMax,LonMax);
+    };
+    this.AddKML = function (Url, ZoomToBounds) {
+      var map = null;
+      var clr = "";
+      var ptr = null;
+      ptr = rtl.createCallback(this,"HandleKMLClick");
+      map = this.GetMap();
+      var kml = new google.maps.KmlLayer(Url, {
+            map: map,
+            clickable: true,
+            preserveViewport: !ZoomToBounds
+          });
+      
+          kml.idx = this.FKMLs.length;
+          kml.addListener('click', function() { ptr(kml); } );
+          this.FKMLs.push(kml);
+    };
+    this.AddPolyLine = function (Points, AColor, AWidth, AOpacity) {
+      var map = null;
+      var clr = "";
+      var ptr = null;
+      ptr = rtl.createCallback(this,"HandlePolylineClick");
+      map = this.GetMap();
+      clr = pas["WEBLib.Graphics"].ColorToHTML(AColor);
+      var poly = new google.maps.Polyline({
+            map: map,
+            path: Points,
+              strokeColor: clr,
+            strokeOpacity: AOpacity,
+            strokeWeight: AWidth
+          });
+      
+          poly.idx = this.FPolylines.length;
+          poly.addListener('click', function() { ptr(poly); } );
+          this.FPolylines.push(poly);
+    };
+    this.AddPolygon = function (Points, AFillColor, AStrokeColor, AWidth, AOpacity) {
+      var map = null;
+      var clrF = "";
+      var clrS = "";
+      var ptr = null;
+      ptr = rtl.createCallback(this,"HandlePolygonClick");
+      map = this.GetMap();
+      clrF = pas["WEBLib.Graphics"].ColorToHTML(AFillColor);
+      clrS = pas["WEBLib.Graphics"].ColorToHTML(AStrokeColor);
+      var poly = new google.maps.Polygon({
+            map: map,
+            paths: Points,
+            fillColor: clrF,
+            fillOpacity: AOpacity,
+              strokeColor: clrS,
+            strokeOpacity: AOpacity,
+            strokeWeight: AWidth
+          });
+      
+          poly.idx = this.FPolygons.length;
+          poly.addListener('click', function() { ptr(poly); } );
+          this.FPolygons.push(poly);
+    };
+    this.AddCircle = function (Lat, Lon, Radius, AFillColor, AStrokeColor, AWidth, AOpacity) {
+      var map = null;
+      var clrF = "";
+      var clrS = "";
+      var ptr = null;
+      ptr = rtl.createCallback(this,"HandleCircleClick");
+      map = this.GetMap();
+      clrF = pas["WEBLib.Graphics"].ColorToHTML(AFillColor);
+      clrS = pas["WEBLib.Graphics"].ColorToHTML(AStrokeColor);
+      var myLatLng = {lat: Lat, lng: Lon};
+          var circle = new google.maps.Circle({
+            map: map,
+            center: myLatLng,
+            radius: Radius,
+            fillColor: clrF,
+            fillOpacity: AOpacity,
+              strokeColor: clrS,
+            strokeOpacity: AOpacity,
+            strokeWeight: AWidth
+          });
+      
+          circle.idx = this.FCircles.length;
+          circle.addListener('click', function() { ptr(circle); } );
+          this.FCircles.push(circle);
+    };
+    this.AddRectangle = function (NorthEastLat, NorthEastLon, SouthWestLat, SouthWestLon, AFillColor, AStrokeColor, AWidth, AOpacity) {
+      var map = null;
+      var clrF = "";
+      var clrS = "";
+      var ptr = null;
+      ptr = rtl.createCallback(this,"HandleRectangleClick");
+      map = this.GetMap();
+      clrF = pas["WEBLib.Graphics"].ColorToHTML(AFillColor);
+      clrS = pas["WEBLib.Graphics"].ColorToHTML(AStrokeColor);
+      var NELatLng = {lat: NorthEastLat, lng: NorthEastLon};
+          var SWLatLng = {lat: SouthWestLat, lng: SouthWestLon};
+          var rect = new google.maps.Rectangle({
+            map: map,
+            bounds: new google.maps.LatLngBounds(NELatLng, SWLatLng),
+            fillColor: clrF,
+            fillOpacity: AOpacity,
+              strokeColor: clrS,
+            strokeOpacity: AOpacity,
+            strokeWeight: AWidth
+          });
+      
+          rect.idx = this.FRectangles.length;
+          rect.addListener('click', function() { ptr(rect); } );
+          this.FRectangles.push(rect);
+    };
+    this.AddMarker = function (Lat, Lon, Title) {
+      var map = null;
+      var ptr = null;
+      ptr = rtl.createCallback(this,"HandleMarkerClick");
+      map = this.GetMap();
+      var myLatLng = {lat: Lat, lng: Lon};
+      var marker = new google.maps.marker.AdvancedMarkerElement({
+            position: myLatLng,
+            map: map,
+            title: Title
+          });
+      marker.idx = this.FMarkers.length;
+      marker.addListener('click', function() { ptr(marker); } );
+      this.FMarkers.push(marker);
+    };
+    this.AddMarker$1 = function (Lat, Lon, Color, Title) {
+      var map = null;
+      var clr = "";
+      var ptr = null;
+      ptr = rtl.createCallback(this,"HandleMarkerClick");
+      var $tmp = Color;
+      if ($tmp === $mod.TGoogleMarkerColor.mcDefault) {
+        clr = ""}
+       else if ($tmp === $mod.TGoogleMarkerColor.mcRed) {
+        clr = "red-dot.png"}
+       else if ($tmp === $mod.TGoogleMarkerColor.mcGreen) {
+        clr = "green-dot.png"}
+       else if ($tmp === $mod.TGoogleMarkerColor.mcYellow) {
+        clr = "yellow-dot.png"}
+       else if ($tmp === $mod.TGoogleMarkerColor.mcPurple) {
+        clr = "purple-dot.png"}
+       else if ($tmp === $mod.TGoogleMarkerColor.mcBlue) clr = "blue-dot.png";
+      map = this.GetMap();
+      var myLatLng = {lat: Lat, lng: Lon};
+      
+          const img = document.createElement("img");
+          // Use your specific URL as the source
+          img.src = "http://maps.google.com/mapfiles/ms/icons/" + clr;
+      
+          var marker = new google.maps.marker.AdvancedMarkerElement({
+                position: myLatLng,
+                map: map,
+                title: Title,
+                content: img
+              });
+      
+      //   if (clr != "") {
+      //      marker.setIcon('http://maps.google.com/mapfiles/ms/icons/' + clr);
+      //    }
+          marker.idx = this.FMarkers.length;
+          marker.addListener('click', function() { ptr(marker); } );
+      
+          this.FMarkers.push(marker);
+    };
+    this.AddMarker$2 = function (Lat, Lon, Color, PinLetter, Title) {
+      var map = null;
+      var clr = "";
+      var url = "";
+      var ch = "";
+      var ptr = null;
+      ptr = rtl.createCallback(this,"HandleMarkerClick");
+      clr = pas["WEBLib.Graphics"].ColorToHTML(Color);
+      map = this.GetMap();
+      var myLatLng = {lat: Lat, lng: Lon};
+      
+          //url = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld="+ PinLetter + "|" + clr;
+      
+          // Create the PinElement instance
+          const pin = new google.maps.marker.PinElement({
+              // Set the background color (pin body)
+              background: clr, // Blue
+              // Set the color of the letter/glyph
+              borderColor: "#000000", // Black outline (optional)
+              // Set the glyph (the letter 'P')
+              glyph: PinLetter,
+              // Set the color of the glyph itself
+              glyphColor: "#FFFFFF", // White
+      
+              // Optional: scale for size
+              scale: 1.5,
+          });
+      
+          var marker = new google.maps.marker.AdvancedMarkerElement({
+                position: myLatLng,
+                map: map,
+                title: Title,
+                content: pin.element
+              });
+          marker.idx = this.FMarkers.length;
+          marker.addListener('click', function() { ptr(marker); } );
+      
+          this.FMarkers.push(marker);
+    };
+    this.AddMarker$3 = function (Lat, Lon, PinIcon, Title, XOffset, YOffset) {
+      var map = null;
+      var ptr = null;
+      ptr = rtl.createCallback(this,"HandleMarkerClick");
+      map = this.GetMap();
+      //    var pinImage = new google.maps.MarkerImage(PinIcon, null, null,new google.maps.Point(XOffset, YOffset));
+      
+          const img = document.createElement("img");
+          // Use your specific URL as the source
+          img.src = PinIcon;
+      
+          const anchor = new google.maps.Point(XOffset, YOffset);
+      
+          var myLatLng = {lat: Lat, lng: Lon};
+          var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: Title,
+                content: img,
+                anchor: anchor
+              });
+          marker.idx = this.FMarkers.length;
+          marker.addListener('click', function() { ptr(marker); } );
+      
+          this.FMarkers.push(marker);
+    };
+    this.AddMarker$4 = function (Lat, Lon, Shape, Color, Title) {
+      this.AddMarker$5(Lat,Lon,Shape,Color,0,1,Title,"");
+    };
+    this.AddMarker$5 = function (Lat, Lon, Shape, Color, BorderColor, Scale, CustomShape, Title) {
+      var map = null;
+      var clr = "";
+      var bclr = "";
+      var pth = "";
+      var scl = "";
+      var ptr = null;
+      ptr = rtl.createCallback(this,"HandleMarkerClick");
+      map = this.GetMap();
+      clr = pas["WEBLib.Graphics"].ColorToHTML(Color);
+      bclr = pas["WEBLib.Graphics"].ColorToHTML(BorderColor);
+      scl = pas.SysUtils.StringReplace(pas.SysUtils.FloatToStr(Scale),",",".",{});
+      var $tmp = Shape;
+      if ($tmp === $mod.TGoogleMarkerShape.msPin) {
+        pth = "M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z"}
+       else if ($tmp === $mod.TGoogleMarkerShape.msPinDot) {
+        pth = "M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0"}
+       else if ($tmp === $mod.TGoogleMarkerShape.msFlag) {
+        pth = "M 0,0 -1,-2 V -43 H 1 V -2 z M 1,-40 H 30 V -20 H 1 z"}
+       else if ($tmp === $mod.TGoogleMarkerShape.msBookmark) {
+        pth = "M17 3h-10c-1.1 0-1.99.9-1.99 2l-.01 16 7-3 7 3v-16c0-1.1-.9-2-2-2z"}
+       else if ($tmp === $mod.TGoogleMarkerShape.msFlagSmall) {
+        pth = "M14.4 6l-.4-2h-9v17h2v-7h5.6l.4 2h7v-10z"}
+       else if ($tmp === $mod.TGoogleMarkerShape.msHome) {
+        pth = "M10 20v-6h4v6h5v-8h3l-10-9-10 9h3v8z"}
+       else if ($tmp === $mod.TGoogleMarkerShape.msFavorite) {
+        pth = "M12 21.35l-1.45-1.32c-5.15-4.67-8.55-7.75-8.55-11.53 0-3.08 2.42-5.5 5.5-5.5 1.74 0 3.41.81 4.5 2.09 1.09-1.28 2.76-2.09 4.5-2.09 3.08 0 5.5 2.42 5.5 5.5 0 3.78-3.4 6.86-8.55 11.54l-1.45 1.31z"}
+       else if ($tmp === $mod.TGoogleMarkerShape.msStar) {
+        pth = "M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"}
+       else if ($tmp === $mod.TGoogleMarkerShape.msCustom) pth = CustomShape;
+      function pinSymbol(color, bcolor, scale) {
+          return {
+              path: pth,
+              fillColor: color,
+              fillOpacity: 1,
+              strokeColor: bcolor,
+              strokeWeight: 1,
+              scale: parseFloat(scale),
+              };
+          }
+          var myLatLng = {lat: Lat, lng: Lon};
+          var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: Title,
+                icon: pinSymbol(clr, bclr, scl)
+              });
+          marker.idx = this.FMarkers.length;
+          marker.addListener('click', function() { ptr(marker); } );
+      
+          this.FMarkers.push(marker);
+    };
+    this.SetMarkerTitle = function (AIndex, ATitle) {
+      if (AIndex < this.FMarkers.length)
+      {
+        this.FMarkers[AIndex].setTitle(ATitle);
+      };
+    };
+    this.SetMarkerLocation = function (AIndex, Lat, Lon) {
+      if (AIndex < this.FMarkers.length)
+      {
+        this.FMarkers[AIndex].setPosition(new google.maps.LatLng(Lat, Lon));
+      };
+    };
+    this.SetMarkerIcon = function (AIndex, Url) {
+      if (AIndex < this.FMarkers.length)
+      {
+        this.FMarkers[AIndex].setIcon(Url);
+      };
+    };
+    this.SetCircleCenter = function (AIndex, Lat, Lon) {
+      if (AIndex < this.FCircles.length)
+      {
+        this.FCircles[AIndex].setCenter(new google.maps.LatLng(Lat, Lon));
+      };
+    };
+    this.SetCircleRadius = function (AIndex, Radius) {
+      if (AIndex < this.FCircles.length)
+      {
+        this.FCircles[AIndex].setRadius(Radius);
+      };
+    };
+    this.SetCircleColors = function (AIndex, AFillColor, AStrokeColor) {
+      var clrF = "";
+      var clrS = "";
+      clrF = pas["WEBLib.Graphics"].ColorToHTML(AFillColor);
+      clrS = pas["WEBLib.Graphics"].ColorToHTML(AStrokeColor);
+      if (AIndex < this.FCircles.length)
+      {
+        this.FCircles[AIndex].setOptions({ fillColor: clrF, strokeColor: clrS });
+      };
+    };
+    this.SetRectangleLocation = function (AIndex, NorthEastLat, NorthEastLon, SouthWestLat, SouthWestLon) {
+      if (AIndex < this.FRectangles.length)
+      {
+        var NELatLng = {lat: NorthEastLat, lng: NorthEastLon};
+        var SWLatLng = {lat: SouthWestLat, lng: SouthWestLon};
+        this.FRectangles[AIndex].setOptions({ bounds: new google.maps.LatLngBounds(NELatLng, SWLatLng) });
+      };
+    };
+    this.SetRectangleColors = function (AIndex, AFillColor, AStrokeColor) {
+      var clrF = "";
+      var clrS = "";
+      clrF = pas["WEBLib.Graphics"].ColorToHTML(AFillColor);
+      clrS = pas["WEBLib.Graphics"].ColorToHTML(AStrokeColor);
+      if (AIndex < this.FRectangles.length)
+      {
+        this.FRectangles[AIndex].setOptions({ fillColor: clrF, strokeColor: clrS });
+      };
+    };
+    this.SetPolylineColor = function (AIndex, AColor) {
+      var clr = "";
+      clr = pas["WEBLib.Graphics"].ColorToHTML(AColor);
+      if (AIndex < this.FPolylines.length)
+      {
+        this.FPolylines[AIndex].setOptions({ strokeColor: clr });
+      };
+    };
+    this.SetPolylinePoints = function (AIndex, Points) {
+      if (AIndex < this.FPolylines.length)
+      {
+        this.FPolylines[AIndex].setOptions({ path: Points });
+      };
+    };
+    this.SetPolygonColors = function (AIndex, AFillColor, AStrokeColor) {
+      var clrF = "";
+      var clrS = "";
+      clrF = pas["WEBLib.Graphics"].ColorToHTML(AFillColor);
+      clrS = pas["WEBLib.Graphics"].ColorToHTML(AStrokeColor);
+      if (AIndex < this.FPolygons.length)
+      {
+        this.FPolygons[AIndex].setOptions({ fillColor: clrF, strokeColor: clrS });
+      };
+    };
+    this.SetPolygonPoints = function (AIndex, Points) {
+      if (AIndex < this.FPolygons.length)
+      {
+        this.FPolygons[AIndex].setOptions({ path: Points });
+      };
+    };
+    this.FitBounds = function (LatMin, LonMin, LatMax, LonMax) {
+      var map = null;
+      map = this.GetMap();
+      if ((map != null) && this.GoogleLoaded()) {
+        var ne = new google.maps.LatLng(LatMax, LonMax);
+        var sw = new google.maps.LatLng(LatMin, LonMin);
+        var bounds = new google.maps.LatLngBounds(sw,ne);
+        map.fitBounds(bounds);
+      };
+    };
+    this.ClearMarkers = function () {
+      for (var i = 0; i < this.FMarkers.length; i++) {
+            this.FMarkers[i].setMap(null);
+            }
+      this.FMarkers = [];
+    };
+    this.ClearKMLs = function () {
+      for (var i = 0; i < this.FKMLs.length; i++) {
+            this.FKMLs[i].setMap(null);
+            }
+      this.FKMLs = [];
+    };
+    this.ClearPolylines = function () {
+      for (var i = 0; i < this.FPolylines.length; i++) {
+            this.FPolylines[i].setMap(null);
+            }
+      this.FPolyLines = [];
+    };
+    this.ClearPolygons = function () {
+      for (var i = 0; i < this.FPolygons.length; i++) {
+            this.FPolygons[i].setMap(null);
+            }
+      this.FPolyLines = [];
+    };
+    this.ClearCircles = function () {
+      for (var i = 0; i < this.FCircles.length; i++) {
+            this.FCircles[i].setMap(null);
+            }
+      this.FMarkers = [];
+    };
+    this.ClearRectangles = function () {
+      for (var i = 0; i < this.FRectangles.length; i++) {
+            this.FRectangles[i].setMap(null);
+            }
+      this.FRectangles = [];
+    };
+    this.ShowDirections = function (Source, Destination, ATravelMode, WayPoints, OptimizeWayPoints, AvoidHighways, AvoidTolls) {
+      var dirsvc = null;
+      var dirdispl = null;
+      var map = null;
+      var tm = "";
+      var wp = null;
+      var I = 0;
+      if (!(this.FDirectionsDisplay != null)) this.BindEvents();
+      dirsvc = this.FDirectionsService;
+      dirdispl = this.FDirectionsDisplay;
+      map = this.GetMap();
+      tm = this.TravelModeStr(ATravelMode);
+      wp = new Array();
+      if (WayPoints !== null) {
+        for (var $l = 0, $end = WayPoints.GetCount() - 1; $l <= $end; $l++) {
+          I = $l;
+          wp.push(pas.JS.New(["location",WayPoints.Get(I)]));
+        };
+      };
+      dirdispl.setMap(map);
+      
+          dirsvc.route({
+                origin: Source,
+                destination: Destination,
+                waypoints: wp,
+                optimizeWaypoints: OptimizeWayPoints,
+                avoidHighways: AvoidHighways,
+                avoidTolls: AvoidTolls,
+                travelMode: tm
+              }, function(response, status) {
+                if (status === 'OK') {
+                  dirdispl.setDirections(response);
+                  document.obj.DoDirections(response.routes);
+                } else {
+                  window.alert('Directions request failed due to ' + status);
+                }
+              });
+    };
+    this.ShowDirections$1 = function (SourceLon, SourceLat, DestLon, DestLat, ATravelMode, WayPoints, OptimizeWayPoints, AvoidHighways, AvoidTolls) {
+      var dirsvc = null;
+      var dirdispl = null;
+      var map = null;
+      var tm = "";
+      var wp = null;
+      var I = 0;
+      if (!(this.FDirectionsDisplay != null)) this.BindEvents();
+      dirsvc = this.FDirectionsService;
+      dirdispl = this.FDirectionsDisplay;
+      map = this.GetMap();
+      tm = this.TravelModeStr(ATravelMode);
+      wp = new Array();
+      if (WayPoints !== null) {
+        for (var $l = 0, $end = WayPoints.GetCount() - 1; $l <= $end; $l++) {
+          I = $l;
+          wp.push(pas.JS.New(["location",WayPoints.Get(I)]));
+        };
+      };
+      var sourcelatlon = new google.maps.LatLng(SourceLat, SourceLon);
+          var destlatlon = new google.maps.LatLng(DestLat, DestLon);
+      
+          dirdispl.setMap(map);
+          dirsvc.route({
+                origin: sourcelatlon,
+                destination: destlatlon,
+                waypoints: wp,
+                optimizeWaypoints: OptimizeWayPoints,
+                avoidHighways: AvoidHighways,
+                avoidTolls: AvoidTolls,
+                travelMode: tm
+              }, function(response, status) {
+                if (status === 'OK') {
+                  dirdispl.setDirections(response);
+                  document.obj.DoDirections(response.routes);
+                } else {
+                  window.alert('Directions request failed due to ' + status);
+                }
+              });
+    };
+    this.ShowStreetView = function (Lat, Lon, Heading, Zoom, Pitch) {
+      var map = null;
+      var mapid = "";
+      map = this.GetMap();
+      mapid = this.GetID();
+      var LatLng = {lat: Lat, lng: Lon};
+      var panorama = new google.maps.StreetViewPanorama(
+          document.getElementById(mapid), {
+            position: LatLng,
+            pov: {
+              heading: Heading,
+              zoom: Zoom,
+              pitch: Pitch
+            }
+          });
+      map.setStreetView(panorama);
+    };
+    this.HideStreetView = function () {
+      var map = null;
+      map = this.GetMap();
+      map.streetView.setVisible(false);
+    };
+    this.MoveMarker = function (AIndex, NewLat, NewLon) {
+      var marker = undefined;
+      marker = this.GetMarker(AIndex);
+      var latlng = new google.maps.LatLng(NewLat,NewLon);
+      marker.setPosition(latlng);
+    };
+    this.RemoveDirections = function () {
+      var dirdispl = null;
+      if (!(this.FDirectionsDisplay != null)) this.BindEvents();
+      dirdispl = this.FDirectionsDisplay;
+      dirdispl.setMap(null);
+    };
+    this.RemoveMarker = function (AIndex) {
+      if (AIndex < this.FMarkers.length)
+      {
+        this.FMarkers[AIndex].setMap(null);
+        this.FMarkers.splice(AIndex, 1);
+      };
+    };
+    this.RemovePolygon = function (AIndex) {
+      if (AIndex < this.FPolygons.length)
+      {
+        this.FPolygons[AIndex].setMap(null);
+        this.FPolygons.splice(AIndex, 1);
+      };
+    };
+    this.RemovePolyline = function (AIndex) {
+      if (AIndex < this.FPolylines.length)
+      {
+        this.FPolylines[AIndex].setMap(null);
+        this.FPolylines.splice(AIndex, 1);
+      };
+    };
+    this.RemoveCircle = function (AIndex) {
+      if (AIndex < this.FPolygons.length)
+      {
+        this.FCircles[AIndex].setMap(null);
+        this.FCircles.splice(AIndex, 1);
+      };
+    };
+    this.RemoveRectangle = function (AIndex) {
+      if (AIndex < this.FPolygons.length)
+      {
+        this.FRectangles[AIndex].setMap(null);
+        this.FRectangles.splice(AIndex, 1);
+      };
+    };
+    this.GeoCode = function (Address) {
+      var FURL = "";
+      this.FReq = new XMLHttpRequest();
+      this.FReq.addEventListener("load",rtl.createSafeCallback(this,"HandleResponse"));
+      this.FReq.addEventListener("abort",rtl.createSafeCallback(this,"HandleAbort"));
+      FURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + encodeURIComponent(Address) + "&key=" + this.FAPIKey;
+      this.FReq.open("GET",FURL);
+      this.FReq.send();
+    };
+    this.GetCoord = function (Lon, Lat) {
+      var Result = undefined;
+      Result = new google.maps.LatLng(Lat,Lon);
+      return Result;
+    };
+    this.Distance = function (Lon1, Lat1, Lon2, Lat2) {
+      var Result = 0.0;
+      Result = 0;
+      var R = 3958.8; // Radius of the Earth in miles
+      var rlat1 = Lat1 * (Math.PI/180); // Convert degrees to radians
+      var rlat2 = Lat2 * (Math.PI/180); // Convert degrees to radians
+      var difflat = rlat2-rlat1; // Radian difference (latitudes)
+      var difflon = (Lon2-Lon1) * (Math.PI/180); // Radian difference (longitudes)
+      var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat/2)*Math.sin(difflat/2)+Math.cos(rlat1)*Math.cos(rlat2)*Math.sin(difflon/2)*Math.sin(difflon/2)));
+      Result = d;
+      return Result;
+    };
+    this.GetBBox = function (Lon1, Lat1, Lon2, Lat2) {
+      var Result = undefined;
+      var SW = undefined;
+      var NE = undefined;
+      SW = this.GetCoord(Lon1,Lat1);
+      NE = this.GetCoord(Lon2,Lat2);
+      Result = new google.maps.LatLngBounds(SW,NE);
+      return Result;
+    };
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+    var $r = this.$rtti;
+    $r.addProperty("Align",2,pas["WEBLib.Controls"].$rtti["TAlign"],"FAlign","SetAlign",4,{Default: pas["WEBLib.Controls"].TAlign.alNone});
+    $r.addProperty("APIKey",2,rtl.string,"FAPIKey","SetAPIKey");
+    $r.addProperty("Center",0,pas["WEBLib.Controls"].$rtti["TCenter"],"FCenter","");
+    $r.addProperty("MapID",2,rtl.string,"FMapID","SetMapID");
+    $r.addProperty("MapRender",2,$mod.$rtti["TGoogleMapsRender"],"FMapRender","SetMapRender",4,{Default: $mod.TGoogleMapsRender.mrRaster});
+    $r.addProperty("Options",0,$mod.$rtti["TGoogleMapsOptions"],"FOptions","FOptions");
+    $r.addProperty("OnGeoCoded",0,$mod.$rtti["TMapClickEvent"],"FOnGeoCoded","FOnGeoCoded");
+    $r.addProperty("OnKeyDown",0,pas["WEBLib.Controls"].$rtti["TKeyEvent"],"FOnKeyDown","FOnKeyDown");
+    $r.addProperty("OnKeyUp",0,pas["WEBLib.Controls"].$rtti["TKeyEvent"],"FOnKeyUp","FOnKeyUp");
+    $r.addProperty("OnKeyPress",0,pas["WEBLib.Controls"].$rtti["TKeyPressEvent"],"FOnKeyPress","FOnKeyPress");
+    $r.addProperty("OnMapClick",0,$mod.$rtti["TMapClickEvent"],"FOnMapClick","FOnMapClick");
+    $r.addProperty("OnMapDblClick",0,$mod.$rtti["TMapClickEvent"],"FOnMapDblClick","FOnMapDblClick");
+    $r.addProperty("OnMapIdle",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnMapIdle","FOnMapIdle");
+    $r.addProperty("OnMapPan",0,$mod.$rtti["TMapClickEvent"],"FOnMapPan","FOnMapPan");
+    $r.addProperty("OnMapLoaded",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnMapLoaded","FOnMapLoaded");
+    $r.addProperty("OnMapZoom",0,$mod.$rtti["TMapZoomEvent"],"FOnMapZoom","FOnMapZoom");
+    $r.addProperty("OnMarkerClick",0,$mod.$rtti["TMapMarkerClickEvent"],"FOnMarkerClick","FOnMarkerClick");
+    $r.addProperty("OnPolygonClick",0,$mod.$rtti["TMapPolygonClickEvent"],"FOnPolygonClick","FOnPolygonClick");
+    $r.addProperty("OnPolylineClick",0,$mod.$rtti["TMapPolylineClickEvent"],"FOnPolylineClick","FOnPolylineClick");
+    $r.addProperty("OnCircleClick",0,$mod.$rtti["TMapCircleClickEvent"],"FOnCircleClick","FOnCircleClick");
+    $r.addProperty("OnRectangleClick",0,$mod.$rtti["TMapRectangleClickEvent"],"FOnRectangleClick","FOnRectangleClick");
+    $r.addProperty("OnKMLClick",0,$mod.$rtti["TMapKMLClickEvent"],"FOnKMLClick","FOnKMLClick");
+    $r.addProperty("OnDirectionsShown",0,$mod.$rtti["TDirectionsShownEvent"],"FOnDirectionsShown","FOnDirectionsShown");
+  });
+  rtl.createClass(this,"TWebGoogleMaps",this.TGoogleMaps,function () {
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+  });
+  this.$rtti.$Class("TLeafletMaps");
+  this.$rtti.$MethodVar("TLeafletMarkerEvent",{procsig: rtl.newTIProcSig([["Sender",pas.System.$rtti["TObject"]],["Lon",rtl.double],["Lat",rtl.double],["ID",rtl.string]]), methodkind: 0});
+  this.TLeafletZoom = {"0": "lzTopLeft", lzTopLeft: 0, "1": "lzTopRight", lzTopRight: 1, "2": "lzBottomLeft", lzBottomLeft: 2, "3": "lzBottomRight", lzBottomRight: 3, "4": "lzNone", lzNone: 4};
+  this.$rtti.$Enum("TLeafletZoom",{minvalue: 0, maxvalue: 4, ordtype: 1, enumtype: this.TLeafletZoom});
+  rtl.createClass(this,"TLeafletMapsOptions",pas.Classes.TPersistent,function () {
+    this.$init = function () {
+      pas.Classes.TPersistent.$init.call(this);
+      this.FOwner = null;
+      this.FDefaultLongitude = 0.0;
+      this.FZoomControl = 0;
+      this.FDefaultZoomLevel = 0;
+      this.FDefaultLatitude = 0.0;
+    };
+    this.$final = function () {
+      this.FOwner = undefined;
+      pas.Classes.TPersistent.$final.call(this);
+    };
+    this.SetDefaultLatitude = function (Value) {
+      this.FDefaultLatitude = Value;
+      if (this.FOwner != null) this.FOwner.SetCenter(this.FDefaultLatitude,this.FDefaultLongitude);
+    };
+    this.SetDefaultLongitude = function (Value) {
+      this.FDefaultLongitude = Value;
+      if (this.FOwner != null) this.FOwner.SetCenter(this.FDefaultLatitude,this.FDefaultLongitude);
+    };
+    this.SetDefaultZoomLevel = function (Value) {
+      this.FDefaultZoomLevel = Value;
+      if (this.FOwner != null) this.FOwner.SetZoom(this.FDefaultZoomLevel);
+    };
+    this.SetZoomControl = function (Value) {
+      this.FZoomControl = Value;
+      if (this.FOwner != null) this.FOwner.SetZoomControl(Value);
+    };
+    this.Create$1 = function (AOwner) {
+      this.FOwner = AOwner;
+      this.FDefaultLatitude = -34.397;
+      this.FDefaultLongitude = 150.644;
+      this.FDefaultZoomLevel = 13;
+      this.FZoomControl = $mod.TLeafletZoom.lzTopLeft;
+      return this;
+    };
+    this.Assign = function (Source) {
+      if ($mod.TLeafletMapsOptions.isPrototypeOf(Source)) {
+        this.FDefaultLatitude = rtl.as(Source,$mod.TLeafletMapsOptions).FDefaultLatitude;
+        this.FDefaultLongitude = rtl.as(Source,$mod.TLeafletMapsOptions).FDefaultLongitude;
+        this.FDefaultZoomLevel = rtl.as(Source,$mod.TLeafletMapsOptions).FDefaultZoomLevel;
+        this.FZoomControl = rtl.as(Source,$mod.TLeafletMapsOptions).FZoomControl;
+      };
+    };
+    var $r = this.$rtti;
+    $r.addProperty("ZoomControl",2,$mod.$rtti["TLeafletZoom"],"FZoomControl","SetZoomControl",4,{Default: $mod.TLeafletZoom.lzTopLeft});
+    $r.addProperty("DefaultLatitude",2,rtl.double,"FDefaultLatitude","SetDefaultLatitude",4,{Default: -34.397});
+    $r.addProperty("DefaultLongitude",2,rtl.double,"FDefaultLongitude","SetDefaultLongitude",4,{Default: 150.644});
+    $r.addProperty("DefaultZoomLevel",2,rtl.longint,"FDefaultZoomLevel","SetDefaultZoomLevel",4,{Default: 13});
+  });
+  rtl.createClass(this,"TLeafletMaps",pas["WEBLib.Controls"].TCustomControl,function () {
+    this.$init = function () {
+      pas["WEBLib.Controls"].TCustomControl.$init.call(this);
+      this.FMap = null;
+      this.FMapObject = undefined;
+      this.FMarkerGroup = undefined;
+      this.FZoomControl = undefined;
+      this.FCircles = null;
+      this.FRectangles = null;
+      this.FPolygons = null;
+      this.FPolyLines = null;
+      this.FMapClickPtr = null;
+      this.FMapDblClickPtr = null;
+      this.FMapPanPtr = null;
+      this.FMapZoomPtr = null;
+      this.FMarkerClickPtr = null;
+      this.FOnMapClick = null;
+      this.FOnMapDblClick = null;
+      this.FOnMapPan = null;
+      this.FOnMapZoom = null;
+      this.FOnMarkerClick = null;
+      this.FOptions = null;
+    };
+    this.$final = function () {
+      this.FMap = undefined;
+      this.FCircles = undefined;
+      this.FRectangles = undefined;
+      this.FPolygons = undefined;
+      this.FPolyLines = undefined;
+      this.FOnMapClick = undefined;
+      this.FOnMapDblClick = undefined;
+      this.FOnMapPan = undefined;
+      this.FOnMapZoom = undefined;
+      this.FOnMarkerClick = undefined;
+      this.FOptions = undefined;
+      pas["WEBLib.Controls"].TCustomControl.$final.call(this);
+    };
+    this.SetOptions = function (Value) {
+      this.FOptions.Assign(Value);
+    };
+    this.GetMap = function () {
+      var Result = null;
+      Result = this.FMap;
+      return Result;
+    };
+    this.CreateElement = function () {
+      var Result = null;
+      Result = document.createElement("DIV");
+      Result.setAttribute("id",this.GetID());
+      this.FMap = null;
+      return Result;
+    };
+    this.BindEvents = function () {
+      pas["WEBLib.Controls"].TCustomControl.BindEvents.call(this);
+    };
+    this.InitScript = function () {
+      var id = "";
+      var el = null;
+      pas["WEBLib.Controls"].TControl.InitScript.call(this);
+      id = this.GetID();
+      el = document.getElementById(id);
+      if (!(el != null)) return;
+      if (!pas.System.Assigned(this.FMapObject) && (this.FMapZoomPtr != null) && (this.FMapPanPtr != null) && (this.FMapClickPtr != null) && (this.FMapDblClickPtr != null) && (this.FMarkerClickPtr != null)) {
+        this.FMapObject = L.map(id, {zoomControl: false}).setView([51.505, -0.09], 13);
+        
+               // Add an OpenStreetMap tile layer
+               L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                  maxZoom: 19,
+                  attribution: '© OpenStreetMap contributors'
+               }).addTo(this.FMapObject);
+        
+               this.FMapObject.on("click", this.FMapClickPtr);
+               this.FMapObject.on("dblclick", this.FMapDblClickPtr);
+               this.FMapObject.on("dragend", this.FMapPanPtr);
+               this.FMapObject.on("zoomend", this.FMapZoomPtr);
+               this.FMarkerGroup = L.layerGroup().addTo(this.FMapObject);
+               this.FZoomControl = L.control.zoom({
+                 position: 'topleft' // You can specify the position as 'topleft', 'topright', 'bottomleft', or 'bottomright'
+                 }).addTo(this.FMapObject);
+        
+               var map = this.FMapObject;
+        
+               setTimeout(function() { map.invalidateSize(); }, 200);
+      };
+    };
+    this.HandleDoMouseDown = function (Event) {
+      var Result = false;
+      var me = null;
+      me = Event.originalEvent;
+      if (!(me != null)) pas["WEBLib.Controls"].TControl.HandleDoMouseDown.call(this,Event);
+      return Result;
+    };
+    this.HandleDoMouseUp = function (Event) {
+      var Result = false;
+      var me = null;
+      me = Event.originalEvent;
+      if (!(me != null)) pas["WEBLib.Controls"].TControl.HandleDoMouseUp.call(this,Event);
+      return Result;
+    };
+    this.HandleDoMouseMove = function (Event) {
+      var Result = false;
+      var me = null;
+      me = Event.originalEvent;
+      if (!(me != null)) pas["WEBLib.Controls"].TControl.HandleDoMouseMove.call(this,Event);
+      return Result;
+    };
+    this.DoHandleMapClick = function (AEvent) {
+      var Lon = 0.0;
+      var Lat = 0.0;
+      Lat = AEvent.latlng.lat;
+      Lon = AEvent.latlng.lng;
+      if (this.FOnMapClick != null) this.FOnMapClick(this,Lon,Lat);
+    };
+    this.DoHandleMapDblClick = function (AEvent) {
+      var Lon = 0.0;
+      var Lat = 0.0;
+      Lat = AEvent.latlng.lat;
+      Lon = AEvent.latlng.lng;
+      if (this.FOnMapDblClick != null) this.FOnMapDblClick(this,Lon,Lat);
+    };
+    this.DoHandleMapPan = function (AEvent) {
+      var Lon = 0.0;
+      var Lat = 0.0;
+      var center = this.FMapObject.getCenter();
+      Lon = center.lng;
+      Lat = center.lat;
+      if (this.FOnMapPan != null) this.FOnMapPan(this,Lat,Lon);
+    };
+    this.DoHandleMapZoom = function (AEvent) {
+      var zoom = 0;
+      zoom = this.FMapObject.getZoom();
+      if (this.FOnMapZoom != null) this.FOnMapZoom(this,zoom);
+    };
+    this.DoHandleMarkerclick = function (AEvent) {
+      var Lon = 0.0;
+      var Lat = 0.0;
+      var ID = "";
+      Lon = AEvent.latlng.lng;
+      Lat = AEvent.latlng.lat;
+      ID = AEvent.target.myCustomId;
+      if (this.FOnMarkerClick != null) this.FOnMarkerClick(this,Lon,Lat,ID);
+    };
+    this.ClearMethodPointers = function () {
+      pas["WEBLib.Controls"].TControl.ClearMethodPointers.call(this);
+      this.FMapClickPtr = null;
+      this.FMapDblClickPtr = null;
+      this.FMapPanPtr = null;
+      this.FMapZoomPtr = null;
+      this.FMarkerClickPtr = null;
+    };
+    this.GetMethodPointers = function () {
+      pas["WEBLib.Controls"].TControl.GetMethodPointers.call(this);
+      this.FMapClickPtr = rtl.createCallback(this,"DoHandleMapClick");
+      this.FMapDblClickPtr = rtl.createCallback(this,"DoHandleMapDblClick");
+      this.FMapPanPtr = rtl.createCallback(this,"DoHandleMapPan");
+      this.FMapZoomPtr = rtl.createCallback(this,"DoHandleMapZoom");
+      this.FMarkerClickPtr = rtl.createCallback(this,"DoHandleMarkerclick");
+    };
+    this.SetBoundsInt = function (X, Y, AWidth, AHeight) {
+      pas["WEBLib.Controls"].TControl.SetBoundsInt.apply(this,arguments);
+      if (pas.System.Assigned(this.FMapObject)) {
+        this.FMapObject.invalidateSize();
+      };
+    };
+    this.SetZoomControl = function (Value) {
+      var s = "";
+      if (!pas.System.Assigned(this.FMapObject)) return;
+      if (!pas.System.Assigned(this.FZoomControl)) return;
+      var $tmp = Value;
+      if ($tmp === $mod.TLeafletZoom.lzTopLeft) {
+        s = "topleft"}
+       else if ($tmp === $mod.TLeafletZoom.lzTopRight) {
+        s = "topright"}
+       else if ($tmp === $mod.TLeafletZoom.lzBottomLeft) {
+        s = "bottomleft"}
+       else if ($tmp === $mod.TLeafletZoom.lzBottomRight) s = "bottomright";
+      this.FZoomControl.remove();
+      if (Value !== $mod.TLeafletZoom.lzNone) {
+        this.FZoomControl = L.control.zoom({
+                position: s  // Choose: 'topleft', 'topright', 'bottomleft', 'bottomright'
+              }).addTo(this.FMapObject);
+        
+              this.FMapObject.invalidateSize();
+      };
+    };
+    this.CreateInitialize = function () {
+      pas["WEBLib.Controls"].TCustomControl.CreateInitialize.call(this);
+      this.FCircles = pas.Classes.TList.$create("Create$1");
+      this.FRectangles = pas.Classes.TList.$create("Create$1");
+      this.FPolygons = pas.Classes.TList.$create("Create$1");
+      this.FPolyLines = pas.Classes.TList.$create("Create$1");
+      this.FOptions = $mod.TLeafletMapsOptions.$create("Create$1",[this]);
+    };
+    this.Destroy = function () {
+      rtl.free(this,"FCircles");
+      rtl.free(this,"FRectangles");
+      rtl.free(this,"FPolygons");
+      rtl.free(this,"FPolyLines");
+      rtl.free(this,"FOptions");
+      pas["WEBLib.Controls"].TCustomControl.Destroy.call(this);
+    };
+    this.SetCenter = function (Lat, Lon) {
+      this.FMapObject.setView([Lat,Lon]);
+      this.FMapObject.invalidateSize();
+    };
+    this.GetCenter = function (Lat, Lon) {
+      var Result = false;
+      var la = 0.0;
+      var lo = 0.0;
+      Result = false;
+      if (!pas.System.Assigned(this.FMapObject)) return Result;
+      var center = this.FMapObject.getCenter();
+      la = center.lat;
+      lo = center.lng;
+      Lat.set(la);
+      Lon.set(lo);
+      Result = true;
+      return Result;
+    };
+    this.SetZoom = function (Zoom) {
+      this.FMapObject.setZoom(Zoom);
+      this.FMapObject.invalidateSize();
+    };
+    this.AddMarker = function (Lat, Lon, ID, Title, Popup) {
+      if (pas.System.Assigned(this.FMarkerGroup)) {
+        var mrkr = L.marker([Lat, Lon]).addTo(this.FMarkerGroup);
+        // Optionally, you can add a popup to the marker
+        if (Title != "") {
+          mrkr.bindTooltip(Title); }
+        if (Popup != "") {
+          mrkr.bindPopup(Title); }
+        mrkr.myCustomId = ID;
+        mrkr.on('click', this.FMarkerClickPtr);
+      };
+    };
+    this.ClearMarkers = function () {
+      this.FMarkerGroup.clearLayers();
+    };
+    this.AddPolyLine = function (Points, AColor, AWidth, AOpacity) {
+      var strokecolor = "";
+      var polyline = undefined;
+      strokecolor = pas["WEBLib.Graphics"].ColorToHTML(AColor);
+      polyline = L.polyline(Points, {color: strokecolor, weight: AWidth}).addTo(this.FMapObject);
+      this.FPolyLines.Add(polyline);
+    };
+    this.AddPolygon = function (Points, AFillColor, AStrokeColor, AWidth, AOpacity) {
+      var Fillcolor = "";
+      var Strokecolor = "";
+      var poly = undefined;
+      Strokecolor = pas["WEBLib.Graphics"].ColorToHTML(AStrokeColor);
+      Fillcolor = pas["WEBLib.Graphics"].ColorToHTML(AFillColor);
+      poly = L.polygon(Points, {color: Strokecolor, fillcolor: Fillcolor, fillopacity: AOpacity, weight: AWidth}).addTo(this.FMapObject);
+      this.FPolygons.Add(poly);
+    };
+    this.AddCircle = function (Lat, Lon, Radius, AFillColor, AStrokeColor, AWidth, AOpacity) {
+      var fillcolor = "";
+      var strokecolor = "";
+      var circle = undefined;
+      fillcolor = pas["WEBLib.Graphics"].ColorToHTML(AFillColor);
+      strokecolor = pas["WEBLib.Graphics"].ColorToHTML(AStrokeColor);
+      var center = [Lat, Lon];
+      // Create and add the rectangle to the map
+      circle = L.circle(center, {radius: Radius, color: strokecolor, weight: AWidth, fillcolor: fillcolor, fillopacity: AOpacity}).addTo(this.FMapObject);
+      this.FCircles.Add(circle);
+    };
+    this.AddRectangle = function (NorthEastLat, NorthEastLon, SouthWestLat, SouthWestLon, AFillColor, AStrokeColor, AWidth, AOpacity) {
+      var Fillcolor = "";
+      var Strokecolor = "";
+      var rect = undefined;
+      Fillcolor = pas["WEBLib.Graphics"].ColorToHTML(AFillColor);
+      Strokecolor = pas["WEBLib.Graphics"].ColorToHTML(AStrokeColor);
+      var bounds = [[NorthEastLat, NorthEastLon], [SouthWestLat, SouthWestLon]];
+      // Create and add the rectangle to the map
+      rect = L.rectangle(bounds, {color: Strokecolor, weight: AWidth, fillcolor: Fillcolor, fillopacity: AOpacity}).addTo(this.FMapObject);
+      this.FRectangles.Add(rect);
+    };
+    this.ClearPolylines = function () {
+      var i = 0;
+      var c = undefined;
+      for (var $l = 0, $end = this.FPolyLines.GetCount() - 1; $l <= $end; $l++) {
+        i = $l;
+        c = this.FPolyLines.Get(i);
+        this.FMapObject.removeLayer(c);
+      };
+    };
+    this.ClearPolygons = function () {
+      var i = 0;
+      var c = undefined;
+      for (var $l = 0, $end = this.FPolygons.GetCount() - 1; $l <= $end; $l++) {
+        i = $l;
+        c = this.FPolygons.Get(i);
+        this.FMapObject.removeLayer(c);
+      };
+    };
+    this.ClearCircles = function () {
+      var i = 0;
+      var c = undefined;
+      for (var $l = 0, $end = this.FCircles.GetCount() - 1; $l <= $end; $l++) {
+        i = $l;
+        c = this.FCircles.Get(i);
+        this.FMapObject.removeLayer(c);
+      };
+    };
+    this.ClearRectangles = function () {
+      var i = 0;
+      var c = undefined;
+      for (var $l = 0, $end = this.FRectangles.GetCount() - 1; $l <= $end; $l++) {
+        i = $l;
+        c = this.FRectangles.Get(i);
+        this.FMapObject.removeLayer(c);
+      };
+    };
+    this.LatLonToXY = function (Lat, Lon, X, Y) {
+      var px = 0;
+      var py = 0;
+      if (pas.System.Assigned(this.FMapObject)) {
+        var latLng = L.latLng(Lat,Lon);
+        var point = this.FMapObject.latLngToContainerPoint(latLng);
+        px = point.x;
+        py = point.y;
+        X.set(px);
+        Y.set(py);
+      } else throw pas.SysUtils.Exception.$create("Create$1",[$impl.LMapNotCreated]);
+    };
+    this.XYToLatLon = function (X, Y, Lat, Lon) {
+      var la = 0.0;
+      var lo = 0.0;
+      if (pas.System.Assigned(this.FMapObject)) {
+        var point = L.point(X, Y);
+        var latLng = this.FMapObject.containerPointToLatLng(point);
+        la = latLng.lat;
+        lo = latLng.lng;
+        Lat.set(la);
+        Lon.set(lo);
+      } else throw pas.SysUtils.Exception.$create("Create$1",[$impl.LMapNotCreated]);
+    };
+    this.Distance = function (Lon1, Lat1, Lon2, Lat2) {
+      var Result = 0.0;
+      if (pas.System.Assigned(this.FMapObject)) {
+        var pt1 = L.latLng(Lat1,Lon1);
+        var pt2 = L.latLng(Lat2,Lon2);
+        Result = pt1.distanceTo(pt2);
+      } else throw pas.SysUtils.Exception.$create("Create$1",[$impl.LMapNotCreated]);
+      return Result;
+    };
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+    var $r = this.$rtti;
+    $r.addProperty("Center",0,pas["WEBLib.Controls"].$rtti["TCenter"],"FCenter","");
+    $r.addProperty("Options",2,$mod.$rtti["TLeafletMapsOptions"],"FOptions","SetOptions");
+    $r.addProperty("OnKeyUp",0,pas["WEBLib.Controls"].$rtti["TKeyEvent"],"FOnKeyUp","FOnKeyUp");
+    $r.addProperty("OnKeyDown",0,pas["WEBLib.Controls"].$rtti["TKeyEvent"],"FOnKeyDown","FOnKeyDown");
+    $r.addProperty("OnKeyPress",0,pas["WEBLib.Controls"].$rtti["TKeyPressEvent"],"FOnKeyPress","FOnKeyPress");
+    $r.addProperty("OnMapClick",0,$mod.$rtti["TMapClickEvent"],"FOnMapClick","FOnMapClick");
+    $r.addProperty("OnMapDblClick",0,$mod.$rtti["TMapClickEvent"],"FOnMapDblClick","FOnMapDblClick");
+    $r.addProperty("OnMapPan",0,$mod.$rtti["TMapClickEvent"],"FOnMapPan","FOnMapPan");
+    $r.addProperty("OnMapZoom",0,$mod.$rtti["TMapZoomEvent"],"FOnMapZoom","FOnMapZoom");
+    $r.addProperty("OnMarkerClick",0,$mod.$rtti["TLeafletMarkerEvent"],"FOnMarkerClick","FOnMarkerClick");
+    $r.addProperty("OnMouseDown",0,pas["WEBLib.Controls"].$rtti["TMouseEvent"],"FOnMouseDown","FOnMouseDown");
+    $r.addProperty("OnMouseMove",0,pas["WEBLib.Controls"].$rtti["TMouseMoveEvent"],"FOnMouseMove","FOnMouseMove");
+    $r.addProperty("OnMouseUp",0,pas["WEBLib.Controls"].$rtti["TMouseEvent"],"FOnMouseUp","FOnMouseUp");
+  });
+  rtl.createClass(this,"TWebLeafletMaps",this.TLeafletMaps,function () {
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+  });
+  this.TDriveView = {"0": "dvList", dvList: 0, "1": "dvGrid", dvGrid: 1};
+  this.$rtti.$Enum("TDriveView",{minvalue: 0, maxvalue: 1, ordtype: 1, enumtype: this.TDriveView});
+  rtl.createClass(this,"TGoogleDrive",pas["WEBLib.Controls"].TCustomControl,function () {
+    this.$init = function () {
+      pas["WEBLib.Controls"].TCustomControl.$init.call(this);
+      this.FView = 0;
+      this.FFolderID = "";
+      this.FFrameHandle = null;
+    };
+    this.$final = function () {
+      this.FFrameHandle = undefined;
+      pas["WEBLib.Controls"].TCustomControl.$final.call(this);
+    };
+    this.SetFolderID = function (Value) {
+      if (this.FFolderID !== Value) {
+        this.FFolderID = Value;
+        this.UpdateElement();
+      };
+    };
+    this.SetView = function (Value) {
+      if (this.FView !== Value) {
+        this.FView = Value;
+        this.UpdateElement();
+      };
+    };
+    this.CreateElement = function () {
+      var Result = null;
+      Result = document.createElement("DIV");
+      this.FFrameHandle = document.createElement("IFRAME");
+      Result.appendChild(this.FFrameHandle);
+      this.FFrameHandle.setAttribute("frameborder","0");
+      return Result;
+    };
+    this.UpdateElement = function () {
+      var vs = "";
+      var img = "";
+      pas["WEBLib.Controls"].TControl.UpdateElement.call(this);
+      var $tmp = this.FView;
+      if ($tmp === $mod.TDriveView.dvList) {
+        vs = "list"}
+       else if ($tmp === $mod.TDriveView.dvGrid) vs = "grid";
+      if (this.GetElementHandle() != null) {
+        if (this.FFolderID !== "") {
+          this.FFrameHandle.setAttribute("src","https://drive.google.com/embeddedfolderview?id=" + this.FFolderID + "&embedded=true#" + vs);
+          this.FFrameHandle.style.setProperty("border","0");
+        } else {
+          img = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGV" + "uYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDEyOCAxMjgiIGlkPSJTb2NpYWxfSWNvbnMiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDEyOCAxMjgiIHhtbDpzcGFjZT0icHJlc2VydmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1s" + "bnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxnIGlkPSJfeDMzX19zdHJva2UiPjxnIGlkPSJHb29nbGVfRHJpdmUiPjxyZWN0IGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBoZWlnaHQ9I" + "jEyOCIgd2lkdGg9IjEyOCIvPjxnIGlkPSJHb29nbGVfRHJpdmVfMV8iPjxwb2x5Z29uIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iIzM3NzdFMyIgZmlsbC1ydWxlPSJldmVub2RkIiBwb2ludHM9IjIxLjMzNSwxMjAgNDIuNjY2LDgyLjY2NyAxMjgsODIuNj" + "Y3IDEwNi42NjYsMTIwICAgICAgICAgIi8+PHBvbHlnb24gY2xpcC1ydWxlPSJldmVub2RkIiBmaWxsPSIjRkZDRjYzIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIHBvaW50cz0iODUuMzM1LDgyLjY2NyAxMjgsODIuNjY3IDg1LjMzNSw4IDQyLjY2Niw4ICAgICIvPjx" + "wb2x5Z29uIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iIzExQTg2MSIgZmlsbC1ydWxlPSJldmVub2RkIiBwb2ludHM9IjAsODIuNjY3IDIxLjMzNSwxMjAgNjQsNDUuMzMzIDQyLjY2Niw4ICAgICIvPjwvZz48L2c+PC9nPjwvc3ZnPg==";
+          this.RenderDesigning(this.$classname,this.GetContainer(),this,true,img);
+        };
+      };
+    };
+    this.CreateInitialize = function () {
+      pas["WEBLib.Controls"].TCustomControl.CreateInitialize.call(this);
+      this.SetWidth(400);
+      this.SetHeight(300);
+    };
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+    var $r = this.$rtti;
+    $r.addProperty("FolderID",2,rtl.string,"FFolderID","SetFolderID");
+    $r.addProperty("View",2,$mod.$rtti["TDriveView"],"FView","SetView");
+  });
+  rtl.createClass(this,"TWebGoogleDrive",this.TGoogleDrive,function () {
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+  });
+  rtl.createClass(this,"TTwitterFeed",pas["WEBLib.Controls"].TCustomControl,function () {
+    this.$init = function () {
+      pas["WEBLib.Controls"].TCustomControl.$init.call(this);
+      this.FUpdatedFeed = false;
+      this.FFeed = "";
+      this.FFeedLinkText = "";
+    };
+    this.SetFeed = function (Value) {
+      this.FFeed = Value;
+      this.FUpdatedFeed = false;
+      this.UpdateElement();
+    };
+    this.SetFeedLinkText = function (Value) {
+      this.FFeedLinkText = Value;
+      this.UpdateElement();
+    };
+    this.CreateElement = function () {
+      var Result = null;
+      Result = document.createElement("SPAN");
+      return Result;
+    };
+    this.UpdateElement = function () {
+      var srcurl = "";
+      var img = "";
+      var script = null;
+      pas["WEBLib.Controls"].TControl.UpdateElement.call(this);
+      if ((this.GetElementHandle() != null) && !this.IsUpdating()) {
+        srcurl = "https://platform.twitter.com/widgets.js";
+        script = document.getElementById($impl.TWITTERSCRIPTID);
+        if (!(script != null)) {
+          script = document.createElement("script");
+          script.setAttribute("id",$impl.TWITTERSCRIPTID);
+          script.async = true;
+          script.setAttribute("type","text/javascript");
+          script.setAttribute("charset","utf-8");
+          script.setAttribute("src",srcurl);
+          document.head.appendChild(script);
+        };
+      };
+      if ((this.GetElementHandle() != null) && !this.IsUpdating() && !this.FUpdatedFeed) {
+        if ((this.FFeed !== "") && !(pas.Classes.TComponentStateItem.csDesigning in this.FComponentState)) {
+          srcurl = '<a class="twitter-timeline" href="https://twitter.com/' + this.FFeed + '" data-chrome="nofooter noborders">' + this.FFeedLinkText + "</a>";
+          this.SetBorderStyle(pas["WEBLib.Controls"].TBorderStyle.bsNone);
+          this.GetElementHandle().innerHTML = srcurl;
+          if (typeof twttr !== 'undefined') {
+          twttr.widgets.load() };
+          this.FUpdatedFeed = true;
+        } else {
+          img = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIg0KICAgd2lkdGg9IjMwMCINCiAgIGhlaWdodD0iMzAwIj4NCjxwYX" + "RoIGQ9Im0gMjUwLDg3Ljk3NCBjIC03LjM1OCwzLjI2NCAtMTUuMjY3LDUuNDY5IC0yMy41NjYsNi40NjEgOC40NzEsLTUuMDc4IDE0Ljk3OCwtMTMuMTE5IDE4LjA0MSwtMjIuNzAxIC03LjkyOSw0LjcwMyAtMTYuNzEsOC4xMTcgLTI2LjA1Ny" + "w5Ljk1NyAtNy40ODQsLTcuOTc1IC0xOC4xNDgsLTEyLjk1NyAtMjkuOTUsLTEyLjk1NyAtMjIuNjYsMCAtNDEuMDMzLDE4LjM3MSAtNDEuMDMzLDQxLjAzMSAwLDMuMjE2IDAuMzYzLDYuMzQ4IDEuMDYyLDkuMzUxIC0zNC4xMDIsLTEuNzExIC" + "02NC4zMzYsLTE4LjA0NyAtODQuNTc0LC00Mi44NzIgLTMuNTMyLDYuMDYgLTUuNTU2LDEzLjEwOCAtNS41NTYsMjAuNjI4IDAsMTQuMjM2IDcuMjQ0LDI2Ljc5NSAxOC4yNTQsMzQuMTUzIC02LjcyNiwtMC4yMTMgLTEzLjA1MywtMi4wNTkgLT" + "E4LjU4NSwtNS4xMzIgLTAuMDA0LDAuMTcxIC0wLjAwNCwwLjM0MyAtMC4wMDQsMC41MTYgMCwxOS44OCAxNC4xNDQsMzYuNDY0IDMyLjkxNSw0MC4yMzQgLTMuNDQzLDAuOTM4IC03LjA2OCwxLjQzOSAtMTAuODEsMS40MzkgLTIuNjQ0LDAgLT" + "UuMjE0LC0wLjI1OCAtNy43MiwtMC43MzYgNS4yMjIsMTYuMzAxIDIwLjM3NSwyOC4xNjUgMzguMzMxLDI4LjQ5NSAtMTQuMDQzLDExLjAwNiAtMzEuNzM1LDE3LjU2NSAtNTAuOTYsMTcuNTY1IC0zLjMxMiwwIC02LjU3OCwtMC4xOTQgLTkuNz" + "g4LC0wLjU3NCAxOC4xNTksMTEuNjQzIDM5LjcyNywxOC40MzcgNjIuODk5LDE4LjQzNyA3NS40NzMsMCAxMTYuNzQ2LC02Mi41MjQgMTE2Ljc0NiwtMTE2Ljc0NyAwLC0xLjc3OSAtMC4wNCwtMy41NDggLTAuMTE5LC01LjMwOSA4LjAxNywtNS" + "43ODQgMTQuOTczLC0xMy4wMTEgMjAuNDc0LC0yMS4yMzkgeiIgc3R5bGU9ImZpbGw6IzNhYWFlMSIgLz4NCjwvc3ZnPg==";
+          this.RenderDesigning(this.$classname,this.GetContainer(),this,true,img);
+        };
+      };
+      if (this.GetElementHandle() != null) this.GetElementHandle().style.setProperty("overflow-y","auto");
+    };
+    this.CreateInitialize = function () {
+      pas["WEBLib.Controls"].TCustomControl.CreateInitialize.call(this);
+      this.SetWidth(400);
+      this.SetHeight(300);
+    };
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+    var $r = this.$rtti;
+    $r.addProperty("Center",0,pas["WEBLib.Controls"].$rtti["TCenter"],"FCenter","");
+    $r.addProperty("Feed",2,rtl.string,"FFeed","SetFeed");
+    $r.addProperty("FeedLinkText",2,rtl.string,"FFeedLinkText","SetFeedLinkText");
+    $r.addProperty("Visible",2,rtl.boolean,"FVisible","SetVisible",4,{Default: true});
+  });
+  rtl.createClass(this,"TWebTwitterFeed",this.TTwitterFeed,function () {
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+  });
+  rtl.createClass(this,"THTMLDiv",pas["WEBLib.Controls"].TCustomControl,function () {
+    this.$init = function () {
+      pas["WEBLib.Controls"].TCustomControl.$init.call(this);
+      this.FHTML = null;
+      this.FOldText = "";
+    };
+    this.$final = function () {
+      this.FHTML = undefined;
+      pas["WEBLib.Controls"].TCustomControl.$final.call(this);
+    };
+    this.SetHTML = function (Value) {
+      this.FHTML.Assign(Value);
+    };
+    this.UpdateElementData = function () {
+      pas["WEBLib.Controls"].TControl.UpdateElementData.call(this);
+      if (this.GetElementHandle() != null) {
+        if ((this.FOldText !== "") || (this.FHTML.GetTextStr() !== "")) this.GetElementHandle().innerHTML = this.FHTML.GetTextStr();
+        this.FOldText = this.FHTML.GetTextStr();
+      } else {
+        if (!this.GetIsLinked() && (pas.Classes.TComponentStateItem.csDesigning in this.FComponentState)) this.RenderDesigning(this.$classname,this.GetContainer(),this,true,"");
+      };
+    };
+    this.HTMLChanged = function (Sender) {
+      this.UpdateElementData();
+    };
+    this.CreateElement = function () {
+      var Result = null;
+      Result = document.createElement("DIV");
+      return Result;
+    };
+    this.CreateInitialize = function () {
+      this.FHTML = pas.Classes.TStringList.$create("Create$1");
+      this.FHTML.SetSkipLastLineBreak(true);
+      rtl.as(this.FHTML,pas.Classes.TStringList).FOnChange = rtl.createCallback(this,"HTMLChanged");
+      pas["WEBLib.Controls"].TCustomControl.CreateInitialize.call(this);
+      this.FControlStyle = rtl.unionSet(this.FControlStyle,rtl.createSet(pas["WEBLib.Controls"].TControlStyleValue.csAcceptsControls));
+      this.SetClipChildren(false);
+      this.SetTabStop(false);
+      if (pas.Classes.TComponentStateItem.csDesigning in this.FComponentState) {
+        this.SetWidth(240);
+        this.SetHeight(160);
+      };
+    };
+    this.Destroy = function () {
+      rtl.free(this,"FHTML");
+      pas["WEBLib.Controls"].TCustomControl.Destroy.call(this);
+    };
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+    var $r = this.$rtti;
+    $r.addProperty("Align",2,pas["WEBLib.Controls"].$rtti["TAlign"],"FAlign","SetAlign",4,{Default: pas["WEBLib.Controls"].TAlign.alNone});
+    $r.addProperty("AlignWithMargins",2,rtl.boolean,"FAlignWithMargins","SetAlignWithMargins",4,{Default: false});
+    $r.addProperty("Anchors",2,pas["WEBLib.Controls"].$rtti["TAnchors"],"FAnchors","SetAnchors",4,{Default: rtl.createSet(pas["WEBLib.Controls"].TAnchorKind.akLeft,pas["WEBLib.Controls"].TAnchorKind.akTop)});
+    $r.addProperty("Center",0,pas["WEBLib.Controls"].$rtti["TCenter"],"FCenter","");
+    $r.addProperty("ChildOrder",2,rtl.longint,"FChildOrder","SetChildOrderEx",4,{Default: 0});
+    $r.addProperty("DragMode",2,pas["WEBLib.Controls"].$rtti["TDragMode"],"FDragMode","SetDragMode",4,{Default: pas["WEBLib.Controls"].TDragMode.dmManual});
+    $r.addProperty("ElementClassName",2,pas["WEBLib.Controls"].$rtti["TElementClassName"],"FElementClassName","SetElementClassName");
+    $r.addProperty("ElementFont",2,pas["WEBLib.Controls"].$rtti["TElementFont"],"FElementFont","SetElementFont",4,{Default: pas["WEBLib.Controls"].TElementFont.efProperty});
+    $r.addProperty("ElementID",3,pas["WEBLib.Controls"].$rtti["TElementID"],"GetID","SetID");
+    $r.addProperty("ElementPosition",2,pas["WEBLib.Controls"].$rtti["TElementPosition"],"FElementPosition","SetElementPosition",4,{Default: pas["WEBLib.Controls"].TElementPosition.epAbsolute});
+    $r.addProperty("HeightPercent",2,rtl.double,"FHeightPercent","SetHeightPercent",4,{Default: 100});
+    $r.addProperty("HeightStyle",2,pas["WEBLib.Controls"].$rtti["TSizeStyle"],"FHeightStyle","SetHeightStyle",4,{Default: pas["WEBLib.Controls"].TSizeStyle.ssAbsolute});
+    $r.addProperty("HTML",2,pas.Classes.$rtti["TStrings"],"FHTML","SetHTML");
+    $r.addProperty("Role",3,rtl.string,"GetRole","SetRole");
+    $r.addProperty("Visible",2,rtl.boolean,"FVisible","SetVisible",4,{Default: true});
+    $r.addProperty("WidthPercent",2,rtl.double,"FWidthPercent","SetWidthPercent",4,{Default: 100});
+    $r.addProperty("WidthStyle",2,pas["WEBLib.Controls"].$rtti["TSizeStyle"],"FWidthStyle","SetWidthStyle",4,{Default: pas["WEBLib.Controls"].TSizeStyle.ssAbsolute});
+    $r.addProperty("OnClick",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnClick","FOnClick");
+    $r.addProperty("OnDblClick",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnDblClick","FOnDblClick");
+    $r.addProperty("OnMouseDown",0,pas["WEBLib.Controls"].$rtti["TMouseEvent"],"FOnMouseDown","FOnMouseDown");
+    $r.addProperty("OnMouseUp",0,pas["WEBLib.Controls"].$rtti["TMouseEvent"],"FOnMouseUp","FOnMouseUp");
+    $r.addProperty("OnMouseMove",0,pas["WEBLib.Controls"].$rtti["TMouseMoveEvent"],"FOnMouseMove","FOnMouseMove");
+    $r.addProperty("OnMouseLeave",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnMouseLeave","FOnMouseLeave");
+    $r.addProperty("OnMouseEnter",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnMouseEnter","FOnMouseEnter");
+    $r.addProperty("OnTouchStart",0,pas["WEBLib.Controls"].$rtti["TTouchEvent"],"FOnTouchStart","FOnTouchStart");
+    $r.addProperty("OnTouchEnd",0,pas["WEBLib.Controls"].$rtti["TTouchEvent"],"FOnTouchEnd","FOnTouchEnd");
+    $r.addProperty("OnTouchMove",0,pas["WEBLib.Controls"].$rtti["TTouchEvent"],"FOnTouchMove","FOnTouchMove");
+    $r.addProperty("OnTouchCancel",0,pas["WEBLib.Controls"].$rtti["TTouchEvent"],"FOnTouchCancel","FOnTouchCancel");
+    $r.addProperty("OnDragDrop",0,pas["WEBLib.Controls"].$rtti["TDragDropEvent"],"FOnDragDrop","FOnDragDrop");
+    $r.addProperty("OnDragOver",0,pas["WEBLib.Controls"].$rtti["TDragOverEvent"],"FOnDragOver","FOnDragOver");
+    $r.addProperty("OnEndDrag",0,pas["WEBLib.Controls"].$rtti["TEndDragEvent"],"FonEndDrag","FonEndDrag");
+    $r.addProperty("OnStartDrag",0,pas["WEBLib.Controls"].$rtti["TStartDragEvent"],"FOnStartDrag","FOnStartDrag");
+  });
+  rtl.createClass(this,"TWebHTMLDiv",this.THTMLDiv,function () {
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+  });
+  rtl.createClass(this,"THTMLSpan",pas["WEBLib.Controls"].TCustomControl,function () {
+    this.$init = function () {
+      pas["WEBLib.Controls"].TCustomControl.$init.call(this);
+      this.FHTML = null;
+      this.FOldText = "";
+    };
+    this.$final = function () {
+      this.FHTML = undefined;
+      pas["WEBLib.Controls"].TCustomControl.$final.call(this);
+    };
+    this.SetHTML = function (Value) {
+      this.FHTML.Assign(Value);
+    };
+    this.UpdateElementData = function () {
+      pas["WEBLib.Controls"].TControl.UpdateElementData.call(this);
+      if (this.GetElementHandle() != null) {
+        if ((this.FOldText !== "") || (this.FHTML.GetTextStr() !== "")) this.GetElementHandle().innerHTML = this.FHTML.GetTextStr();
+        this.FOldText = this.FHTML.GetTextStr();
+      } else {
+        if (!this.GetIsLinked() && (pas.Classes.TComponentStateItem.csDesigning in this.FComponentState)) this.RenderDesigning(this.$classname,this.GetContainer(),this,true,"");
+      };
+    };
+    this.HTMLChanged = function (Sender) {
+      this.UpdateElementData();
+    };
+    this.CreateElement = function () {
+      var Result = null;
+      Result = document.createElement("SPAN");
+      return Result;
+    };
+    this.CreateInitialize = function () {
+      this.FHTML = pas.Classes.TStringList.$create("Create$1");
+      rtl.as(this.FHTML,pas.Classes.TStringList).FOnChange = rtl.createCallback(this,"HTMLChanged");
+      pas["WEBLib.Controls"].TCustomControl.CreateInitialize.call(this);
+      this.FControlStyle = rtl.unionSet(this.FControlStyle,rtl.createSet(pas["WEBLib.Controls"].TControlStyleValue.csAcceptsControls));
+      this.SetTabStop(false);
+      this.SetClipChildren(false);
+      if (pas.Classes.TComponentStateItem.csDesigning in this.FComponentState) {
+        this.SetWidth(240);
+        this.SetHeight(160);
+      };
+    };
+    this.Destroy = function () {
+      rtl.free(this,"FHTML");
+      pas["WEBLib.Controls"].TCustomControl.Destroy.call(this);
+    };
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+    var $r = this.$rtti;
+    $r.addProperty("Align",2,pas["WEBLib.Controls"].$rtti["TAlign"],"FAlign","SetAlign",4,{Default: pas["WEBLib.Controls"].TAlign.alNone});
+    $r.addProperty("AlignWithMargins",2,rtl.boolean,"FAlignWithMargins","SetAlignWithMargins",4,{Default: false});
+    $r.addProperty("Anchors",2,pas["WEBLib.Controls"].$rtti["TAnchors"],"FAnchors","SetAnchors",4,{Default: rtl.createSet(pas["WEBLib.Controls"].TAnchorKind.akLeft,pas["WEBLib.Controls"].TAnchorKind.akTop)});
+    $r.addProperty("Center",0,pas["WEBLib.Controls"].$rtti["TCenter"],"FCenter","");
+    $r.addProperty("ChildOrder",2,rtl.longint,"FChildOrder","SetChildOrderEx",4,{Default: 0});
+    $r.addProperty("DragMode",2,pas["WEBLib.Controls"].$rtti["TDragMode"],"FDragMode","SetDragMode",4,{Default: pas["WEBLib.Controls"].TDragMode.dmManual});
+    $r.addProperty("ElementClassName",2,pas["WEBLib.Controls"].$rtti["TElementClassName"],"FElementClassName","SetElementClassName");
+    $r.addProperty("ElementFont",2,pas["WEBLib.Controls"].$rtti["TElementFont"],"FElementFont","SetElementFont",4,{Default: pas["WEBLib.Controls"].TElementFont.efProperty});
+    $r.addProperty("ElementID",3,pas["WEBLib.Controls"].$rtti["TElementID"],"GetID","SetID");
+    $r.addProperty("ElementPosition",2,pas["WEBLib.Controls"].$rtti["TElementPosition"],"FElementPosition","SetElementPosition",4,{Default: pas["WEBLib.Controls"].TElementPosition.epAbsolute});
+    $r.addProperty("HeightPercent",2,rtl.double,"FHeightPercent","SetHeightPercent",4,{Default: 100});
+    $r.addProperty("HeightStyle",2,pas["WEBLib.Controls"].$rtti["TSizeStyle"],"FHeightStyle","SetHeightStyle",4,{Default: pas["WEBLib.Controls"].TSizeStyle.ssAbsolute});
+    $r.addProperty("HTML",2,pas.Classes.$rtti["TStrings"],"FHTML","SetHTML");
+    $r.addProperty("Role",3,rtl.string,"GetRole","SetRole");
+    $r.addProperty("Visible",2,rtl.boolean,"FVisible","SetVisible",4,{Default: true});
+    $r.addProperty("WidthPercent",2,rtl.double,"FWidthPercent","SetWidthPercent",4,{Default: 100});
+    $r.addProperty("WidthStyle",2,pas["WEBLib.Controls"].$rtti["TSizeStyle"],"FWidthStyle","SetWidthStyle",4,{Default: pas["WEBLib.Controls"].TSizeStyle.ssAbsolute});
+    $r.addProperty("OnClick",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnClick","FOnClick");
+    $r.addProperty("OnDblClick",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnDblClick","FOnDblClick");
+    $r.addProperty("OnMouseDown",0,pas["WEBLib.Controls"].$rtti["TMouseEvent"],"FOnMouseDown","FOnMouseDown");
+    $r.addProperty("OnMouseUp",0,pas["WEBLib.Controls"].$rtti["TMouseEvent"],"FOnMouseUp","FOnMouseUp");
+    $r.addProperty("OnMouseMove",0,pas["WEBLib.Controls"].$rtti["TMouseMoveEvent"],"FOnMouseMove","FOnMouseMove");
+    $r.addProperty("OnMouseLeave",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnMouseLeave","FOnMouseLeave");
+    $r.addProperty("OnMouseEnter",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnMouseEnter","FOnMouseEnter");
+    $r.addProperty("OnTouchStart",0,pas["WEBLib.Controls"].$rtti["TTouchEvent"],"FOnTouchStart","FOnTouchStart");
+    $r.addProperty("OnTouchEnd",0,pas["WEBLib.Controls"].$rtti["TTouchEvent"],"FOnTouchEnd","FOnTouchEnd");
+    $r.addProperty("OnTouchMove",0,pas["WEBLib.Controls"].$rtti["TTouchEvent"],"FOnTouchMove","FOnTouchMove");
+    $r.addProperty("OnTouchCancel",0,pas["WEBLib.Controls"].$rtti["TTouchEvent"],"FOnTouchCancel","FOnTouchCancel");
+    $r.addProperty("OnDragDrop",0,pas["WEBLib.Controls"].$rtti["TDragDropEvent"],"FOnDragDrop","FOnDragDrop");
+    $r.addProperty("OnDragOver",0,pas["WEBLib.Controls"].$rtti["TDragOverEvent"],"FOnDragOver","FOnDragOver");
+    $r.addProperty("OnEndDrag",0,pas["WEBLib.Controls"].$rtti["TEndDragEvent"],"FonEndDrag","FonEndDrag");
+    $r.addProperty("OnStartDrag",0,pas["WEBLib.Controls"].$rtti["TStartDragEvent"],"FOnStartDrag","FOnStartDrag");
+  });
+  rtl.createClass(this,"TWebHTMLSpan",this.THTMLSpan,function () {
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+  });
+  rtl.createClass(this,"THTMLAnchor",pas["WEBLib.Controls"].TCustomControl,function () {
+    this.$init = function () {
+      pas["WEBLib.Controls"].TCustomControl.$init.call(this);
+      this.FHref = "";
+      this.FTarget = "";
+    };
+    this.SetHref = function (Value) {
+      this.FHref = Value;
+      this.UpdateElementData();
+    };
+    this.SetTarget = function (Value) {
+      this.FTarget = Value;
+      this.UpdateElementData();
+    };
+    this.SetCaption = function (Value) {
+      pas["WEBLib.Controls"].TCustomControl.SetCaption.call(this,Value);
+      this.UpdateElementData();
+    };
+    this.HandleDoClick = function (Event) {
+      var Result = false;
+      if (this.FOnClick != null) {
+        Event.preventDefault();
+        this.StopPropagation();
+        Result = false;
+        this.FOnClick(this);
+      } else Result = pas["WEBLib.Controls"].TControl.HandleDoClick.apply(this,arguments);
+      return Result;
+    };
+    this.CreateElement = function () {
+      var Result = null;
+      Result = document.createElement("A");
+      return Result;
+    };
+    this.UpdateElementData = function () {
+      pas["WEBLib.Controls"].TControl.UpdateElementData.call(this);
+      if (this.GetElementHandle() != null) {
+        if (this.FCaption !== "") this.GetElementHandle().innerHTML = this.FCaption;
+        this.GetElementHandle().setAttribute("href",this.FHref);
+        this.GetElementHandle().setAttribute("target",this.FTarget);
+      };
+    };
+    this.CreateInitialize = function () {
+      pas["WEBLib.Controls"].TCustomControl.CreateInitialize.call(this);
+      this.SetCaption("WebHTMLAnchor");
+    };
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+    var $r = this.$rtti;
+    $r.addProperty("Align",2,pas["WEBLib.Controls"].$rtti["TAlign"],"FAlign","SetAlign",4,{Default: pas["WEBLib.Controls"].TAlign.alNone});
+    $r.addProperty("AlignWithMargins",2,rtl.boolean,"FAlignWithMargins","SetAlignWithMargins",4,{Default: false});
+    $r.addProperty("Anchors",2,pas["WEBLib.Controls"].$rtti["TAnchors"],"FAnchors","SetAnchors",4,{Default: rtl.createSet(pas["WEBLib.Controls"].TAnchorKind.akLeft,pas["WEBLib.Controls"].TAnchorKind.akTop)});
+    $r.addProperty("Caption",2,rtl.string,"FCaption","SetCaption");
+    $r.addProperty("Center",0,pas["WEBLib.Controls"].$rtti["TCenter"],"FCenter","");
+    $r.addProperty("ChildOrder",2,rtl.longint,"FChildOrder","SetChildOrderEx",4,{Default: 0});
+    $r.addProperty("ElementClassName",2,pas["WEBLib.Controls"].$rtti["TElementClassName"],"FElementClassName","SetElementClassName");
+    $r.addProperty("ElementFont",2,pas["WEBLib.Controls"].$rtti["TElementFont"],"FElementFont","SetElementFont",4,{Default: pas["WEBLib.Controls"].TElementFont.efProperty});
+    $r.addProperty("ElementID",3,pas["WEBLib.Controls"].$rtti["TElementID"],"GetID","SetID");
+    $r.addProperty("ElementPosition",2,pas["WEBLib.Controls"].$rtti["TElementPosition"],"FElementPosition","SetElementPosition",4,{Default: pas["WEBLib.Controls"].TElementPosition.epAbsolute});
+    $r.addProperty("HeightPercent",2,rtl.double,"FHeightPercent","SetHeightPercent",4,{Default: 100});
+    $r.addProperty("HeightStyle",2,pas["WEBLib.Controls"].$rtti["TSizeStyle"],"FHeightStyle","SetHeightStyle",4,{Default: pas["WEBLib.Controls"].TSizeStyle.ssAbsolute});
+    $r.addProperty("HRef",2,rtl.string,"FHref","SetHref");
+    $r.addProperty("Target",2,rtl.string,"FTarget","SetTarget");
+    $r.addProperty("Role",3,rtl.string,"GetRole","SetRole");
+    $r.addProperty("Visible",2,rtl.boolean,"FVisible","SetVisible",4,{Default: true});
+    $r.addProperty("WidthPercent",2,rtl.double,"FWidthPercent","SetWidthPercent",4,{Default: 100});
+    $r.addProperty("WidthStyle",2,pas["WEBLib.Controls"].$rtti["TSizeStyle"],"FWidthStyle","SetWidthStyle",4,{Default: pas["WEBLib.Controls"].TSizeStyle.ssAbsolute});
+    $r.addProperty("OnClick",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnClick","FOnClick");
+    $r.addProperty("OnDblClick",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnDblClick","FOnDblClick");
+    $r.addProperty("OnMouseDown",0,pas["WEBLib.Controls"].$rtti["TMouseEvent"],"FOnMouseDown","FOnMouseDown");
+    $r.addProperty("OnMouseUp",0,pas["WEBLib.Controls"].$rtti["TMouseEvent"],"FOnMouseUp","FOnMouseUp");
+    $r.addProperty("OnMouseMove",0,pas["WEBLib.Controls"].$rtti["TMouseMoveEvent"],"FOnMouseMove","FOnMouseMove");
+    $r.addProperty("OnMouseLeave",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnMouseLeave","FOnMouseLeave");
+    $r.addProperty("OnMouseEnter",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnMouseEnter","FOnMouseEnter");
+  });
+  rtl.createClass(this,"TWebHTMLAnchor",this.THTMLAnchor,function () {
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+  });
+  this.$rtti.$MethodVar("TURLValidatorEvent",{procsig: rtl.newTIProcSig([["Sender",pas.System.$rtti["TObject"]],["IsValid",rtl.boolean]]), methodkind: 0});
+  rtl.createClass(this,"TURLValidator",pas.Classes.TComponent,function () {
+    this.$init = function () {
+      pas.Classes.TComponent.$init.call(this);
+      this.FURL = "";
+      this.FOnValidated = null;
+    };
+    this.$final = function () {
+      this.FOnValidated = undefined;
+      pas.Classes.TComponent.$final.call(this);
+    };
+    this.HandleResult = function (IsValid) {
+      if (this.FOnValidated != null) this.FOnValidated(this,IsValid);
+    };
+    this.Validate = function () {
+      var s = "";
+      var ptr = null;
+      s = this.FURL;
+      ptr = rtl.createCallback(this,"HandleResult");
+      var request = new XMLHttpRequest();
+      request.open('GET', s, true);
+      request.onreadystatechange = function(){
+         if (request.readyState === 4){
+             ptr(request.status === 200);
+             }
+      };
+      request.send();
+    };
+    rtl.addIntf(this,pas.System.IUnknown);
+    var $r = this.$rtti;
+    $r.addProperty("URL",0,rtl.string,"FURL","FURL");
+    $r.addProperty("OnValidated",0,$mod.$rtti["TURLValidatorEvent"],"FOnValidated","FOnValidated");
+  });
+  rtl.createClass(this,"TWebURLValidator",this.TURLValidator,function () {
+    rtl.addIntf(this,pas.System.IUnknown);
+  });
+  this.$rtti.$DynArray("TJSHTMLFileArray",{eltype: pas.Web.$rtti["TJSHTMLFile"]});
+  rtl.createClass(this,"TShare",pas.Classes.TComponent,function () {
+    this.$init = function () {
+      pas.Classes.TComponent.$init.call(this);
+      this.FTitle = "";
+      this.FText = "";
+      this.FURL = "";
+    };
+    this.Share = function (ATitle, AText, AURL) {
+      var Result = false;
+      var res = false;
+      res = false;
+      if (navigator.share) {
+        res = true;
+        navigator.share({
+          title: ATitle,
+          text: AText,
+          url: AURL });
+      };
+      Result = res;
+      return Result;
+    };
+    this.Share$1 = function (ATitle, AText, AURL, AFiles) {
+      var Result = false;
+      var res = false;
+      res = false;
+      if (navigator.canShare && navigator.canShare({ files: AFiles })) {
+       res = true;
+       navigator.share({
+       files: AFiles,
+       title: ATitle,
+       text: AText });
+      };
+      Result = res;
+      return Result;
+    };
+    this.CanShareFiles = function () {
+      var Result = false;
+      var res = false;
+      res = false;
+      if (navigator.share) {
+      try
+      {
+        res = navigator.canShare;
+      }
+      catch(err)
+      {
+      }
+      };
+      Result = res;
+      return Result;
+    };
+    this.Execute = function () {
+      var Result = false;
+      Result = this.Share(this.FTitle,this.FText,this.FURL);
+      return Result;
+    };
+    rtl.addIntf(this,pas.System.IUnknown);
+    var $r = this.$rtti;
+    $r.addProperty("Title",0,rtl.string,"FTitle","FTitle");
+    $r.addProperty("Text",0,rtl.string,"FText","FText");
+    $r.addProperty("URL",0,rtl.string,"FURL","FURL");
+  });
+  rtl.createClass(this,"TWebShare",this.TShare,function () {
+    rtl.addIntf(this,pas.System.IUnknown);
+  });
+  this.TDeviceOrientationError = {"0": "oeDenied", oeDenied: 0, "1": "oeNotSupported", oeNotSupported: 1};
+  this.$rtti.$Enum("TDeviceOrientationError",{minvalue: 0, maxvalue: 1, ordtype: 1, enumtype: this.TDeviceOrientationError});
+  this.$rtti.$MethodVar("TDeviceOrientationEvent",{procsig: rtl.newTIProcSig([["Sender",pas.System.$rtti["TObject"]],["Heading",rtl.double]]), methodkind: 0});
+  this.$rtti.$MethodVar("TDeviceOrientationErrorEvent",{procsig: rtl.newTIProcSig([["Sender",pas.System.$rtti["TObject"]],["AError",this.$rtti["TDeviceOrientationError"]]]), methodkind: 0});
+  rtl.createClass(this,"TDeviceOrientation",pas.Classes.TComponent,function () {
+    this.$init = function () {
+      pas.Classes.TComponent.$init.call(this);
+      this.FOnHeadingChange = null;
+      this.FOnInitialized = null;
+      this.FOnError = null;
+      this.FStarted = false;
+      this.FOrientationPtr = null;
+    };
+    this.$final = function () {
+      this.FOnHeadingChange = undefined;
+      this.FOnInitialized = undefined;
+      this.FOnError = undefined;
+      pas.Classes.TComponent.$final.call(this);
+    };
+    this.DoHandleOrientationEvent = function (e) {
+      var Result = false;
+      var s = 0.0;
+      var compass = undefined;
+      s = 0.0;
+      compass = e.webkitCompassHeading || Math.abs(e.alpha - 360);
+      var d = 0.0;
+      s = d + compass;
+      if (this.FOnHeadingChange != null) this.FOnHeadingChange(this,s);
+      return Result;
+    };
+    this.Enabled = function () {
+      var Result = false;
+      Result = window.DeviceOrientationEvent != null;
+      return Result;
+    };
+    this.Start = function () {
+      var $Self = this;
+      var os = 0;
+      var ptr = null;
+      function HandleDeny() {
+        if ($Self.FOnError != null) $Self.FOnError($Self,$mod.TDeviceOrientationError.oeDenied);
+      };
+      function HandleError() {
+        if ($Self.FOnError != null) $Self.FOnError($Self,$mod.TDeviceOrientationError.oeNotSupported);
+      };
+      function HandleSuccess() {
+        $Self.FStarted = true;
+        if ($Self.FOnInitialized != null) $Self.FOnInitialized($Self);
+      };
+      os = pas["WEBLib.WebTools"].GetOperatingSystem();
+      this.FOrientationPtr = rtl.createCallback($Self,"DoHandleOrientationEvent");
+      ptr = this.FOrientationPtr;
+      if (os in rtl.createSet(pas["WEBLib.WebTools"].TOperatingSystem.osiOS,pas["WEBLib.WebTools"].TOperatingSystem.osmacOS)) {
+        if (DeviceOrientationEvent==null) return;
+              if (DeviceOrientationEvent.requestPermission==null) return;
+        
+              DeviceOrientationEvent.requestPermission().then((response) => {
+                if (response === "granted") {
+                  window.addEventListener("deviceorientation", ptr, true);
+                  HandleSuccess();
+                } else {
+                  HandleDeny();
+                }
+              })
+              .catch(() => HandleError());
+      } else {
+        window.addEventListener("deviceorientationabsolute", ptr, true);
+        HandleSuccess();
+      };
+    };
+    rtl.addIntf(this,pas.System.IUnknown);
+    var $r = this.$rtti;
+    $r.addProperty("OnHeadingChange",0,$mod.$rtti["TDeviceOrientationEvent"],"FOnHeadingChange","FOnHeadingChange");
+    $r.addProperty("OnInitialized",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnInitialized","FOnInitialized");
+    $r.addProperty("OnError",0,$mod.$rtti["TDeviceOrientationErrorEvent"],"FOnError","FOnError");
+  });
+  rtl.createClass(this,"TWebDeviceOrientation",this.TDeviceOrientation,function () {
+    rtl.addIntf(this,pas.System.IUnknown);
+  });
+  rtl.createClass(this,"TSpeechSynthesis",pas.Classes.TComponent,function () {
+    this.$init = function () {
+      pas.Classes.TComponent.$init.call(this);
+      this.FVolume = 0.0;
+      this.FPitch = 0.0;
+      this.FRate = 0.0;
+      this.FVoices = null;
+      this.FOnVoicesReady = null;
+      this.FVoice = "";
+    };
+    this.$final = function () {
+      this.FVoices = undefined;
+      this.FOnVoicesReady = undefined;
+      pas.Classes.TComponent.$final.call(this);
+    };
+    this.SetVolume = function (Value) {
+      if ((Value >= 0) && (Value <= 1)) this.FVolume = Value;
+    };
+    this.SetPitch = function (Value) {
+      if ((Value >= 0) && (Value <= 10)) this.FPitch = Value;
+    };
+    this.SetRate = function (Value) {
+      if ((Value >= 0) && (Value <= 2)) this.FRate = Value;
+    };
+    this.SetVoice = function (Value) {
+      this.FVoice = Value;
+    };
+    this.Create$1 = function (AOwner) {
+      pas.Classes.TComponent.Create$1.apply(this,arguments);
+      this.FVolume = 1;
+      this.FRate = 1;
+      this.FPitch = 1;
+      this.FVoices = pas.Classes.TStringList.$create("Create$1");
+      if (this.Supported()) this.GetVoices();
+      return this;
+    };
+    this.Destroy = function () {
+      rtl.free(this,"FVoices");
+      pas.Classes.TComponent.Destroy.call(this);
+    };
+    this.Speak = function (AText) {
+      var v = 0.0;
+      var r = 0.0;
+      var p = 0.0;
+      var avoice = "";
+      v = this.FVolume;
+      r = this.FRate;
+      p = this.FPitch;
+      avoice = this.FVoice;
+      // Create a new instance of SpeechSynthesisUtterance.
+          var msg = new SpeechSynthesisUtterance();
+      
+          // Set the text.
+          msg.text = AText;
+      
+          // Set the attributes.
+            msg.volume = v;
+          msg.rate = r;
+          msg.pitch = p;
+      
+          // If a voice has been selected, find the voice and set the
+          // utterance instance's voice attribute.
+          if (avoice != "") {
+              msg.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.name == avoice; })[0];
+          }
+      
+          // Queue this utterance.
+            window.speechSynthesis.speak(msg);
+    };
+    this.Cancel = function () {
+      window.speechSynthesis.cancel();
+    };
+    this.GetVoices = function () {
+      var $Self = this;
+      var Result = null;
+      var sl = null;
+      function VoicesReady() {
+        if ($Self.FOnVoicesReady != null) $Self.FOnVoicesReady($Self);
+      };
+      sl = this.FVoices;
+      if (1 < 0) VoicesReady();
+      function populateVoiceList()
+          {
+              var voices = speechSynthesis.getVoices();
+            // console.log(voices);
+            // Loop through each of the voices.
+              voices.forEach(function(voice, i) {
+              sl.Add(voice.name);
+              //console.log(voice.name);
+              });
+            if (voices.length > 0) { VoicesReady(); }
+      
+         }
+         populateVoiceList();
+         if (window.speechSynthesis.onvoiceschanged !== undefined) {
+           speechSynthesis.onvoiceschanged = populateVoiceList;
+         };
+      return Result;
+    };
+    this.IsSpeaking = function () {
+      var Result = false;
+      var res = false;
+      res = window.speechSynthesis.speaking;
+      Result = res;
+      return Result;
+    };
+    this.Supported = function () {
+      var Result = false;
+      var res = false;
+      res = false;
+      if ('speechSynthesis' in window) { res = true; };
+      Result = res;
+      return Result;
+    };
+    rtl.addIntf(this,pas.System.IUnknown);
+    var $r = this.$rtti;
+    $r.addProperty("Pitch",2,rtl.double,"FPitch","SetPitch");
+    $r.addProperty("Rate",2,rtl.double,"FRate","SetRate");
+    $r.addProperty("Voice",2,rtl.string,"FVoice","SetVoice");
+    $r.addProperty("Volume",2,rtl.double,"FVolume","SetVolume");
+    $r.addProperty("OnVoicesReady",0,pas["WEBLib.Controls"].$rtti["TNotifyEvent"],"FOnVoicesReady","FOnVoicesReady");
+  });
+  rtl.createClass(this,"TWebSpeechSynthesis",this.TSpeechSynthesis,function () {
+    rtl.addIntf(this,pas.System.IUnknown);
+  });
+  rtl.createClass(this,"TConsoleLog",pas["WEBLib.Menus"].TWebCustomControl,function () {
+    this.$init = function () {
+      pas["WEBLib.Menus"].TWebCustomControl.$init.call(this);
+      this.FLog = null;
+      this.FInit = false;
+      this.FAutoScroll = false;
+    };
+    this.$final = function () {
+      this.FLog = undefined;
+      pas["WEBLib.Menus"].TWebCustomControl.$final.call(this);
+    };
+    this.CreateElement = function () {
+      var Result = null;
+      var el = null;
+      var ellog = null;
+      var LAutoScroll = false;
+      LAutoScroll = this.FAutoScroll;
+      el = document.createElement("DIV");
+      ellog = document.createElement("PRE");
+      el.appendChild(ellog);
+      Result = el;
+      this.FLog = ellog;
+      if (pas.Classes.TComponentStateItem.csDesigning in this.FComponentState) return Result;
+      this.AddControlStyle(".log-warn { color: orange }" + pas["WEBLib.WebTools"].CRLF + ".log-error { color: red }" + pas["WEBLib.WebTools"].CRLF + ".log-info { color: skyblue }" + pas["WEBLib.WebTools"].CRLF + ".log-log { color: silver }" + pas["WEBLib.WebTools"].CRLF + ".log-warn, .log-error { font-weight: bold; }");
+      this.AddControlScriptSource("    function unfixLoggingFunc(name) {" + pas["WEBLib.WebTools"].CRLF + '        console[name] = console["old" + name];' + pas["WEBLib.WebTools"].CRLF + " }" + pas["WEBLib.WebTools"].CRLF + "function unwireLogging() {" + pas["WEBLib.WebTools"].CRLF + '    unfixLoggingFunc("log");' + pas["WEBLib.WebTools"].CRLF + '    unfixLoggingFunc("debug");' + pas["WEBLib.WebTools"].CRLF + '    unfixLoggingFunc("warn");' + pas["WEBLib.WebTools"].CRLF + '    unfixLoggingFunc("error");' + pas["WEBLib.WebTools"].CRLF + '    unfixLoggingFunc("info");' + pas["WEBLib.WebTools"].CRLF + "}" + pas["WEBLib.WebTools"].CRLF + "function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {" + pas["WEBLib.WebTools"].CRLF + '    fixLoggingFunc("log");' + pas["WEBLib.WebTools"].CRLF + '    fixLoggingFunc("debug");' + pas["WEBLib.WebTools"].CRLF + '    fixLoggingFunc("warn");' + pas["WEBLib.WebTools"].CRLF + '    fixLoggingFunc("error");' + pas["WEBLib.WebTools"].CRLF + '    fixLoggingFunc("info");' + pas["WEBLib.WebTools"].CRLF + "" + pas["WEBLib.WebTools"].CRLF + "    function fixLoggingFunc(name) {" + pas["WEBLib.WebTools"].CRLF + '        console["old" + name] = console[name];' + pas["WEBLib.WebTools"].CRLF + "        console[name] = function(...arguments) {" + pas["WEBLib.WebTools"].CRLF + "            const output = produceOutput(name, arguments);" + pas["WEBLib.WebTools"].CRLF + "            const eleLog = eleLocator;" + pas["WEBLib.WebTools"].CRLF + "" + pas["WEBLib.WebTools"].CRLF + "            if (autoScroll) {" + pas["WEBLib.WebTools"].CRLF + "                const eleContainerLog = eleOverflowLocator;" + pas["WEBLib.WebTools"].CRLF + "                const isScrolledToBottom = eleContainerLog.scrollHeight - eleContainerLog.clientHeight <= eleContainerLog.scrollTop + 1;" + pas["WEBLib.WebTools"].CRLF + '                eleLog.innerHTML += output + "<br>";' + pas["WEBLib.WebTools"].CRLF + "                if (isScrolledToBottom) {" + pas["WEBLib.WebTools"].CRLF + "                    eleContainerLog.scrollTop = eleContainerLog.scrollHeight - eleContainerLog.clientHeight;" + pas["WEBLib.WebTools"].CRLF + "                }" + pas["WEBLib.WebTools"].CRLF + "            } else {" + pas["WEBLib.WebTools"].CRLF + '                eleLog.innerHTML += output + "<br>";' + pas["WEBLib.WebTools"].CRLF + "            }" + pas["WEBLib.WebTools"].CRLF + "" + pas["WEBLib.WebTools"].CRLF + '            console["old" + name].apply(undefined, arguments);' + pas["WEBLib.WebTools"].CRLF + "        };" + pas["WEBLib.WebTools"].CRLF + "    }" + pas["WEBLib.WebTools"].CRLF + "" + pas["WEBLib.WebTools"].CRLF + "   function produceOutput(name, args) {" + pas["WEBLib.WebTools"].CRLF + "       return args.reduce((output, arg) => {" + pas["WEBLib.WebTools"].CRLF + "            return output +" + pas["WEBLib.WebTools"].CRLF + '                "<span class=\\"log-" + (typeof arg) + " log-" + name + "\\">" +' + pas["WEBLib.WebTools"].CRLF + '                    (typeof arg === "object" && (JSON || {}).stringify ? JSON.stringify(arg) : arg) +' + pas["WEBLib.WebTools"].CRLF + '                "</span>&nbsp;";' + pas["WEBLib.WebTools"].CRLF + '        }, "");' + pas["WEBLib.WebTools"].CRLF + "    }" + pas["WEBLib.WebTools"].CRLF + "}");
+      rewireLoggingToElement(ellog, el, LAutoScroll);
+      this.FInit = true;
+      return Result;
+    };
+    this.UpdateElement = function () {
+      pas["WEBLib.Controls"].TControl.UpdateElement.call(this);
+      if (this.GetElementHandle() != null) this.GetElementHandle().style.setProperty("overflow","auto");
+    };
+    this.CreateInitialize = function () {
+      pas["WEBLib.Controls"].TCustomControl.CreateInitialize.call(this);
+      this.FAutoScroll = true;
+    };
+    this.Destroy = function () {
+      if (this.FInit) {
+        unwireLogging();
+      };
+      pas["WEBLib.Controls"].TCustomControl.Destroy.call(this);
+    };
+    this.Clear = function () {
+      this.FLog.innerHTML = "";
+    };
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+    var $r = this.$rtti;
+    $r.addProperty("AutoScroll",0,rtl.boolean,"FAutoScroll","FAutoScroll",4,{Default: true});
+  });
+  rtl.createClass(this,"TWebConsoleLog",this.TConsoleLog,function () {
+    rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
+    rtl.addIntf(this,pas.System.IUnknown);
+  });
+  this.GPXToCoordinates = function (AGPXData) {
+    var Result = null;
+    Result = null;
+    var parser = new DOMParser();
+        var xmlDoc = parser.parseFromString(AGPXData, "application/xml");
+    
+        var trkpts = xmlDoc.getElementsByTagName("trkpt");
+        if (trkpts.length == 0) {
+          trkpts = xmlDoc.getElementsByTagName("rtept");
+        }
+    
+        var coordinates = [];
+    
+        for (var i = 0; i < trkpts.length; i++) {
+            var trkpt = trkpts[i];
+            var lat = trkpt.getAttribute("lat");
+            var lon = trkpt.getAttribute("lon");
+            var coord = [];
+            coord.push(parseFloat(lat));
+            coord.push(parseFloat(lon));
+            //coordinates.push({ latitude: parseFloat(lat), longitude: parseFloat(lon) });
+            coordinates.push(coord);
+         }
+        return coordinates;
+    return Result;
+  };
+  $mod.$implcode = function () {
+    $impl.TWITTERSCRIPTID = "twitterscriptid";
+    $impl.LMapNotCreated = "Map not created";
+  };
+},["WEBLib.Dialogs","WEBLib.WebTools"]);
+rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","WEBLib.Controls","WEBLib.Forms","WEBLib.Dialogs","WEBLib.StdCtrls","WEBLib.Controls","WEBLib.StdCtrls","WEBLib.WebCtrls"],function () {
   "use strict";
   var $mod = this;
   rtl.createClass(this,"TForm1",pas["WEBLib.Forms"].TForm,function () {
@@ -49588,6 +52518,20 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       this.WebLabel3 = null;
       this.WebComboBox1 = null;
       this.WebLabel4 = null;
+      this.WebHTMLDivResultadoDia = null;
+      this.WebHTMLDivComparacao = null;
+      this.WebButtonSalvar = null;
+      this.WebButtonVerSalvos = null;
+      this.WebButtonLimpar = null;
+      this.WebButtonComparar = null;
+      this.WebLabel5 = null;
+      this.WebLabel6 = null;
+      this.WebEditNome = null;
+      this.WebLabel7 = null;
+      this.WebComboBoxApostas = null;
+      this.WebButtonExcluir = null;
+      this.FUltimoJogo = [];
+      this.FTipoUltimoJogo = "";
     };
     this.$final = function () {
       this.WebButton1 = undefined;
@@ -49598,93 +52542,236 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       this.WebLabel3 = undefined;
       this.WebComboBox1 = undefined;
       this.WebLabel4 = undefined;
+      this.WebHTMLDivResultadoDia = undefined;
+      this.WebHTMLDivComparacao = undefined;
+      this.WebButtonSalvar = undefined;
+      this.WebButtonVerSalvos = undefined;
+      this.WebButtonLimpar = undefined;
+      this.WebButtonComparar = undefined;
+      this.WebLabel5 = undefined;
+      this.WebLabel6 = undefined;
+      this.WebEditNome = undefined;
+      this.WebLabel7 = undefined;
+      this.WebComboBoxApostas = undefined;
+      this.WebButtonExcluir = undefined;
+      this.FUltimoJogo = undefined;
       pas["WEBLib.Forms"].TForm.$final.call(this);
     };
     this.WebFormCreate = function (Sender) {
       this.SetCaption("Sorteador Mega Sena e Loto Fácil - TMS Web Core");
-      this.WebLabel1.SetCaption("Aposte Sorteador de Números - Mega Sena e Loto Fácil");
+      this.WebLabel1.SetCaption("Sorteador de Números - Mega Sena e Loto Fácil");
       this.WebLabel4.SetCaption("Escolha o tipo de jogo:");
       this.WebLabel2.SetCaption("Quantidade de dezenas:");
       this.WebLabel3.SetCaption("Números sorteados:");
+      this.WebLabel5.SetCaption("Sorteios salvos: 0");
+      this.WebLabel6.SetCaption("Seu nome:");
+      this.WebLabel7.SetCaption("Apostas salvas (selecione para excluir):");
       this.WebComboBox1.FItems.Clear();
       this.WebComboBox1.FItems.Add("Mega Sena (6 dezenas)");
       this.WebComboBox1.FItems.Add("Loto Fácil (15 dezenas)");
       this.WebComboBox1.SetItemIndex(0);
       this.WebEdit1.SetText("6");
+      this.WebEditNome.SetReadOnly(false);
+      this.WebEditNome.SetEnabled(true);
+      this.WebEditNome.SetText(this.ObterNomeSalvo());
       this.WebButton1.SetCaption("Sortear Números");
+      this.WebButtonSalvar.SetCaption("Salvar Sorteio");
+      this.WebButtonVerSalvos.SetCaption("Ver Salvos");
+      this.WebButtonLimpar.SetCaption("Limpar Salvos");
+      this.WebButtonComparar.SetCaption("Comparar com o Dia");
+      this.WebButtonExcluir.SetCaption("Excluir Aposta");
+      this.WebButtonSalvar.SetEnabled(false);
+      this.WebButtonExcluir.SetEnabled(false);
       this.WebMemo1.SetReadOnly(true);
       this.WebMemo1.FLines.Clear();
+      this.WebHTMLDivComparacao.FHTML.SetTextStr('<div style="text-align:center; font-family:Arial,sans-serif; color:#888; ' + 'padding-top:120px; font-style:italic;">' + 'Clique em "Comparar com o Dia"<br>para ver a comparação com os jogos salvos.' + "</div>");
       this.AplicarCoresDoJogo(this.WebComboBox1.GetItemIndex());
+      this.AtualizarResultadoDoDia();
+      this.AtualizarContador();
+      this.PopularListaApostas();
     };
     this.WebButton1Click = function (Sender) {
       var Quantidade = 0;
       var Numeros = [];
       var TipoJogo = 0;
-      var i = 0;
+      var Titulo = "";
+      var Nome = "";
+      Nome = pas.SysUtils.Trim(this.WebEditNome.GetText());
+      if (Nome === "") Nome = "Apostador";
+      this.SalvarNome(Nome);
       Quantidade = pas.SysUtils.StrToIntDef(this.WebEdit1.GetText(),0);
       TipoJogo = this.WebComboBox1.GetItemIndex();
       if (TipoJogo === 0) {
         if ((Quantidade < 6) || (Quantidade > 15)) {
           this.WebMemo1.FLines.Clear();
           this.WebMemo1.FLines.Add("Erro: Para a Mega Sena, a quantidade deve ser entre 6 e 15 dezenas.");
+          this.WebButtonSalvar.SetEnabled(false);
           return;
         };
-        this.WebMemo1.FLines.Clear();
-        this.WebMemo1.FLines.Add("===== MEGA SENA =====");
-        this.WebMemo1.FLines.Add("");
-        for (i = 1; i <= 3; i++) {
-          Numeros = this.GerarJogoMegaSena(Quantidade);
-          this.ExibirNumeros(Numeros,"Mega Sena - Jogo " + pas.SysUtils.IntToStr(i));
-          this.WebMemo1.FLines.Add("");
-        };
+        Numeros = this.GerarJogoMegaSena(Quantidade);
+        Titulo = "Mega Sena";
       } else {
         if ((Quantidade < 15) || (Quantidade > 20)) {
           this.WebMemo1.FLines.Clear();
           this.WebMemo1.FLines.Add("Erro: Para a Loto Fácil, a quantidade deve ser entre 15 e 20 dezenas.");
+          this.WebButtonSalvar.SetEnabled(false);
           return;
         };
-        this.WebMemo1.FLines.Clear();
-        this.WebMemo1.FLines.Add("===== LOTO FÁCIL =====");
-        this.WebMemo1.FLines.Add("");
-        for (i = 1; i <= 3; i++) {
-          Numeros = this.GerarJogoLotoFacil(Quantidade);
-          this.ExibirNumeros(Numeros,"Loto Fácil - Jogo " + pas.SysUtils.IntToStr(i));
-          this.WebMemo1.FLines.Add("");
-        };
+        Numeros = this.GerarJogoLotoFacil(Quantidade);
+        Titulo = "Loto Fácil";
       };
+      this.FUltimoJogo = rtl.arrayRef(Numeros);
+      this.FTipoUltimoJogo = Titulo;
+      this.ExibirNumeros(Numeros,Titulo);
+      this.AtualizarResultadoDoDia();
+      this.WebButtonSalvar.SetEnabled(true);
     };
     this.WebComboBox1Change = function (Sender) {
       if (this.WebComboBox1.GetItemIndex() === 0) {
         this.WebEdit1.SetText("6")}
        else this.WebEdit1.SetText("15");
       this.AplicarCoresDoJogo(this.WebComboBox1.GetItemIndex());
+      this.AtualizarResultadoDoDia();
+    };
+    this.WebButtonSalvarClick = function (Sender) {
+      var DataHora = "";
+      var NumerosStr = "";
+      var Nome = "";
+      if (rtl.length(this.FUltimoJogo) === 0) {
+        this.WebMemo1.FLines.Clear();
+        this.WebMemo1.FLines.Add('Nenhum sorteio para salvar. Clique em "Sortear Números" primeiro.');
+        return;
+      };
+      Nome = pas.SysUtils.Trim(this.WebEditNome.GetText());
+      if (Nome === "") Nome = "Apostador";
+      this.SalvarNome(Nome);
+      DataHora = pas.SysUtils.FormatDateTime("dd/mm/yyyy hh:nn:ss",pas.SysUtils.Now());
+      NumerosStr = this.FormatarNumeros(this.FUltimoJogo);
+      this.AdicionarJogoAoHistorico(Nome,this.FTipoUltimoJogo,DataHora,NumerosStr);
+      this.WebMemo1.FLines.Clear();
+      this.WebMemo1.FLines.Add("OK - Sorteio salvo com sucesso!");
+      this.WebMemo1.FLines.Add("");
+      this.WebMemo1.FLines.Add("Nome: " + Nome);
+      this.WebMemo1.FLines.Add("Jogo: " + this.FTipoUltimoJogo);
+      this.WebMemo1.FLines.Add("Data/Hora: " + DataHora);
+      this.WebMemo1.FLines.Add("Números: " + NumerosStr);
+      this.AtualizarContador();
+      this.PopularListaApostas();
+    };
+    this.WebButtonVerSalvosClick = function (Sender) {
+      var Historico = "";
+      var Linhas = [];
+      var i = 0;
+      Historico = this.ObterHistorico();
+      this.WebMemo1.FLines.Clear();
+      this.PopularListaApostas();
+      if (Historico === "") {
+        this.WebMemo1.FLines.Add("Nenhum sorteio salvo ainda.");
+        this.WebMemo1.FLines.Add("");
+        this.WebMemo1.FLines.Add('Faça um sorteio e clique em "Salvar Sorteio".');
+        return;
+      };
+      this.WebMemo1.FLines.Add("===== SORTEIOS SALVOS =====");
+      this.WebMemo1.FLines.Add("");
+      Linhas = pas.SysUtils.TStringHelper.Split$1.call({get: function () {
+          return Historico;
+        }, set: function (v) {
+          Historico = v;
+        }},["\n"]);
+      for (var $l = 0, $end = rtl.length(Linhas) - 1; $l <= $end; $l++) {
+        i = $l;
+        if (pas.SysUtils.Trim(Linhas[i]) !== "") this.WebMemo1.FLines.Add(Linhas[i]);
+      };
+    };
+    this.WebButtonLimparClick = function (Sender) {
+      window.localStorage.setItem("sorteios_salvos","");
+      this.AtualizarContador();
+      this.PopularListaApostas();
+      this.WebMemo1.FLines.Clear();
+      this.WebMemo1.FLines.Add("Todos os sorteios salvos foram apagados.");
+      this.WebHTMLDivComparacao.FHTML.SetTextStr('<div style="text-align:center; font-family:Arial,sans-serif; color:#888; ' + 'padding-top:120px; font-style:italic;">' + 'Histórico apagado.<br>Faça novos sorteios e clique em "Salvar Sorteio".' + "</div>");
+    };
+    this.WebButtonCompararClick = function (Sender) {
+      var Historico = "";
+      var HTML = "";
+      var Linhas = [];
+      var i = 0;
+      var Acertos = 0;
+      var JogoSalvo = [];
+      var ResultadoDia = [];
+      var Semente = 0;
+      var TipoJogo = 0;
+      var Linha = "";
+      var Nome = "";
+      var DataHora = "";
+      Historico = this.ObterHistorico();
+      if (Historico === "") {
+        this.WebHTMLDivComparacao.FHTML.SetTextStr('<div style="text-align:center; font-family:Arial,sans-serif; color:#C62828; ' + 'padding-top:120px; font-weight:bold;">' + "Nenhum sorteio salvo para comparar.<br>" + '<span style="font-weight:normal;">Faça um sorteio e clique em "Salvar Sorteio".</span>' + "</div>");
+        return;
+      };
+      TipoJogo = this.WebComboBox1.GetItemIndex();
+      Semente = pas.System.Trunc(pas.SysUtils.Now()) + (TipoJogo * 1000);
+      if (TipoJogo === 0) {
+        ResultadoDia = this.GerarJogoMegaSenaComSemente(6,Semente)}
+       else ResultadoDia = this.GerarJogoLotoFacilComSemente(15,Semente);
+      HTML = '<div style="font-family: Arial, sans-serif; text-align:center; padding:6px;">';
+      HTML = HTML + '<div style="font-size:15px; font-weight:bold; margin-bottom:6px; color:#333;">' + "Comparação com Jogos Salvos</div>";
+      HTML = HTML + '<div style="font-size:12px; color:#666; margin-bottom:10px;">' + "Resultado do Dia: " + this.FormatarNumeros(ResultadoDia) + "</div>";
+      HTML = HTML + '<hr style="border:none; border-top:1px dashed #999; margin:8px 0;">';
+      Linhas = pas.SysUtils.TStringHelper.Split$1.call({get: function () {
+          return Historico;
+        }, set: function (v) {
+          Historico = v;
+        }},["\n"]);
+      for (var $l = 0, $end = rtl.length(Linhas) - 1; $l <= $end; $l++) {
+        i = $l;
+        Linha = pas.SysUtils.Trim(Linhas[i]);
+        if (Linha === "") continue;
+        JogoSalvo = this.ExtrairNumerosDaLinha(Linha);
+        if (rtl.length(JogoSalvo) === 0) continue;
+        Nome = this.ExtrairNomeDaLinha(Linha);
+        DataHora = this.ExtrairDataHoraDaLinha(Linha);
+        Acertos = this.ContarAcertos(JogoSalvo,ResultadoDia);
+        HTML = HTML + this.GerarHTMLLinhaComparada(Nome,DataHora,JogoSalvo,ResultadoDia,Acertos);
+      };
+      HTML = HTML + "</div>";
+      this.WebHTMLDivComparacao.FHTML.SetTextStr(HTML);
+    };
+    this.WebEditNomeChange = function (Sender) {
+      this.SalvarNome(pas.SysUtils.Trim(this.WebEditNome.GetText()));
+    };
+    this.WebButtonExcluirClick = function (Sender) {
+      this.ExcluirApostaSelecionada();
     };
     this.GerarJogoMegaSena = function (QuantidadeNumeros) {
       var Result = [];
       var Disponiveis = [];
       var i = 0;
       var j = 0;
-      var SorteadoIndex = 0;
       var Temp = 0;
-      pas.SysUtils.Randomize();
+      var S = 0;
+      S = pas.System.Trunc(pas.SysUtils.Now() * 86400000) + pas.System.Random(100000);
+      if (S < 1) S = 1;
       Disponiveis = rtl.arraySetLength(Disponiveis,0,60);
       for (i = 0; i <= 59; i++) Disponiveis[i] = i + 1;
+      this.EmbaralharComSemente({get: function () {
+          return Disponiveis;
+        }, set: function (v) {
+          Disponiveis = v;
+        }},{get: function () {
+          return S;
+        }, set: function (v) {
+          S = v;
+        }});
+      Result = rtl.arraySetLength(Result,0,QuantidadeNumeros);
       for (var $l = 0, $end = QuantidadeNumeros - 1; $l <= $end; $l++) {
         i = $l;
-        SorteadoIndex = pas.System.Random(60 - i);
-        Temp = Disponiveis[SorteadoIndex];
-        Disponiveis[SorteadoIndex] = Disponiveis[59 - i];
-        Disponiveis[59 - i] = Temp;
+        Result[i] = Disponiveis[i];
       };
-      Result = rtl.arraySetLength(Result,0,QuantidadeNumeros);
-      for (var $l1 = 0, $end1 = QuantidadeNumeros - 1; $l1 <= $end1; $l1++) {
+      for (var $l1 = 0, $end1 = QuantidadeNumeros - 2; $l1 <= $end1; $l1++) {
         i = $l1;
-        Result[i] = Disponiveis[59 - i];
-      };
-      for (var $l2 = 0, $end2 = QuantidadeNumeros - 2; $l2 <= $end2; $l2++) {
-        i = $l2;
-        for (var $l3 = i + 1, $end3 = QuantidadeNumeros - 1; $l3 <= $end3; $l3++) {
-          j = $l3;
+        for (var $l2 = i + 1, $end2 = QuantidadeNumeros - 1; $l2 <= $end2; $l2++) {
+          j = $l2;
           if (Result[i] > Result[j]) {
             Temp = Result[i];
             Result[i] = Result[j];
@@ -49699,27 +52786,30 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       var Disponiveis = [];
       var i = 0;
       var j = 0;
-      var SorteadoIndex = 0;
       var Temp = 0;
-      pas.SysUtils.Randomize();
+      var S = 0;
+      S = pas.System.Trunc(pas.SysUtils.Now() * 86400000) + pas.System.Random(100000);
+      if (S < 1) S = 1;
       Disponiveis = rtl.arraySetLength(Disponiveis,0,25);
       for (i = 0; i <= 24; i++) Disponiveis[i] = i + 1;
+      this.EmbaralharComSemente({get: function () {
+          return Disponiveis;
+        }, set: function (v) {
+          Disponiveis = v;
+        }},{get: function () {
+          return S;
+        }, set: function (v) {
+          S = v;
+        }});
+      Result = rtl.arraySetLength(Result,0,QuantidadeNumeros);
       for (var $l = 0, $end = QuantidadeNumeros - 1; $l <= $end; $l++) {
         i = $l;
-        SorteadoIndex = pas.System.Random(25 - i);
-        Temp = Disponiveis[SorteadoIndex];
-        Disponiveis[SorteadoIndex] = Disponiveis[24 - i];
-        Disponiveis[24 - i] = Temp;
+        Result[i] = Disponiveis[i];
       };
-      Result = rtl.arraySetLength(Result,0,QuantidadeNumeros);
-      for (var $l1 = 0, $end1 = QuantidadeNumeros - 1; $l1 <= $end1; $l1++) {
+      for (var $l1 = 0, $end1 = QuantidadeNumeros - 2; $l1 <= $end1; $l1++) {
         i = $l1;
-        Result[i] = Disponiveis[24 - i];
-      };
-      for (var $l2 = 0, $end2 = QuantidadeNumeros - 2; $l2 <= $end2; $l2++) {
-        i = $l2;
-        for (var $l3 = i + 1, $end3 = QuantidadeNumeros - 1; $l3 <= $end3; $l3++) {
-          j = $l3;
+        for (var $l2 = i + 1, $end2 = QuantidadeNumeros - 1; $l2 <= $end2; $l2++) {
+          j = $l2;
           if (Result[i] > Result[j]) {
             Temp = Result[i];
             Result[i] = Result[j];
@@ -49729,9 +52819,106 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       };
       return Result;
     };
+    this.GerarJogoMegaSenaComSemente = function (QuantidadeNumeros, Semente) {
+      var Result = [];
+      var Disponiveis = [];
+      var i = 0;
+      var j = 0;
+      var Temp = 0;
+      var S = 0;
+      S = Semente;
+      Disponiveis = rtl.arraySetLength(Disponiveis,0,60);
+      for (i = 0; i <= 59; i++) Disponiveis[i] = i + 1;
+      this.EmbaralharComSemente({get: function () {
+          return Disponiveis;
+        }, set: function (v) {
+          Disponiveis = v;
+        }},{get: function () {
+          return S;
+        }, set: function (v) {
+          S = v;
+        }});
+      Result = rtl.arraySetLength(Result,0,QuantidadeNumeros);
+      for (var $l = 0, $end = QuantidadeNumeros - 1; $l <= $end; $l++) {
+        i = $l;
+        Result[i] = Disponiveis[i];
+      };
+      for (var $l1 = 0, $end1 = QuantidadeNumeros - 2; $l1 <= $end1; $l1++) {
+        i = $l1;
+        for (var $l2 = i + 1, $end2 = QuantidadeNumeros - 1; $l2 <= $end2; $l2++) {
+          j = $l2;
+          if (Result[i] > Result[j]) {
+            Temp = Result[i];
+            Result[i] = Result[j];
+            Result[j] = Temp;
+          };
+        };
+      };
+      return Result;
+    };
+    this.GerarJogoLotoFacilComSemente = function (QuantidadeNumeros, Semente) {
+      var Result = [];
+      var Disponiveis = [];
+      var i = 0;
+      var j = 0;
+      var Temp = 0;
+      var S = 0;
+      S = Semente;
+      Disponiveis = rtl.arraySetLength(Disponiveis,0,25);
+      for (i = 0; i <= 24; i++) Disponiveis[i] = i + 1;
+      this.EmbaralharComSemente({get: function () {
+          return Disponiveis;
+        }, set: function (v) {
+          Disponiveis = v;
+        }},{get: function () {
+          return S;
+        }, set: function (v) {
+          S = v;
+        }});
+      Result = rtl.arraySetLength(Result,0,QuantidadeNumeros);
+      for (var $l = 0, $end = QuantidadeNumeros - 1; $l <= $end; $l++) {
+        i = $l;
+        Result[i] = Disponiveis[i];
+      };
+      for (var $l1 = 0, $end1 = QuantidadeNumeros - 2; $l1 <= $end1; $l1++) {
+        i = $l1;
+        for (var $l2 = i + 1, $end2 = QuantidadeNumeros - 1; $l2 <= $end2; $l2++) {
+          j = $l2;
+          if (Result[i] > Result[j]) {
+            Temp = Result[i];
+            Result[i] = Result[j];
+            Result[j] = Temp;
+          };
+        };
+      };
+      return Result;
+    };
+    this.ProximoAleatorio = function (Semente) {
+      var Result = 0;
+      Semente.set(((Semente.get() * 1103515245) + 12345) & 0x7FFFFFFF);
+      Result = Semente.get();
+      return Result;
+    };
+    this.EmbaralharComSemente = function (Arr, Semente) {
+      var i = 0;
+      var j = 0;
+      var Temp = 0;
+      var n = 0;
+      var R = 0;
+      n = rtl.length(Arr.get());
+      for (var $l = n - 1; $l >= 1; $l--) {
+        i = $l;
+        R = this.ProximoAleatorio(Semente);
+        j = R % (i + 1);
+        Temp = Arr.get()[i];
+        Arr.get()[i] = Arr.get()[j];
+        Arr.get()[j] = Temp;
+      };
+    };
     this.ExibirNumeros = function (Numeros, Titulo) {
       var i = 0;
       var Linha = "";
+      this.WebMemo1.FLines.Clear();
       Linha = "";
       for (var $l = 0, $end = rtl.length(Numeros) - 1; $l <= $end; $l++) {
         i = $l;
@@ -49740,6 +52927,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       };
       this.WebMemo1.FLines.Add("Jogo: " + Titulo);
       this.WebMemo1.FLines.Add(Linha);
+      this.WebMemo1.FLines.Add("");
       this.WebMemo1.FLines.Add("Total de dezenas: " + pas.SysUtils.IntToStr(rtl.length(Numeros)));
     };
     this.AplicarCoresDoJogo = function (TipoJogo) {
@@ -49748,156 +52936,716 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebMemo1.SetColor(0xC8E6C9);
         this.WebMemo1.FFont.SetColor(0x4D00);
         this.WebLabel1.FFont.SetColor(0x8000);
+        this.WebLabel5.FFont.SetColor(0x8000);
+        this.WebLabel6.FFont.SetColor(0x8000);
+        this.WebLabel7.FFont.SetColor(0x8000);
       } else {
         this.SetColor(0xF3E5F5);
         this.WebMemo1.SetColor(0xE1BEE7);
         this.WebMemo1.FFont.SetColor(0x4A148C);
         this.WebLabel1.FFont.SetColor(0x6A1B9A);
+        this.WebLabel5.FFont.SetColor(0x6A1B9A);
+        this.WebLabel6.FFont.SetColor(0x6A1B9A);
+        this.WebLabel7.FFont.SetColor(0x6A1B9A);
       };
+    };
+    this.AtualizarResultadoDoDia = function () {
+      var DataAtual = 0.0;
+      var DataFormatada = "";
+      var TipoJogo = 0;
+      var Semente = 0;
+      var Numeros = [];
+      var HTML = "";
+      DataAtual = pas.SysUtils.Now();
+      DataFormatada = pas.SysUtils.FormatDateTime("dd/mm/yyyy",DataAtual);
+      TipoJogo = this.WebComboBox1.GetItemIndex();
+      Semente = pas.System.Trunc(DataAtual) + (TipoJogo * 1000);
+      if (TipoJogo === 0) {
+        Numeros = this.GerarJogoMegaSenaComSemente(6,Semente)}
+       else Numeros = this.GerarJogoLotoFacilComSemente(15,Semente);
+      HTML = '<div style="text-align:center; font-family:Arial,sans-serif; padding:8px;">' + '<div style="font-size:15px; font-weight:bold; margin-bottom:10px; color:#333;">' + "Resultado do Dia - " + this.WebComboBox1.FItems.Get(this.WebComboBox1.GetItemIndex()) + "</div>" + '<div style="font-size:13px; color:#666; margin-bottom:10px;">' + "Data: " + DataFormatada + "</div>" + "<div>" + this.GerarBolinhasHTML(Numeros,Numeros,false) + "</div>" + "</div>";
+      this.WebHTMLDivResultadoDia.FHTML.SetTextStr(HTML);
+    };
+    this.FormatarNumeros = function (Numeros) {
+      var Result = "";
+      var i = 0;
+      Result = "";
+      for (var $l = 0, $end = rtl.length(Numeros) - 1; $l <= $end; $l++) {
+        i = $l;
+        if (i > 0) Result = Result + " - ";
+        Result = Result + pas.SysUtils.FormatFloat("00",Numeros[i]);
+      };
+      return Result;
+    };
+    this.AtualizarContador = function () {
+      var Historico = "";
+      var Total = 0;
+      var P = 0;
+      Historico = this.ObterHistorico();
+      if (Historico === "") {
+        this.WebLabel5.SetCaption("Sorteios salvos: 0");
+        return;
+      };
+      Total = 1;
+      for (var $l = 1, $end = Historico.length; $l <= $end; $l++) {
+        P = $l;
+        if (Historico.charAt(P - 1) === "\n") Total += 1;
+      };
+      this.WebLabel5.SetCaption("Sorteios salvos: " + pas.SysUtils.IntToStr(Total));
+    };
+    this.ObterHistorico = function () {
+      var Result = "";
+      var V = "";
+      Result = "";
+      try {
+        V = window.localStorage.getItem("sorteios_salvos");
+      } catch ($e) {
+        return Result;
+      };
+      try {
+        if (V.length === 0) return Result;
+      } catch ($e) {
+        return Result;
+      };
+      if ((V === "null") || (V === "undefined") || (V === "NaN")) return Result;
+      Result = V;
+      return Result;
+    };
+    this.SalvarHistorico = function (Valor) {
+      try {
+        window.localStorage.setItem("sorteios_salvos",Valor);
+      } catch ($e) {
+      };
+    };
+    this.AdicionarJogoAoHistorico = function (Nome, Tipo, DataHora, Numeros) {
+      var Historico = "";
+      var NovoItem = "";
+      Historico = this.ObterHistorico();
+      NovoItem = pas.SysUtils.Format("[%s] %s | %s -> %s",pas.System.VarRecs(18,DataHora,18,Nome,18,Tipo,18,Numeros));
+      if (Historico === "") {
+        Historico = NovoItem}
+       else Historico = Historico + "\n" + NovoItem;
+      this.SalvarHistorico(Historico);
+    };
+    this.ContarAcertos = function (JogoSalvo, ResultadoDia) {
+      var Result = 0;
+      var i = 0;
+      var j = 0;
+      Result = 0;
+      for (var $l = 0, $end = rtl.length(JogoSalvo) - 1; $l <= $end; $l++) {
+        i = $l;
+        for (var $l1 = 0, $end1 = rtl.length(ResultadoDia) - 1; $l1 <= $end1; $l1++) {
+          j = $l1;
+          if (JogoSalvo[i] === ResultadoDia[j]) {
+            Result += 1;
+            break;
+          };
+        };
+      };
+      return Result;
+    };
+    this.ExtrairNumerosDaLinha = function (Linha) {
+      var Result = [];
+      var P = 0;
+      var Inicio = 0;
+      var Fim = 0;
+      var n = 0;
+      var S = "";
+      var Token = "";
+      var Lista = [];
+      Lista = rtl.arraySetLength(Lista,0,0);
+      n = 0;
+      P = pas.System.Pos("->",Linha);
+      if (P === 0) {
+        Result = rtl.arraySetLength(Result,0,0);
+        return Result;
+      };
+      S = pas.SysUtils.Trim(pas.System.Copy(Linha,P + 2,Linha.length));
+      Inicio = 1;
+      while (Inicio <= S.length) {
+        Fim = Inicio;
+        while ((Fim <= S.length) && (S.charAt(Fim - 1) !== "-")) Fim += 1;
+        Token = pas.SysUtils.Trim(pas.System.Copy(S,Inicio,Fim - Inicio));
+        if (Token !== "") {
+          Lista = rtl.arraySetLength(Lista,0,n + 1);
+          Lista[n] = pas.SysUtils.StrToIntDef(Token,0);
+          n += 1;
+        };
+        Inicio = Fim + 1;
+      };
+      Result = rtl.arraySetLength(Result,0,n);
+      for (var $l = 0, $end = n - 1; $l <= $end; $l++) {
+        P = $l;
+        Result[P] = Lista[P];
+      };
+      return Result;
+    };
+    this.ExtrairNomeDaLinha = function (Linha) {
+      var Result = "";
+      var P1 = 0;
+      var P2 = 0;
+      Result = "";
+      P1 = pas.System.Pos("]",Linha);
+      if (P1 === 0) return Result;
+      P1 += 1;
+      P2 = pas.System.Pos("|",Linha);
+      if (P2 === 0) return Result;
+      if (P2 > P1) Result = pas.SysUtils.Trim(pas.System.Copy(Linha,P1 + 1,P2 - P1 - 1));
+      return Result;
+    };
+    this.ExtrairDataHoraDaLinha = function (Linha) {
+      var Result = "";
+      var P = 0;
+      Result = "";
+      P = pas.System.Pos("]",Linha);
+      if ((P > 1) && (Linha.charAt(0) === "[")) Result = pas.System.Copy(Linha,2,P - 2);
+      return Result;
+    };
+    this.PertenceAoResultado = function (Numero, ResultadoDia) {
+      var Result = false;
+      var i = 0;
+      Result = false;
+      for (var $l = 0, $end = rtl.length(ResultadoDia) - 1; $l <= $end; $l++) {
+        i = $l;
+        if (ResultadoDia[i] === Numero) {
+          Result = true;
+          return Result;
+        };
+      };
+      return Result;
+    };
+    this.GerarBolinhasHTML = function (Numeros, ResultadoDia, ModoComparacao) {
+      var Result = "";
+      var i = 0;
+      var Cor = "";
+      var NumStr = "";
+      Result = '<div style="white-space: nowrap; overflow-x: auto;">';
+      for (var $l = 0, $end = rtl.length(Numeros) - 1; $l <= $end; $l++) {
+        i = $l;
+        Cor = this.CorBolinha(Numeros[i],ResultadoDia,ModoComparacao);
+        NumStr = pas.SysUtils.FormatFloat("00",Numeros[i]);
+        Result = Result + '<span style="display:inline-block; width:28px; height:28px; ' + "line-height:28px; border-radius:50%; background:" + Cor + "; " + "color:white; font-weight:bold; font-size:11px; " + 'margin:2px; text-align:center;">' + NumStr + "</span>";
+      };
+      Result = Result + "</div>";
+      return Result;
+    };
+    this.GerarHTMLLinhaComparada = function (Nome, DataHora, JogoSalvo, ResultadoDia, Acertos) {
+      var Result = "";
+      var CorPrefixo = "";
+      var Prefixo = "";
+      var Bolinhas = "";
+      var NomeSeguro = "";
+      if (Acertos > 0) {
+        CorPrefixo = "#2E7D32";
+        Prefixo = "ACERTOU " + pas.SysUtils.IntToStr(Acertos);
+      } else {
+        CorPrefixo = "#C62828";
+        Prefixo = "ZERO ACERTOS";
+      };
+      NomeSeguro = Nome;
+      if (NomeSeguro === "") NomeSeguro = "Apostador";
+      Bolinhas = this.GerarBolinhasHTML(JogoSalvo,ResultadoDia,true);
+      Result = '<div style="border:1px solid #ccc; border-radius:6px; padding:5px 8px; ' + 'margin:5px auto; max-width:740px; background:#fafafa;">' + '<div style="font-size:13px; color:#444; font-weight:bold; ' + 'margin-bottom:3px; text-align:center;">' + "👤 " + NomeSeguro + "</div>" + '<div style="font-size:12px; color:' + CorPrefixo + "; " + 'font-weight:bold; margin-bottom:3px; text-align:center;">' + Prefixo + " &nbsp;|&nbsp; " + DataHora + "</div>" + Bolinhas + "</div>";
+      return Result;
+    };
+    this.CorBolinha = function (Numero, ResultadoDia, ModoComparacao) {
+      var Result = "";
+      if (!ModoComparacao) {
+        Result = "#4CAF50";
+        return Result;
+      };
+      if (this.PertenceAoResultado(Numero,ResultadoDia)) {
+        Result = "#2E7D32"}
+       else Result = "#B0BEC5";
+      return Result;
+    };
+    this.ObterNomeSalvo = function () {
+      var Result = "";
+      var V = "";
+      Result = "";
+      try {
+        V = window.localStorage.getItem("sorteio_nome");
+      } catch ($e) {
+        return Result;
+      };
+      try {
+        if (V.length === 0) return Result;
+      } catch ($e) {
+        return Result;
+      };
+      if ((V === "null") || (V === "undefined") || (V === "NaN")) return Result;
+      Result = pas.SysUtils.Trim(V);
+      return Result;
+    };
+    this.SalvarNome = function (Valor) {
+      try {
+        window.localStorage.setItem("sorteio_nome",Valor);
+      } catch ($e) {
+      };
+    };
+    this.PopularListaApostas = function () {
+      var Historico = "";
+      var Linhas = [];
+      var i = 0;
+      var Item = "";
+      this.WebComboBoxApostas.FItems.Clear();
+      Historico = this.ObterHistorico();
+      if (Historico === "") {
+        this.WebButtonExcluir.SetEnabled(false);
+        return;
+      };
+      Linhas = pas.SysUtils.TStringHelper.Split$1.call({get: function () {
+          return Historico;
+        }, set: function (v) {
+          Historico = v;
+        }},["\n"]);
+      for (var $l = 0, $end = rtl.length(Linhas) - 1; $l <= $end; $l++) {
+        i = $l;
+        Item = pas.SysUtils.Trim(Linhas[i]);
+        if (Item !== "") this.WebComboBoxApostas.FItems.Add(Item);
+      };
+      if (this.WebComboBoxApostas.FItems.GetCount() > 0) {
+        this.WebComboBoxApostas.SetItemIndex(0);
+        this.WebButtonExcluir.SetEnabled(true);
+      } else this.WebButtonExcluir.SetEnabled(false);
+    };
+    this.ExcluirApostaSelecionada = function () {
+      var LinhaSelecionada = "";
+      var Historico = "";
+      var NovoHistorico = "";
+      var Linhas = [];
+      var i = 0;
+      var Removido = false;
+      if (this.WebComboBoxApostas.GetItemIndex() < 0) {
+        this.WebMemo1.FLines.Clear();
+        this.WebMemo1.FLines.Add("Selecione uma aposta na lista para excluir.");
+        return;
+      };
+      LinhaSelecionada = this.WebComboBoxApostas.FItems.Get(this.WebComboBoxApostas.GetItemIndex());
+      Removido = this.RemoverLinhaDoHistorico(LinhaSelecionada);
+      if (!Removido) {
+        this.WebMemo1.FLines.Clear();
+        this.WebMemo1.FLines.Add("Não foi possível excluir a aposta selecionada.");
+        return;
+      };
+      this.PopularListaApostas();
+      this.AtualizarContador();
+      this.WebMemo1.FLines.Clear();
+      this.WebMemo1.FLines.Add("Aposta excluída com sucesso!");
+      this.WebMemo1.FLines.Add("");
+      this.WebMemo1.FLines.Add("Aposta removida:");
+      this.WebMemo1.FLines.Add(LinhaSelecionada);
+    };
+    this.RemoverLinhaDoHistorico = function (LinhaAlvo) {
+      var Result = false;
+      var Historico = "";
+      var Linhas = [];
+      var i = 0;
+      var Total = 0;
+      var NovoLote = "";
+      var LinhaAtual = "";
+      var Encontrado = false;
+      Result = false;
+      Historico = this.ObterHistorico();
+      if (Historico === "") return Result;
+      Linhas = pas.SysUtils.TStringHelper.Split$1.call({get: function () {
+          return Historico;
+        }, set: function (v) {
+          Historico = v;
+        }},["\n"]);
+      NovoLote = "";
+      Total = 0;
+      Encontrado = false;
+      for (var $l = 0, $end = rtl.length(Linhas) - 1; $l <= $end; $l++) {
+        i = $l;
+        LinhaAtual = pas.SysUtils.Trim(Linhas[i]);
+        if (LinhaAtual === "") continue;
+        if (!Encontrado && (LinhaAtual === LinhaAlvo)) {
+          Encontrado = true;
+          continue;
+        };
+        if (NovoLote === "") {
+          NovoLote = LinhaAtual}
+         else NovoLote = NovoLote + "\n" + LinhaAtual;
+        Total += 1;
+      };
+      if (!Encontrado) return Result;
+      this.SalvarHistorico(NovoLote);
+      Result = true;
+      return Result;
     };
     this.LoadDFMValues = function () {
       pas["WEBLib.Forms"].TCustomForm.LoadDFMValues.call(this);
       this.WebLabel1 = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
+      this.WebLabel6 = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
       this.WebLabel4 = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
       this.WebLabel2 = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
+      this.WebLabel5 = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
       this.WebLabel3 = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
+      this.WebLabel7 = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
+      this.WebHTMLDivResultadoDia = pas["WEBLib.WebCtrls"].THTMLDiv.$create("Create$1",[this]);
+      this.WebHTMLDivComparacao = pas["WEBLib.WebCtrls"].THTMLDiv.$create("Create$1",[this]);
+      this.WebEditNome = pas["WEBLib.StdCtrls"].TEdit.$create("Create$1",[this]);
       this.WebComboBox1 = pas["WEBLib.StdCtrls"].TComboBox.$create("Create$1",[this]);
       this.WebEdit1 = pas["WEBLib.StdCtrls"].TEdit.$create("Create$1",[this]);
       this.WebButton1 = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
+      this.WebButtonSalvar = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
+      this.WebButtonVerSalvos = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
+      this.WebButtonLimpar = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
+      this.WebButtonComparar = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
       this.WebMemo1 = pas["WEBLib.StdCtrls"].TMemo.$create("Create$1",[this]);
+      this.WebComboBoxApostas = pas["WEBLib.StdCtrls"].TComboBox.$create("Create$1",[this]);
+      this.WebButtonExcluir = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
       this.WebLabel1.BeforeLoadDFMValues();
+      this.WebLabel6.BeforeLoadDFMValues();
       this.WebLabel4.BeforeLoadDFMValues();
       this.WebLabel2.BeforeLoadDFMValues();
+      this.WebLabel5.BeforeLoadDFMValues();
       this.WebLabel3.BeforeLoadDFMValues();
+      this.WebLabel7.BeforeLoadDFMValues();
+      this.WebHTMLDivResultadoDia.BeforeLoadDFMValues();
+      this.WebHTMLDivComparacao.BeforeLoadDFMValues();
+      this.WebEditNome.BeforeLoadDFMValues();
       this.WebComboBox1.BeforeLoadDFMValues();
       this.WebEdit1.BeforeLoadDFMValues();
       this.WebButton1.BeforeLoadDFMValues();
+      this.WebButtonSalvar.BeforeLoadDFMValues();
+      this.WebButtonVerSalvos.BeforeLoadDFMValues();
+      this.WebButtonLimpar.BeforeLoadDFMValues();
+      this.WebButtonComparar.BeforeLoadDFMValues();
       this.WebMemo1.BeforeLoadDFMValues();
+      this.WebComboBoxApostas.BeforeLoadDFMValues();
+      this.WebButtonExcluir.BeforeLoadDFMValues();
       try {
         this.SetName("Form1");
-        this.SetWidth(640);
-        this.SetHeight(520);
-        this.SetCaption("Aposte Sorteador de Números - Mega Sena e Loto Fácil - TMS Web Core");
-        this.SetColor(15329769);
+        this.SetWidth(1600);
+        this.SetHeight(1000);
+        this.SetCaption("Sorteador Mega Sena e Loto Fácil - TMS Web Core");
+        this.SetColor(15790320);
         this.FFont.FCharset = 1;
         this.FFont.SetColor(65793);
-        this.FFont.SetHeight(-13);
-        this.FFont.SetName("Segoe UI");
+        this.FFont.SetHeight(-11);
+        this.FFont.SetName("Tahoma");
         this.FFont.SetStyle({});
         this.SetParentFont(false);
         this.SetEvent(this,"OnCreate","WebFormCreate");
         this.WebLabel1.SetParentComponent(this);
         this.WebLabel1.SetName("WebLabel1");
-        this.WebLabel1.SetLeft(24);
-        this.WebLabel1.SetTop(16);
-        this.WebLabel1.SetWidth(493);
-        this.WebLabel1.SetHeight(25);
-        this.WebLabel1.SetCaption("Aposte Sorteador de Números - Mega Sena e Loto Fácil");
+        this.WebLabel1.SetLeft(200);
+        this.WebLabel1.SetTop(12);
+        this.WebLabel1.SetWidth(524);
+        this.WebLabel1.SetHeight(27);
+        this.WebLabel1.SetAlignment(pas.Classes.TAlignment.taCenter);
+        this.WebLabel1.SetCaption("Sorteador de Números - Mega Sena e Loto Fácil");
         this.WebLabel1.SetColorEx(15790320);
         this.WebLabel1.FFont.FCharset = 1;
-        this.WebLabel1.FFont.SetColor(32768);
-        this.WebLabel1.FFont.SetHeight(-19);
-        this.WebLabel1.FFont.SetName("Segoe UI");
+        this.WebLabel1.FFont.SetColor(65793);
+        this.WebLabel1.FFont.SetHeight(-22);
+        this.WebLabel1.FFont.SetName("Tahoma");
         this.WebLabel1.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
         this.WebLabel1.SetHeightPercent(100.000000000000000000);
         this.WebLabel1.SetParentFont(false);
         this.WebLabel1.SetWidthPercent(100.000000000000000000);
+        this.WebLabel6.SetParentComponent(this);
+        this.WebLabel6.SetName("WebLabel6");
+        this.WebLabel6.SetLeft(60);
+        this.WebLabel6.SetTop(405);
+        this.WebLabel6.SetWidth(63);
+        this.WebLabel6.SetHeight(16);
+        this.WebLabel6.SetCaption("Seu nome:");
+        this.WebLabel6.SetColorEx(15790320);
+        this.WebLabel6.FFont.FCharset = 1;
+        this.WebLabel6.FFont.SetColor(65793);
+        this.WebLabel6.FFont.SetHeight(-13);
+        this.WebLabel6.FFont.SetName("Tahoma");
+        this.WebLabel6.FFont.SetStyle({});
+        this.WebLabel6.SetHeightPercent(100.000000000000000000);
+        this.WebLabel6.SetParentFont(false);
+        this.WebLabel6.SetWidthPercent(100.000000000000000000);
         this.WebLabel4.SetParentComponent(this);
         this.WebLabel4.SetName("WebLabel4");
-        this.WebLabel4.SetLeft(24);
-        this.WebLabel4.SetTop(64);
-        this.WebLabel4.SetWidth(136);
-        this.WebLabel4.SetHeight(17);
+        this.WebLabel4.SetLeft(60);
+        this.WebLabel4.SetTop(465);
+        this.WebLabel4.SetWidth(131);
+        this.WebLabel4.SetHeight(16);
         this.WebLabel4.SetCaption("Escolha o tipo de jogo:");
         this.WebLabel4.SetColorEx(15790320);
+        this.WebLabel4.FFont.FCharset = 1;
+        this.WebLabel4.FFont.SetColor(65793);
+        this.WebLabel4.FFont.SetHeight(-13);
+        this.WebLabel4.FFont.SetName("Tahoma");
+        this.WebLabel4.FFont.SetStyle({});
         this.WebLabel4.SetHeightPercent(100.000000000000000000);
+        this.WebLabel4.SetParentFont(false);
         this.WebLabel4.SetWidthPercent(100.000000000000000000);
         this.WebLabel2.SetParentComponent(this);
         this.WebLabel2.SetName("WebLabel2");
-        this.WebLabel2.SetLeft(24);
-        this.WebLabel2.SetTop(120);
-        this.WebLabel2.SetWidth(142);
-        this.WebLabel2.SetHeight(17);
+        this.WebLabel2.SetLeft(400);
+        this.WebLabel2.SetTop(465);
+        this.WebLabel2.SetWidth(139);
+        this.WebLabel2.SetHeight(16);
         this.WebLabel2.SetCaption("Quantidade de dezenas:");
         this.WebLabel2.SetColorEx(15790320);
+        this.WebLabel2.FFont.FCharset = 1;
+        this.WebLabel2.FFont.SetColor(65793);
+        this.WebLabel2.FFont.SetHeight(-13);
+        this.WebLabel2.FFont.SetName("Tahoma");
+        this.WebLabel2.FFont.SetStyle({});
         this.WebLabel2.SetHeightPercent(100.000000000000000000);
+        this.WebLabel2.SetParentFont(false);
         this.WebLabel2.SetWidthPercent(100.000000000000000000);
+        this.WebLabel5.SetParentComponent(this);
+        this.WebLabel5.SetName("WebLabel5");
+        this.WebLabel5.SetLeft(880);
+        this.WebLabel5.SetTop(545);
+        this.WebLabel5.SetWidth(116);
+        this.WebLabel5.SetHeight(16);
+        this.WebLabel5.SetAlignment(pas.Classes.TAlignment.taCenter);
+        this.WebLabel5.SetCaption("Sorteios salvos: 0");
+        this.WebLabel5.SetColorEx(15790320);
+        this.WebLabel5.FFont.FCharset = 1;
+        this.WebLabel5.FFont.SetColor(65793);
+        this.WebLabel5.FFont.SetHeight(-13);
+        this.WebLabel5.FFont.SetName("Tahoma");
+        this.WebLabel5.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
+        this.WebLabel5.SetHeightPercent(100.000000000000000000);
+        this.WebLabel5.SetParentFont(false);
+        this.WebLabel5.SetWidthPercent(100.000000000000000000);
         this.WebLabel3.SetParentComponent(this);
         this.WebLabel3.SetName("WebLabel3");
-        this.WebLabel3.SetLeft(24);
-        this.WebLabel3.SetTop(200);
-        this.WebLabel3.SetWidth(124);
-        this.WebLabel3.SetHeight(17);
+        this.WebLabel3.SetLeft(60);
+        this.WebLabel3.SetTop(595);
+        this.WebLabel3.SetWidth(116);
+        this.WebLabel3.SetHeight(16);
         this.WebLabel3.SetCaption("Números sorteados:");
         this.WebLabel3.SetColorEx(15790320);
         this.WebLabel3.FFont.FCharset = 1;
         this.WebLabel3.FFont.SetColor(65793);
         this.WebLabel3.FFont.SetHeight(-13);
-        this.WebLabel3.FFont.SetName("Segoe UI");
-        this.WebLabel3.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
+        this.WebLabel3.FFont.SetName("Tahoma");
+        this.WebLabel3.FFont.SetStyle({});
         this.WebLabel3.SetHeightPercent(100.000000000000000000);
         this.WebLabel3.SetParentFont(false);
         this.WebLabel3.SetWidthPercent(100.000000000000000000);
+        this.WebLabel7.SetParentComponent(this);
+        this.WebLabel7.SetName("WebLabel7");
+        this.WebLabel7.SetLeft(60);
+        this.WebLabel7.SetTop(765);
+        this.WebLabel7.SetWidth(260);
+        this.WebLabel7.SetHeight(16);
+        this.WebLabel7.SetCaption("Apostas salvas (selecione para excluir):");
+        this.WebLabel7.SetColorEx(15790320);
+        this.WebLabel7.FFont.FCharset = 1;
+        this.WebLabel7.FFont.SetColor(65793);
+        this.WebLabel7.FFont.SetHeight(-13);
+        this.WebLabel7.FFont.SetName("Tahoma");
+        this.WebLabel7.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
+        this.WebLabel7.SetHeightPercent(100.000000000000000000);
+        this.WebLabel7.SetParentFont(false);
+        this.WebLabel7.SetWidthPercent(100.000000000000000000);
+        this.WebHTMLDivResultadoDia.SetParentComponent(this);
+        this.WebHTMLDivResultadoDia.SetName("WebHTMLDivResultadoDia");
+        this.WebHTMLDivResultadoDia.SetLeft(60);
+        this.WebHTMLDivResultadoDia.SetTop(55);
+        this.WebHTMLDivResultadoDia.SetWidth(760);
+        this.WebHTMLDivResultadoDia.SetHeight(340);
+        this.WebHTMLDivResultadoDia.SetRole("");
+        this.WebHTMLDivComparacao.SetParentComponent(this);
+        this.WebHTMLDivComparacao.SetName("WebHTMLDivComparacao");
+        this.WebHTMLDivComparacao.SetLeft(840);
+        this.WebHTMLDivComparacao.SetTop(55);
+        this.WebHTMLDivComparacao.SetWidth(760);
+        this.WebHTMLDivComparacao.SetHeight(340);
+        this.WebHTMLDivComparacao.SetRole("");
+        this.WebEditNome.SetParentComponent(this);
+        this.WebEditNome.SetName("WebEditNome");
+        this.WebEditNome.SetLeft(60);
+        this.WebEditNome.SetTop(427);
+        this.WebEditNome.SetWidth(300);
+        this.WebEditNome.SetHeight(25);
+        this.WebEditNome.SetHeightPercent(100.000000000000000000);
+        this.WebEditNome.SetText("WebEditNome");
+        this.WebEditNome.SetWidthPercent(100.000000000000000000);
+        this.SetEvent$1(this.WebEditNome,this,"OnChange","WebEditNomeChange");
         this.WebComboBox1.SetParentComponent(this);
         this.WebComboBox1.SetName("WebComboBox1");
-        this.WebComboBox1.SetLeft(24);
-        this.WebComboBox1.SetTop(88);
+        this.WebComboBox1.SetLeft(60);
+        this.WebComboBox1.SetTop(487);
         this.WebComboBox1.SetWidth(300);
-        this.WebComboBox1.SetHeight(25);
+        this.WebComboBox1.SetHeight(21);
         this.WebComboBox1.SetHeightPercent(100.000000000000000000);
+        this.WebComboBox1.SetText("WebComboBox1");
         this.WebComboBox1.SetWidthPercent(100.000000000000000000);
         this.SetEvent$1(this.WebComboBox1,this,"OnChange","WebComboBox1Change");
         this.WebComboBox1.SetItemIndex(-1);
         this.WebEdit1.SetParentComponent(this);
         this.WebEdit1.SetName("WebEdit1");
-        this.WebEdit1.SetLeft(24);
-        this.WebEdit1.SetTop(144);
-        this.WebEdit1.SetWidth(80);
+        this.WebEdit1.SetLeft(400);
+        this.WebEdit1.SetTop(487);
+        this.WebEdit1.SetWidth(100);
         this.WebEdit1.SetHeight(25);
         this.WebEdit1.SetHeightPercent(100.000000000000000000);
         this.WebEdit1.SetTabOrder(1);
-        this.WebEdit1.SetText("6");
+        this.WebEdit1.SetText("WebEdit1");
         this.WebEdit1.SetWidthPercent(100.000000000000000000);
         this.WebButton1.SetParentComponent(this);
         this.WebButton1.SetName("WebButton1");
-        this.WebButton1.SetLeft(120);
-        this.WebButton1.SetTop(144);
-        this.WebButton1.SetWidth(160);
-        this.WebButton1.SetHeight(25);
+        this.WebButton1.SetLeft(60);
+        this.WebButton1.SetTop(530);
+        this.WebButton1.SetWidth(150);
+        this.WebButton1.SetHeight(45);
         this.WebButton1.SetCaption("Sortear Números");
+        this.WebButton1.FFont.FCharset = 1;
+        this.WebButton1.FFont.SetColor(65793);
+        this.WebButton1.FFont.SetHeight(-13);
+        this.WebButton1.FFont.SetName("Tahoma");
+        this.WebButton1.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
         this.WebButton1.SetHeightPercent(100.000000000000000000);
+        this.WebButton1.SetParentFont(false);
         this.WebButton1.SetTabOrder(2);
         this.WebButton1.SetWidthPercent(100.000000000000000000);
         this.SetEvent$1(this.WebButton1,this,"OnClick","WebButton1Click");
+        this.WebButtonSalvar.SetParentComponent(this);
+        this.WebButtonSalvar.SetName("WebButtonSalvar");
+        this.WebButtonSalvar.SetLeft(220);
+        this.WebButtonSalvar.SetTop(530);
+        this.WebButtonSalvar.SetWidth(150);
+        this.WebButtonSalvar.SetHeight(45);
+        this.WebButtonSalvar.SetCaption("Salvar Sorteio");
+        this.WebButtonSalvar.FFont.FCharset = 1;
+        this.WebButtonSalvar.FFont.SetColor(65793);
+        this.WebButtonSalvar.FFont.SetHeight(-13);
+        this.WebButtonSalvar.FFont.SetName("Tahoma");
+        this.WebButtonSalvar.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
+        this.WebButtonSalvar.SetHeightPercent(100.000000000000000000);
+        this.WebButtonSalvar.SetParentFont(false);
+        this.WebButtonSalvar.SetTabOrder(3);
+        this.WebButtonSalvar.SetWidthPercent(100.000000000000000000);
+        this.SetEvent$1(this.WebButtonSalvar,this,"OnClick","WebButtonSalvarClick");
+        this.WebButtonVerSalvos.SetParentComponent(this);
+        this.WebButtonVerSalvos.SetName("WebButtonVerSalvos");
+        this.WebButtonVerSalvos.SetLeft(380);
+        this.WebButtonVerSalvos.SetTop(530);
+        this.WebButtonVerSalvos.SetWidth(150);
+        this.WebButtonVerSalvos.SetHeight(45);
+        this.WebButtonVerSalvos.SetCaption("Ver Salvos");
+        this.WebButtonVerSalvos.FFont.FCharset = 1;
+        this.WebButtonVerSalvos.FFont.SetColor(65793);
+        this.WebButtonVerSalvos.FFont.SetHeight(-13);
+        this.WebButtonVerSalvos.FFont.SetName("Tahoma");
+        this.WebButtonVerSalvos.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
+        this.WebButtonVerSalvos.SetHeightPercent(100.000000000000000000);
+        this.WebButtonVerSalvos.SetParentFont(false);
+        this.WebButtonVerSalvos.SetTabOrder(4);
+        this.WebButtonVerSalvos.SetWidthPercent(100.000000000000000000);
+        this.SetEvent$1(this.WebButtonVerSalvos,this,"OnClick","WebButtonVerSalvosClick");
+        this.WebButtonLimpar.SetParentComponent(this);
+        this.WebButtonLimpar.SetName("WebButtonLimpar");
+        this.WebButtonLimpar.SetLeft(540);
+        this.WebButtonLimpar.SetTop(530);
+        this.WebButtonLimpar.SetWidth(150);
+        this.WebButtonLimpar.SetHeight(45);
+        this.WebButtonLimpar.SetCaption("Limpar Salvos");
+        this.WebButtonLimpar.FFont.FCharset = 1;
+        this.WebButtonLimpar.FFont.SetColor(65793);
+        this.WebButtonLimpar.FFont.SetHeight(-13);
+        this.WebButtonLimpar.FFont.SetName("Tahoma");
+        this.WebButtonLimpar.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
+        this.WebButtonLimpar.SetHeightPercent(100.000000000000000000);
+        this.WebButtonLimpar.SetParentFont(false);
+        this.WebButtonLimpar.SetTabOrder(5);
+        this.WebButtonLimpar.SetWidthPercent(100.000000000000000000);
+        this.SetEvent$1(this.WebButtonLimpar,this,"OnClick","WebButtonLimparClick");
+        this.WebButtonComparar.SetParentComponent(this);
+        this.WebButtonComparar.SetName("WebButtonComparar");
+        this.WebButtonComparar.SetLeft(700);
+        this.WebButtonComparar.SetTop(530);
+        this.WebButtonComparar.SetWidth(160);
+        this.WebButtonComparar.SetHeight(45);
+        this.WebButtonComparar.SetCaption("Comparar com o Dia");
+        this.WebButtonComparar.FFont.FCharset = 1;
+        this.WebButtonComparar.FFont.SetColor(65793);
+        this.WebButtonComparar.FFont.SetHeight(-13);
+        this.WebButtonComparar.FFont.SetName("Tahoma");
+        this.WebButtonComparar.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
+        this.WebButtonComparar.SetHeightPercent(100.000000000000000000);
+        this.WebButtonComparar.SetParentFont(false);
+        this.WebButtonComparar.SetTabOrder(6);
+        this.WebButtonComparar.SetWidthPercent(100.000000000000000000);
+        this.SetEvent$1(this.WebButtonComparar,this,"OnClick","WebButtonCompararClick");
         this.WebMemo1.SetParentComponent(this);
         this.WebMemo1.SetName("WebMemo1");
-        this.WebMemo1.SetLeft(24);
-        this.WebMemo1.SetTop(224);
-        this.WebMemo1.SetWidth(560);
-        this.WebMemo1.SetHeight(265);
+        this.WebMemo1.SetLeft(60);
+        this.WebMemo1.SetTop(617);
+        this.WebMemo1.SetWidth(1500);
+        this.WebMemo1.SetHeight(130);
+        this.WebMemo1.FFont.FCharset = 1;
+        this.WebMemo1.FFont.SetColor(65793);
+        this.WebMemo1.FFont.SetHeight(-13);
+        this.WebMemo1.FFont.SetName("Tahoma");
+        this.WebMemo1.FFont.SetStyle({});
         this.WebMemo1.SetHeightPercent(100.000000000000000000);
         this.WebMemo1.FLines.BeginUpdate();
         try {
           this.WebMemo1.FLines.Clear();
-          this.WebMemo1.FLines.Add("");
+          this.WebMemo1.FLines.Add("WebMemo1");
         } finally {
           this.WebMemo1.FLines.EndUpdate();
         };
+        this.WebMemo1.SetParentFont(false);
         this.WebMemo1.SetReadOnly(true);
-        this.WebMemo1.SetScrollBars(pas["WEBLib.Controls"].TScrollStyle.ssVertical);
         this.WebMemo1.SetSelLength(0);
-        this.WebMemo1.SetSelStart(2);
-        this.WebMemo1.SetTabOrder(3);
+        this.WebMemo1.SetSelStart(0);
+        this.WebMemo1.SetTabOrder(7);
         this.WebMemo1.SetWidthPercent(100.000000000000000000);
+        this.WebComboBoxApostas.SetParentComponent(this);
+        this.WebComboBoxApostas.SetName("WebComboBoxApostas");
+        this.WebComboBoxApostas.SetLeft(60);
+        this.WebComboBoxApostas.SetTop(787);
+        this.WebComboBoxApostas.SetWidth(1100);
+        this.WebComboBoxApostas.SetHeight(21);
+        this.WebComboBoxApostas.SetHeightPercent(100.000000000000000000);
+        this.WebComboBoxApostas.SetText("WebComboBoxApostas");
+        this.WebComboBoxApostas.SetWidthPercent(100.000000000000000000);
+        this.WebComboBoxApostas.SetItemIndex(-1);
+        this.WebButtonExcluir.SetParentComponent(this);
+        this.WebButtonExcluir.SetName("WebButtonExcluir");
+        this.WebButtonExcluir.SetLeft(1180);
+        this.WebButtonExcluir.SetTop(785);
+        this.WebButtonExcluir.SetWidth(200);
+        this.WebButtonExcluir.SetHeight(32);
+        this.WebButtonExcluir.SetCaption("Excluir Aposta");
+        this.WebButtonExcluir.FFont.FCharset = 1;
+        this.WebButtonExcluir.FFont.SetColor(65793);
+        this.WebButtonExcluir.FFont.SetHeight(-13);
+        this.WebButtonExcluir.FFont.SetName("Tahoma");
+        this.WebButtonExcluir.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
+        this.WebButtonExcluir.SetHeightPercent(100.000000000000000000);
+        this.WebButtonExcluir.SetParentFont(false);
+        this.WebButtonExcluir.SetTabOrder(8);
+        this.WebButtonExcluir.SetWidthPercent(100.000000000000000000);
+        this.SetEvent$1(this.WebButtonExcluir,this,"OnClick","WebButtonExcluirClick");
       } finally {
         this.WebLabel1.AfterLoadDFMValues();
+        this.WebLabel6.AfterLoadDFMValues();
         this.WebLabel4.AfterLoadDFMValues();
         this.WebLabel2.AfterLoadDFMValues();
+        this.WebLabel5.AfterLoadDFMValues();
         this.WebLabel3.AfterLoadDFMValues();
+        this.WebLabel7.AfterLoadDFMValues();
+        this.WebHTMLDivResultadoDia.AfterLoadDFMValues();
+        this.WebHTMLDivComparacao.AfterLoadDFMValues();
+        this.WebEditNome.AfterLoadDFMValues();
         this.WebComboBox1.AfterLoadDFMValues();
         this.WebEdit1.AfterLoadDFMValues();
         this.WebButton1.AfterLoadDFMValues();
+        this.WebButtonSalvar.AfterLoadDFMValues();
+        this.WebButtonVerSalvos.AfterLoadDFMValues();
+        this.WebButtonLimpar.AfterLoadDFMValues();
+        this.WebButtonComparar.AfterLoadDFMValues();
         this.WebMemo1.AfterLoadDFMValues();
+        this.WebComboBoxApostas.AfterLoadDFMValues();
+        this.WebButtonExcluir.AfterLoadDFMValues();
       };
     };
     rtl.addIntf(this,pas["WEBLib.Controls"].IControl);
@@ -49911,9 +53659,27 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
     $r.addField("WebLabel3",pas["WEBLib.StdCtrls"].$rtti["TLabel"],4);
     $r.addField("WebComboBox1",pas["WEBLib.StdCtrls"].$rtti["TComboBox"],4);
     $r.addField("WebLabel4",pas["WEBLib.StdCtrls"].$rtti["TLabel"],4);
+    $r.addField("WebHTMLDivResultadoDia",pas["WEBLib.WebCtrls"].$rtti["THTMLDiv"],4);
+    $r.addField("WebHTMLDivComparacao",pas["WEBLib.WebCtrls"].$rtti["THTMLDiv"],4);
+    $r.addField("WebButtonSalvar",pas["WEBLib.StdCtrls"].$rtti["TButton"],4);
+    $r.addField("WebButtonVerSalvos",pas["WEBLib.StdCtrls"].$rtti["TButton"],4);
+    $r.addField("WebButtonLimpar",pas["WEBLib.StdCtrls"].$rtti["TButton"],4);
+    $r.addField("WebButtonComparar",pas["WEBLib.StdCtrls"].$rtti["TButton"],4);
+    $r.addField("WebLabel5",pas["WEBLib.StdCtrls"].$rtti["TLabel"],4);
+    $r.addField("WebLabel6",pas["WEBLib.StdCtrls"].$rtti["TLabel"],4);
+    $r.addField("WebEditNome",pas["WEBLib.StdCtrls"].$rtti["TEdit"],4);
+    $r.addField("WebLabel7",pas["WEBLib.StdCtrls"].$rtti["TLabel"],4);
+    $r.addField("WebComboBoxApostas",pas["WEBLib.StdCtrls"].$rtti["TComboBox"],4);
+    $r.addField("WebButtonExcluir",pas["WEBLib.StdCtrls"].$rtti["TButton"],4);
     $r.addMethod("WebFormCreate",0,[["Sender",pas.System.$rtti["TObject"]]],4);
     $r.addMethod("WebButton1Click",0,[["Sender",pas.System.$rtti["TObject"]]],4);
     $r.addMethod("WebComboBox1Change",0,[["Sender",pas.System.$rtti["TObject"]]],4);
+    $r.addMethod("WebButtonSalvarClick",0,[["Sender",pas.System.$rtti["TObject"]]],4);
+    $r.addMethod("WebButtonVerSalvosClick",0,[["Sender",pas.System.$rtti["TObject"]]],4);
+    $r.addMethod("WebButtonLimparClick",0,[["Sender",pas.System.$rtti["TObject"]]],4);
+    $r.addMethod("WebButtonCompararClick",0,[["Sender",pas.System.$rtti["TObject"]]],4);
+    $r.addMethod("WebEditNomeChange",0,[["Sender",pas.System.$rtti["TObject"]]],4);
+    $r.addMethod("WebButtonExcluirClick",0,[["Sender",pas.System.$rtti["TObject"]]],4);
   });
   this.Form1 = null;
 },["Math"]);
