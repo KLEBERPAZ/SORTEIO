@@ -52532,6 +52532,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       this.WebButtonExcluir = null;
       this.FUltimoJogo = [];
       this.FTipoUltimoJogo = "";
+      this.FUltimoValor = 0.0;
     };
     this.$final = function () {
       this.WebButton1 = undefined;
@@ -52585,6 +52586,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       this.WebMemo1.SetReadOnly(true);
       this.WebMemo1.FLines.Clear();
       this.WebHTMLDivComparacao.FHTML.SetTextStr('<div style="text-align:center; font-family:Arial,sans-serif; color:#888; ' + 'padding-top:120px; font-style:italic;">' + 'Clique em "Comparar com o Dia"<br>para ver a comparação com os jogos salvos.' + "</div>");
+      this.FUltimoValor = 0;
       this.AplicarCoresDoJogo(this.WebComboBox1.GetItemIndex());
       this.AtualizarResultadoDoDia();
       this.AtualizarContador();
@@ -52622,6 +52624,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       };
       this.FUltimoJogo = rtl.arrayRef(Numeros);
       this.FTipoUltimoJogo = Titulo;
+      this.FUltimoValor = this.ValorAposta(Titulo,rtl.length(Numeros));
       this.ExibirNumeros(Numeros,Titulo);
       this.AtualizarResultadoDoDia();
       this.WebButtonSalvar.SetEnabled(true);
@@ -52637,6 +52640,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       var DataHora = "";
       var NumerosStr = "";
       var Nome = "";
+      var Valor = 0.0;
       if (rtl.length(this.FUltimoJogo) === 0) {
         this.WebMemo1.FLines.Clear();
         this.WebMemo1.FLines.Add('Nenhum sorteio para salvar. Clique em "Sortear Números" primeiro.');
@@ -52645,6 +52649,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       Nome = pas.SysUtils.Trim(this.WebEditNome.GetText());
       if (Nome === "") Nome = "Apostador";
       this.SalvarNome(Nome);
+      Valor = this.ValorAposta(this.FTipoUltimoJogo,rtl.length(this.FUltimoJogo));
       DataHora = pas.SysUtils.FormatDateTime("dd/mm/yyyy hh:nn:ss",pas.SysUtils.Now());
       NumerosStr = this.FormatarNumeros(this.FUltimoJogo);
       this.AdicionarJogoAoHistorico(Nome,this.FTipoUltimoJogo,DataHora,NumerosStr);
@@ -52655,6 +52660,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       this.WebMemo1.FLines.Add("Jogo: " + this.FTipoUltimoJogo);
       this.WebMemo1.FLines.Add("Data/Hora: " + DataHora);
       this.WebMemo1.FLines.Add("Números: " + NumerosStr);
+      this.WebMemo1.FLines.Add("Valor da aposta: " + this.FormatarMoeda(Valor));
       this.AtualizarContador();
       this.PopularListaApostas();
     };
@@ -52662,6 +52668,8 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       var Historico = "";
       var Linhas = [];
       var i = 0;
+      var TotalGasto = 0.0;
+      var ValorLinha = 0.0;
       Historico = this.ObterHistorico();
       this.WebMemo1.FLines.Clear();
       this.PopularListaApostas();
@@ -52673,6 +52681,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       };
       this.WebMemo1.FLines.Add("===== SORTEIOS SALVOS =====");
       this.WebMemo1.FLines.Add("");
+      TotalGasto = 0;
       Linhas = pas.SysUtils.TStringHelper.Split$1.call({get: function () {
           return Historico;
         }, set: function (v) {
@@ -52680,8 +52689,15 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         }},["\n"]);
       for (var $l = 0, $end = rtl.length(Linhas) - 1; $l <= $end; $l++) {
         i = $l;
-        if (pas.SysUtils.Trim(Linhas[i]) !== "") this.WebMemo1.FLines.Add(Linhas[i]);
+        if (pas.SysUtils.Trim(Linhas[i]) !== "") {
+          this.WebMemo1.FLines.Add(Linhas[i]);
+          ValorLinha = this.ExtrairValorDaLinha(Linhas[i]);
+          TotalGasto = TotalGasto + ValorLinha;
+        };
       };
+      this.WebMemo1.FLines.Add("");
+      this.WebMemo1.FLines.Add("===== RESUMO =====");
+      this.WebMemo1.FLines.Add("Total investido: " + this.FormatarMoeda(TotalGasto));
     };
     this.WebButtonLimparClick = function (Sender) {
       window.localStorage.setItem("sorteios_salvos","");
@@ -52706,6 +52722,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       var DataHora = "";
       var Tipo = "";
       var TotalPremios = 0.0;
+      var TotalInvestido = 0.0;
       var TeveGanhador = false;
       Historico = this.ObterHistorico();
       if (Historico === "") {
@@ -52722,6 +52739,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       HTML = HTML + '<div style="font-size:12px; color:#666; margin-bottom:10px;">' + "Resultado do Dia: " + this.FormatarNumeros(ResultadoDia) + "</div>";
       HTML = HTML + '<hr style="border:none; border-top:1px dashed #999; margin:8px 0;">';
       TotalPremios = 0;
+      TotalInvestido = 0;
       TeveGanhador = false;
       Linhas = pas.SysUtils.TStringHelper.Split$1.call({get: function () {
           return Historico;
@@ -52738,14 +52756,16 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         DataHora = this.ExtrairDataHoraDaLinha(Linha);
         Tipo = this.ExtrairTipoDaLinha(Linha);
         Acertos = this.ContarAcertos(JogoSalvo,ResultadoDia);
+        TotalInvestido = TotalInvestido + this.ValorAposta(Tipo,rtl.length(JogoSalvo));
         if (this.EhGanhador(Tipo,Acertos)) {
           TeveGanhador = true;
           TotalPremios = TotalPremios + this.ValorPremioNumerico(Tipo,Acertos);
         };
         HTML = HTML + this.GerarHTMLLinhaComparada(Nome,DataHora,Tipo,JogoSalvo,ResultadoDia,Acertos);
       };
+      HTML = HTML + '<div style="margin-top:10px; padding:8px; border-radius:6px; ' + "background:#ECEFF1; color:#333; font-weight:bold; font-size:13px; " + 'display:inline-block; text-align:center;">' + "💵 Total investido: " + this.FormatarMoeda(TotalInvestido) + " &nbsp;|&nbsp; 🏆 Total de prêmios: " + this.FormatarMoeda(TotalPremios) + " &nbsp;|&nbsp; 📊 Saldo: " + this.FormatarMoeda(TotalPremios - TotalInvestido) + "</div>";
       if (TeveGanhador) {
-        HTML = HTML + '<div style="margin-top:10px; padding:8px; border-radius:6px; ' + "background:#2E7D32; color:#fff; font-weight:bold; font-size:14px; " + 'display:inline-block;">' + "💰 TOTAL EM PRÊMIOS: R$ " + pas.SysUtils.FormatFloat("#,##0.00",TotalPremios) + "</div>";
+        HTML = HTML + '<div style="margin-top:6px; padding:8px; border-radius:6px; ' + "background:#2E7D32; color:#fff; font-weight:bold; font-size:14px; " + 'display:inline-block;">' + "💰 TOTAL EM PRÊMIOS: " + this.FormatarMoeda(TotalPremios) + "</div>";
       };
       HTML = HTML + "</div>";
       this.WebHTMLDivComparacao.FHTML.SetTextStr(HTML);
@@ -52931,6 +52951,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
     this.ExibirNumeros = function (Numeros, Titulo) {
       var i = 0;
       var Linha = "";
+      var Valor = 0.0;
       this.WebMemo1.FLines.Clear();
       Linha = "";
       for (var $l = 0, $end = rtl.length(Numeros) - 1; $l <= $end; $l++) {
@@ -52938,10 +52959,12 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         if (i > 0) Linha = Linha + " - ";
         Linha = Linha + pas.SysUtils.FormatFloat("00",Numeros[i]);
       };
+      Valor = this.ValorAposta(Titulo,rtl.length(Numeros));
       this.WebMemo1.FLines.Add("Jogo: " + Titulo);
       this.WebMemo1.FLines.Add(Linha);
       this.WebMemo1.FLines.Add("");
       this.WebMemo1.FLines.Add("Total de dezenas: " + pas.SysUtils.IntToStr(rtl.length(Numeros)));
+      this.WebMemo1.FLines.Add("Valor da aposta: " + this.FormatarMoeda(Valor));
     };
     this.AplicarCoresDoJogo = function (TipoJogo) {
       if (TipoJogo === 0) {
@@ -53033,8 +53056,21 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
     this.AdicionarJogoAoHistorico = function (Nome, Tipo, DataHora, Numeros) {
       var Historico = "";
       var NovoItem = "";
+      var Valor = 0.0;
+      var QtdDezenas = 0;
+      var Partes = [];
       Historico = this.ObterHistorico();
-      NovoItem = pas.SysUtils.Format("[%s] %s | %s -> %s",pas.System.VarRecs(18,DataHora,18,Nome,18,Tipo,18,Numeros));
+      QtdDezenas = 0;
+      if (Numeros !== "") {
+        Partes = pas.SysUtils.TStringHelper.Split$1.call({get: function () {
+            return Numeros;
+          }, set: function (v) {
+            rtl.raiseE("EPropReadOnly");
+          }},["-"]);
+        QtdDezenas = rtl.length(Partes);
+      };
+      Valor = this.ValorAposta(Tipo,QtdDezenas);
+      NovoItem = pas.SysUtils.Format("[%s] %s | %s -> %s (R$ %s)",pas.System.VarRecs(18,DataHora,18,Nome,18,Tipo,18,Numeros,18,pas.SysUtils.FormatFloat("#,##0.00",Valor)));
       if (Historico === "") {
         Historico = NovoItem}
        else Historico = Historico + "\n" + NovoItem;
@@ -53074,6 +53110,8 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         return Result;
       };
       S = pas.SysUtils.Trim(pas.System.Copy(Linha,P + 2,Linha.length));
+      P = pas.System.Pos("(R$",S);
+      if (P > 0) S = pas.SysUtils.Trim(pas.System.Copy(S,1,P - 1));
       Inicio = 1;
       while (Inicio <= S.length) {
         Fim = Inicio;
@@ -53166,6 +53204,11 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       var Fundo = "";
       var FaixaHTML = "";
       var Valor = "";
+      var ValorApostado = 0.0;
+      var ValorGanho = 0.0;
+      var Saldo = 0.0;
+      var SaldoHTML = "";
+      var SaldoCor = "";
       Ganhou = this.EhGanhador(Tipo,Acertos);
       if (Ganhou) {
         CorPrefixo = "#B8860B";
@@ -53190,12 +53233,23 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       if (NomeSeguro === "") NomeSeguro = "Apostador";
       Bolinhas = this.GerarBolinhasHTML(JogoSalvo,ResultadoDia,true);
       Valor = this.ValorPremio(Tipo,Acertos);
+      ValorApostado = this.ValorAposta(Tipo,rtl.length(JogoSalvo));
+      if (Ganhou) {
+        ValorGanho = this.ValorPremioNumerico(Tipo,Acertos)}
+       else ValorGanho = 0;
+      Saldo = ValorGanho - ValorApostado;
+      if (Saldo > 0) {
+        SaldoCor = "#2E7D32"}
+       else if (Saldo < 0) {
+        SaldoCor = "#C62828"}
+       else SaldoCor = "#666";
+      SaldoHTML = '<div style="font-size:11px; color:' + SaldoCor + '; margin-top:3px; text-align:center;">' + "💵 Aposta: " + this.FormatarMoeda(ValorApostado) + "  |  🏆 Prêmio: " + this.FormatarMoeda(ValorGanho) + "  |  📊 Saldo: " + this.FormatarMoeda(Saldo) + "</div>";
       if (Ganhou && (Faixa !== "")) {
         FaixaHTML = '<div style="background:#FFD700; color:#000; font-weight:bold; ' + "font-size:14px; padding:4px 8px; border-radius:4px; " + 'display:inline-block; margin-bottom:4px;">' + "🏆 GANHOU - " + Faixa + " 🏆" + "</div>" + '<div style="background:#2E7D32; color:#fff; font-weight:bold; ' + "font-size:13px; padding:3px 8px; border-radius:4px; " + 'display:inline-block; margin-bottom:4px; margin-left:4px;">' + "💰 " + Valor + "</div>"}
        else if (Ganhou) {
         FaixaHTML = '<div style="background:#FFD700; color:#000; font-weight:bold; ' + "font-size:14px; padding:4px 8px; border-radius:4px; " + 'display:inline-block; margin-bottom:4px;">' + "🏆 GANHOU! 🏆" + "</div>"}
        else FaixaHTML = "";
-      Result = '<div style="border:' + Borda + "; border-radius:6px; padding:5px 8px; " + "margin:5px auto; max-width:740px; background:" + Fundo + ';">' + '<div style="font-size:13px; color:#444; font-weight:bold; ' + 'margin-bottom:3px; text-align:center;">' + "👤 " + NomeSeguro + "</div>" + FaixaHTML + '<div style="font-size:12px; color:' + CorPrefixo + "; " + 'font-weight:bold; margin-bottom:3px; text-align:center;">' + Prefixo + " &nbsp;|&nbsp; " + DataHora + "</div>" + Bolinhas + "</div>";
+      Result = '<div style="border:' + Borda + "; border-radius:6px; padding:5px 8px; " + "margin:5px auto; max-width:740px; background:" + Fundo + ';">' + '<div style="font-size:13px; color:#444; font-weight:bold; ' + 'margin-bottom:3px; text-align:center;">' + "👤 " + NomeSeguro + "</div>" + FaixaHTML + '<div style="font-size:12px; color:' + CorPrefixo + "; " + 'font-weight:bold; margin-bottom:3px; text-align:center;">' + Prefixo + " &nbsp;|&nbsp; " + DataHora + "</div>" + Bolinhas + SaldoHTML + "</div>";
       return Result;
     };
     this.CorBolinha = function (Numero, ResultadoDia, ModoComparacao) {
@@ -53404,6 +53458,79 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
           Result = 14}
          else if ($tmp1 === 11) Result = 7;
       };
+      return Result;
+    };
+    this.ValorAposta = function (Tipo, QuantidadeDezenas) {
+      var Result = 0.0;
+      var TipoUp = "";
+      Result = 0;
+      TipoUp = pas.SysUtils.UpperCase(Tipo);
+      if (pas.System.Pos("MEGA",TipoUp) > 0) {
+        var $tmp = QuantidadeDezenas;
+        if ($tmp === 6) {
+          Result = 5.00}
+         else if ($tmp === 7) {
+          Result = 35.00}
+         else if ($tmp === 8) {
+          Result = 140.00}
+         else if ($tmp === 9) {
+          Result = 420.00}
+         else if ($tmp === 10) {
+          Result = 1050.00}
+         else if ($tmp === 11) {
+          Result = 2310.00}
+         else if ($tmp === 12) {
+          Result = 4620.00}
+         else if ($tmp === 13) {
+          Result = 8580.00}
+         else if ($tmp === 14) {
+          Result = 15015.00}
+         else if ($tmp === 15) {
+          Result = 25025.00}
+         else if ($tmp === 16) {
+          Result = 40040.00}
+         else if ($tmp === 17) {
+          Result = 61880.00}
+         else if ($tmp === 18) {
+          Result = 92820.00}
+         else if ($tmp === 19) {
+          Result = 135660.00}
+         else if ($tmp === 20) Result = 193800.00;
+      } else if (pas.System.Pos("LOTO",TipoUp) > 0) {
+        var $tmp1 = QuantidadeDezenas;
+        if ($tmp1 === 15) {
+          Result = 3.50}
+         else if ($tmp1 === 16) {
+          Result = 56.00}
+         else if ($tmp1 === 17) {
+          Result = 476.00}
+         else if ($tmp1 === 18) {
+          Result = 2856.00}
+         else if ($tmp1 === 19) {
+          Result = 13328.00}
+         else if ($tmp1 === 20) Result = 53312.00;
+      };
+      return Result;
+    };
+    this.FormatarMoeda = function (Valor) {
+      var Result = "";
+      Result = "R$ " + pas.SysUtils.FormatFloat("#,##0.00",Valor);
+      return Result;
+    };
+    this.ExtrairValorDaLinha = function (Linha) {
+      var Result = 0.0;
+      var P1 = 0;
+      var P2 = 0;
+      var S = "";
+      Result = 0;
+      P1 = pas.System.Pos("(R$",Linha);
+      if (P1 === 0) return Result;
+      P2 = pas.System.Pos$1(")",Linha,P1);
+      if (P2 === 0) return Result;
+      S = pas.System.Copy(Linha,P1 + 4,P2 - P1 - 4);
+      S = pas.SysUtils.StringReplace(S,".","",rtl.createSet(pas.SysUtils.TStringReplaceFlag.rfReplaceAll));
+      S = pas.SysUtils.StringReplace(S,",",".",rtl.createSet(pas.SysUtils.TStringReplaceFlag.rfReplaceAll));
+      Result = pas.SysUtils.StrToFloatDef(pas.SysUtils.Trim(S),0);
       return Result;
     };
     this.LoadDFMValues = function () {
