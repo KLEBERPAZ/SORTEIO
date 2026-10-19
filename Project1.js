@@ -51770,7 +51770,6 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       this.WebButtonSalvar = null;
       this.WebButtonExcluir = null;
       this.WebButtonCancelar = null;
-      this.WebButtonAtualizar = null;
       this.WebHTMLDivGrid = null;
       this.WebMemoLog = null;
       this.FClientes = [];
@@ -51796,7 +51795,6 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       this.WebButtonSalvar = undefined;
       this.WebButtonExcluir = undefined;
       this.WebButtonCancelar = undefined;
-      this.WebButtonAtualizar = undefined;
       this.WebHTMLDivGrid = undefined;
       this.WebMemoLog = undefined;
       this.FClientes = undefined;
@@ -51833,9 +51831,6 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       this.Log("Operação cancelada.");
     };
     this.WebButtonAtualizarClick = function (Sender) {
-      this.CarregarClientes();
-      this.AtualizarGrid(pas.SysUtils.Trim(this.WebEditBusca.GetText()));
-      this.Log("Lista recarregada do armazenamento.");
     };
     this.WebEditBuscaChange = function (Sender) {
       this.AtualizarGrid(this.WebEditBusca.GetText());
@@ -51855,6 +51850,11 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         ID = pas.SysUtils.StrToIntDef(DataId,0);
         if (ID > 0) this.SelecionarCliente(ID);
       };
+    };
+    this.WebEditBuscaEnter = function (Sender) {
+      this.CarregarClientes();
+      this.AtualizarGrid(pas.SysUtils.Trim(this.WebEditBusca.GetText()));
+      this.Log("Lista recarregada do armazenamento.");
     };
     this.CarregarClientes = function () {
       var Raw = "";
@@ -52119,7 +52119,6 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       this.WebButtonExcluir = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
       this.WebButtonCancelar = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
       this.WebEditBusca = pas["WEBLib.StdCtrls"].TEdit.$create("Create$1",[this]);
-      this.WebButtonAtualizar = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
       this.WebHTMLDivGrid = pas["WEBLib.WebCtrls"].THTMLDiv.$create("Create$1",[this]);
       this.WebMemoLog = pas["WEBLib.StdCtrls"].TMemo.$create("Create$1",[this]);
       this.WebLabelTitulo.BeforeLoadDFMValues();
@@ -52140,7 +52139,6 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       this.WebButtonExcluir.BeforeLoadDFMValues();
       this.WebButtonCancelar.BeforeLoadDFMValues();
       this.WebEditBusca.BeforeLoadDFMValues();
-      this.WebButtonAtualizar.BeforeLoadDFMValues();
       this.WebHTMLDivGrid.BeforeLoadDFMValues();
       this.WebMemoLog.BeforeLoadDFMValues();
       try {
@@ -52411,30 +52409,14 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebEditBusca.SetHeight(25);
         this.WebEditBusca.SetHeightPercent(100.000000000000000000);
         this.WebEditBusca.SetTabOrder(9);
-        this.WebEditBusca.SetText("WebEditBusca");
         this.WebEditBusca.SetWidthPercent(100.000000000000000000);
-        this.WebButtonAtualizar.SetParentComponent(this);
-        this.WebButtonAtualizar.SetName("WebButtonAtualizar");
-        this.WebButtonAtualizar.SetLeft(1090);
-        this.WebButtonAtualizar.SetTop(66);
-        this.WebButtonAtualizar.SetWidth(130);
-        this.WebButtonAtualizar.SetHeight(28);
-        this.WebButtonAtualizar.SetCaption("Atualizar Lista");
-        this.WebButtonAtualizar.FFont.FCharset = 1;
-        this.WebButtonAtualizar.FFont.SetColor(65793);
-        this.WebButtonAtualizar.FFont.SetHeight(-12);
-        this.WebButtonAtualizar.FFont.SetName("Tahoma");
-        this.WebButtonAtualizar.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
-        this.WebButtonAtualizar.SetHeightPercent(100.000000000000000000);
-        this.WebButtonAtualizar.SetParentFont(false);
-        this.WebButtonAtualizar.SetTabOrder(10);
-        this.WebButtonAtualizar.SetWidthPercent(100.000000000000000000);
-        this.SetEvent$1(this.WebButtonAtualizar,this,"OnClick","WebButtonAtualizarClick");
+        this.SetEvent$1(this.WebEditBusca,this,"OnChange","WebEditBuscaChange");
+        this.SetEvent$1(this.WebEditBusca,this,"OnEnter","WebEditBuscaEnter");
         this.WebHTMLDivGrid.SetParentComponent(this);
         this.WebHTMLDivGrid.SetName("WebHTMLDivGrid");
         this.WebHTMLDivGrid.SetLeft(620);
         this.WebHTMLDivGrid.SetTop(140);
-        this.WebHTMLDivGrid.SetWidth(930);
+        this.WebHTMLDivGrid.SetWidth(460);
         this.WebHTMLDivGrid.SetHeight(620);
         this.WebHTMLDivGrid.SetRole("");
         this.SetEvent$1(this.WebHTMLDivGrid,this,"OnClick","WebHTMLDivGridClick");
@@ -52482,7 +52464,6 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebButtonExcluir.AfterLoadDFMValues();
         this.WebButtonCancelar.AfterLoadDFMValues();
         this.WebEditBusca.AfterLoadDFMValues();
-        this.WebButtonAtualizar.AfterLoadDFMValues();
         this.WebHTMLDivGrid.AfterLoadDFMValues();
         this.WebMemoLog.AfterLoadDFMValues();
       };
@@ -52507,7 +52488,6 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
     $r.addField("WebButtonSalvar",pas["WEBLib.StdCtrls"].$rtti["TButton"]);
     $r.addField("WebButtonExcluir",pas["WEBLib.StdCtrls"].$rtti["TButton"]);
     $r.addField("WebButtonCancelar",pas["WEBLib.StdCtrls"].$rtti["TButton"]);
-    $r.addField("WebButtonAtualizar",pas["WEBLib.StdCtrls"].$rtti["TButton"]);
     $r.addField("WebHTMLDivGrid",pas["WEBLib.WebCtrls"].$rtti["THTMLDiv"]);
     $r.addField("WebMemoLog",pas["WEBLib.StdCtrls"].$rtti["TMemo"]);
     $r.addMethod("WebFormCreate",0,[["Sender",pas.System.$rtti["TObject"]]]);
@@ -52519,6 +52499,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
     $r.addMethod("WebButtonAtualizarClick",0,[["Sender",pas.System.$rtti["TObject"]]]);
     $r.addMethod("WebEditBuscaChange",0,[["Sender",pas.System.$rtti["TObject"]]]);
     $r.addMethod("WebHTMLDivGridClick",0,[["Sender",pas.System.$rtti["TObject"]]]);
+    $r.addMethod("WebEditBuscaEnter",0,[["Sender",pas.System.$rtti["TObject"]]]);
   });
   this.Form1 = null;
   $mod.$implcode = function () {
