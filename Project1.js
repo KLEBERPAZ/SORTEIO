@@ -2272,7 +2272,7 @@ rtl.module("System",[],function () {
   this.$rtti.$DynArray("TArray<RTTI.TRttiParameter>",{});
   this.$rtti.$DynArray("TArray<RTTI.TRttiMethod>",{});
   this.$rtti.$DynArray("TArray<RTTI.TRttiProperty>",{});
-  this.$rtti.$DynArray("TArray<System.Longint>",{eltype: rtl.longint});
+  this.$rtti.$DynArray("TArray<Unit1.TCliente>",{});
   this.$rtti.$DynArray("TArray<System.String>",{eltype: rtl.string});
   $mod.$implcode = function () {
     $mod.$rtti.$ExtClass("TJSObj",{jsclass: "Object"});
@@ -51721,1079 +51721,417 @@ rtl.module("WEBLib.WebCtrls",["System","Classes","WEBLib.Controls","WEBLib.Graph
 rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","WEBLib.Controls","WEBLib.Forms","WEBLib.Dialogs","WEBLib.StdCtrls","WEBLib.Controls","WEBLib.StdCtrls","WEBLib.WebCtrls"],function () {
   "use strict";
   var $mod = this;
+  var $impl = $mod.$impl;
+  rtl.recNewT(this,"TCliente",function () {
+    this.ID = 0;
+    this.Nome = "";
+    this.Email = "";
+    this.Telefone = "";
+    this.Cidade = "";
+    this.DataCadastro = "";
+    this.$eq = function (b) {
+      return (this.ID === b.ID) && (this.Nome === b.Nome) && (this.Email === b.Email) && (this.Telefone === b.Telefone) && (this.Cidade === b.Cidade) && (this.DataCadastro === b.DataCadastro);
+    };
+    this.$assign = function (s) {
+      this.ID = s.ID;
+      this.Nome = s.Nome;
+      this.Email = s.Email;
+      this.Telefone = s.Telefone;
+      this.Cidade = s.Cidade;
+      this.DataCadastro = s.DataCadastro;
+      return this;
+    };
+    var $r = $mod.$rtti.$Record("TCliente",{});
+    $r.addField("ID",rtl.longint);
+    $r.addField("Nome",rtl.string);
+    $r.addField("Email",rtl.string);
+    $r.addField("Telefone",rtl.string);
+    $r.addField("Cidade",rtl.string);
+    $r.addField("DataCadastro",rtl.string);
+  });
   rtl.createClass(this,"TForm1",pas["WEBLib.Forms"].TForm,function () {
     this.$init = function () {
       pas["WEBLib.Forms"].TForm.$init.call(this);
-      this.WebButton1 = null;
-      this.WebLabel1 = null;
-      this.WebLabel2 = null;
-      this.WebMemo1 = null;
-      this.WebEdit1 = null;
-      this.WebLabel3 = null;
-      this.WebComboBox1 = null;
-      this.WebLabel4 = null;
-      this.WebHTMLDivResultadoDia = null;
-      this.WebHTMLDivComparacao = null;
-      this.WebButtonSalvar = null;
-      this.WebButtonVerSalvos = null;
-      this.WebButtonLimpar = null;
-      this.WebButtonComparar = null;
-      this.WebLabel5 = null;
-      this.WebLabel6 = null;
+      this.WebLabelTitulo = null;
+      this.WebLabelID = null;
+      this.WebLabelNome = null;
+      this.WebLabelEmail = null;
+      this.WebLabelTelefone = null;
+      this.WebLabelCidade = null;
+      this.WebLabelBusca = null;
+      this.WebLabelStatus = null;
+      this.WebEditID = null;
       this.WebEditNome = null;
-      this.WebLabel7 = null;
-      this.WebComboBoxApostas = null;
+      this.WebEditEmail = null;
+      this.WebEditTelefone = null;
+      this.WebEditCidade = null;
+      this.WebEditBusca = null;
+      this.WebButtonNovo = null;
+      this.WebButtonSalvar = null;
       this.WebButtonExcluir = null;
-      this.FUltimoJogo = [];
-      this.FTipoUltimoJogo = "";
-      this.FUltimoValor = 0.0;
+      this.WebButtonCancelar = null;
+      this.WebButtonAtualizar = null;
+      this.WebHTMLDivGrid = null;
+      this.WebMemoLog = null;
+      this.FClientes = [];
+      this.FEditandoID = 0;
+      this.FSelecionadoID = 0;
     };
     this.$final = function () {
-      this.WebButton1 = undefined;
-      this.WebLabel1 = undefined;
-      this.WebLabel2 = undefined;
-      this.WebMemo1 = undefined;
-      this.WebEdit1 = undefined;
-      this.WebLabel3 = undefined;
-      this.WebComboBox1 = undefined;
-      this.WebLabel4 = undefined;
-      this.WebHTMLDivResultadoDia = undefined;
-      this.WebHTMLDivComparacao = undefined;
-      this.WebButtonSalvar = undefined;
-      this.WebButtonVerSalvos = undefined;
-      this.WebButtonLimpar = undefined;
-      this.WebButtonComparar = undefined;
-      this.WebLabel5 = undefined;
-      this.WebLabel6 = undefined;
+      this.WebLabelTitulo = undefined;
+      this.WebLabelID = undefined;
+      this.WebLabelNome = undefined;
+      this.WebLabelEmail = undefined;
+      this.WebLabelTelefone = undefined;
+      this.WebLabelCidade = undefined;
+      this.WebLabelBusca = undefined;
+      this.WebLabelStatus = undefined;
+      this.WebEditID = undefined;
       this.WebEditNome = undefined;
-      this.WebLabel7 = undefined;
-      this.WebComboBoxApostas = undefined;
+      this.WebEditEmail = undefined;
+      this.WebEditTelefone = undefined;
+      this.WebEditCidade = undefined;
+      this.WebEditBusca = undefined;
+      this.WebButtonNovo = undefined;
+      this.WebButtonSalvar = undefined;
       this.WebButtonExcluir = undefined;
-      this.FUltimoJogo = undefined;
+      this.WebButtonCancelar = undefined;
+      this.WebButtonAtualizar = undefined;
+      this.WebHTMLDivGrid = undefined;
+      this.WebMemoLog = undefined;
+      this.FClientes = undefined;
       pas["WEBLib.Forms"].TForm.$final.call(this);
     };
     this.WebFormCreate = function (Sender) {
-      this.SetCaption("Sorteador Mega Sena e Loto Fácil - TMS Web Core");
-      this.WebLabel1.SetCaption("Sorteador de Números - Mega Sena e Loto Fácil");
-      this.WebLabel4.SetCaption("Escolha o tipo de jogo:");
-      this.WebLabel2.SetCaption("Quantidade de dezenas:");
-      this.WebLabel3.SetCaption("Números sorteados:");
-      this.WebLabel5.SetCaption("Sorteios salvos: 0");
-      this.WebLabel6.SetCaption("Seu nome:");
-      this.WebLabel7.SetCaption("Apostas salvas (selecione para excluir):");
-      this.WebComboBox1.FItems.Clear();
-      this.WebComboBox1.FItems.Add("Mega Sena (6 dezenas)");
-      this.WebComboBox1.FItems.Add("Loto Fácil (15 dezenas)");
-      this.WebComboBox1.SetItemIndex(0);
-      this.WebEdit1.SetText("6");
-      this.WebEditNome.SetReadOnly(false);
-      this.WebEditNome.SetEnabled(true);
-      this.WebEditNome.SetText(this.ObterNomeSalvo());
-      this.WebButton1.SetCaption("Sortear Números");
-      this.WebButtonSalvar.SetCaption("Salvar Sorteio");
-      this.WebButtonVerSalvos.SetCaption("Ver Salvos");
-      this.WebButtonLimpar.SetCaption("Limpar Salvos");
-      this.WebButtonComparar.SetCaption("Comparar com o Dia");
-      this.WebButtonExcluir.SetCaption("Excluir Aposta");
-      this.WebButtonSalvar.SetEnabled(false);
-      this.WebButtonExcluir.SetEnabled(false);
-      this.WebMemo1.SetReadOnly(true);
-      this.WebMemo1.FLines.Clear();
-      this.WebHTMLDivComparacao.FHTML.SetTextStr('<div style="text-align:center; font-family:Arial,sans-serif; color:#888; ' + 'padding-top:120px; font-style:italic;">' + 'Clique em "Comparar com o Dia"<br>para ver a comparação com os jogos salvos.' + "</div>");
-      this.FUltimoValor = 0;
-      this.AplicarCoresDoJogo(this.WebComboBox1.GetItemIndex());
-      this.AtualizarResultadoDoDia();
-      this.AtualizarContador();
-      this.PopularListaApostas();
+      this.SetCaption("CRUD de Clientes - TMS Web Core");
+      this.WebLabelTitulo.SetCaption("Cadastro de Clientes");
+      this.WebEditID.SetReadOnly(true);
+      this.WebEditID.SetTabStop(false);
+      this.FEditandoID = 0;
+      this.FSelecionadoID = 0;
+      this.LimparFormulario();
     };
-    this.WebButton1Click = function (Sender) {
-      var Quantidade = 0;
-      var Numeros = [];
-      var TipoJogo = 0;
-      var Titulo = "";
-      var Nome = "";
-      Nome = pas.SysUtils.Trim(this.WebEditNome.GetText());
-      if (Nome === "") Nome = "Apostador";
-      this.SalvarNome(Nome);
-      Quantidade = pas.SysUtils.StrToIntDef(this.WebEdit1.GetText(),0);
-      TipoJogo = this.WebComboBox1.GetItemIndex();
-      if (TipoJogo === 0) {
-        if ((Quantidade < 6) || (Quantidade > 15)) {
-          this.WebMemo1.FLines.Clear();
-          this.WebMemo1.FLines.Add("Erro: Para a Mega Sena, a quantidade deve ser entre 6 e 15 dezenas.");
-          this.WebButtonSalvar.SetEnabled(false);
-          return;
-        };
-        Numeros = this.GerarJogoMegaSena(Quantidade);
-        Titulo = "Mega Sena";
-      } else {
-        if ((Quantidade < 15) || (Quantidade > 20)) {
-          this.WebMemo1.FLines.Clear();
-          this.WebMemo1.FLines.Add("Erro: Para a Loto Fácil, a quantidade deve ser entre 15 e 20 dezenas.");
-          this.WebButtonSalvar.SetEnabled(false);
-          return;
-        };
-        Numeros = this.GerarJogoLotoFacil(Quantidade);
-        Titulo = "Loto Fácil";
-      };
-      this.FUltimoJogo = rtl.arrayRef(Numeros);
-      this.FTipoUltimoJogo = Titulo;
-      this.FUltimoValor = this.ValorAposta(Titulo,rtl.length(Numeros));
-      this.ExibirNumeros(Numeros,Titulo);
-      this.AtualizarResultadoDoDia();
-      this.WebButtonSalvar.SetEnabled(true);
+    this.WebFormShow = function (Sender) {
+      this.CarregarClientes();
+      this.AtualizarGrid("");
+      this.Log("Sistema iniciado. Clientes carregados: " + pas.SysUtils.IntToStr(rtl.length(this.FClientes)));
     };
-    this.WebComboBox1Change = function (Sender) {
-      if (this.WebComboBox1.GetItemIndex() === 0) {
-        this.WebEdit1.SetText("6")}
-       else this.WebEdit1.SetText("15");
-      this.AplicarCoresDoJogo(this.WebComboBox1.GetItemIndex());
-      this.AtualizarResultadoDoDia();
+    this.WebButtonNovoClick = function (Sender) {
+      this.NovoCliente();
     };
     this.WebButtonSalvarClick = function (Sender) {
-      var DataHora = "";
-      var NumerosStr = "";
-      var Nome = "";
-      var Valor = 0.0;
-      if (rtl.length(this.FUltimoJogo) === 0) {
-        this.WebMemo1.FLines.Clear();
-        this.WebMemo1.FLines.Add('Nenhum sorteio para salvar. Clique em "Sortear Números" primeiro.');
-        return;
-      };
-      Nome = pas.SysUtils.Trim(this.WebEditNome.GetText());
-      if (Nome === "") Nome = "Apostador";
-      this.SalvarNome(Nome);
-      Valor = this.ValorAposta(this.FTipoUltimoJogo,rtl.length(this.FUltimoJogo));
-      DataHora = pas.SysUtils.FormatDateTime("dd/mm/yyyy hh:nn:ss",pas.SysUtils.Now());
-      NumerosStr = this.FormatarNumeros(this.FUltimoJogo);
-      this.AdicionarJogoAoHistorico(Nome,this.FTipoUltimoJogo,DataHora,NumerosStr);
-      this.WebMemo1.FLines.Clear();
-      this.WebMemo1.FLines.Add("OK - Sorteio salvo com sucesso!");
-      this.WebMemo1.FLines.Add("");
-      this.WebMemo1.FLines.Add("Nome: " + Nome);
-      this.WebMemo1.FLines.Add("Jogo: " + this.FTipoUltimoJogo);
-      this.WebMemo1.FLines.Add("Data/Hora: " + DataHora);
-      this.WebMemo1.FLines.Add("Números: " + NumerosStr);
-      this.WebMemo1.FLines.Add("Valor da aposta: " + this.FormatarMoeda(Valor));
-      this.AtualizarContador();
-      this.PopularListaApostas();
-    };
-    this.WebButtonVerSalvosClick = function (Sender) {
-      var Historico = "";
-      var Linhas = [];
-      var i = 0;
-      var TotalGasto = 0.0;
-      var ValorLinha = 0.0;
-      Historico = this.ObterHistorico();
-      this.WebMemo1.FLines.Clear();
-      this.PopularListaApostas();
-      if (Historico === "") {
-        this.WebMemo1.FLines.Add("Nenhum sorteio salvo ainda.");
-        this.WebMemo1.FLines.Add("");
-        this.WebMemo1.FLines.Add('Faça um sorteio e clique em "Salvar Sorteio".');
-        return;
-      };
-      this.WebMemo1.FLines.Add("===== SORTEIOS SALVOS =====");
-      this.WebMemo1.FLines.Add("");
-      TotalGasto = 0;
-      Linhas = pas.SysUtils.TStringHelper.Split$1.call({get: function () {
-          return Historico;
-        }, set: function (v) {
-          Historico = v;
-        }},["\n"]);
-      for (var $l = 0, $end = rtl.length(Linhas) - 1; $l <= $end; $l++) {
-        i = $l;
-        if (pas.SysUtils.Trim(Linhas[i]) !== "") {
-          this.WebMemo1.FLines.Add(Linhas[i]);
-          ValorLinha = this.ExtrairValorDaLinha(Linhas[i]);
-          TotalGasto = TotalGasto + ValorLinha;
-        };
-      };
-      this.WebMemo1.FLines.Add("");
-      this.WebMemo1.FLines.Add("===== RESUMO =====");
-      this.WebMemo1.FLines.Add("Total investido: " + this.FormatarMoeda(TotalGasto));
-    };
-    this.WebButtonLimparClick = function (Sender) {
-      window.localStorage.setItem("sorteios_salvos","");
-      this.AtualizarContador();
-      this.PopularListaApostas();
-      this.WebMemo1.FLines.Clear();
-      this.WebMemo1.FLines.Add("Todos os sorteios salvos foram apagados.");
-      this.WebHTMLDivComparacao.FHTML.SetTextStr('<div style="text-align:center; font-family:Arial,sans-serif; color:#888; ' + 'padding-top:120px; font-style:italic;">' + 'Histórico apagado.<br>Faça novos sorteios e clique em "Salvar Sorteio".' + "</div>");
-    };
-    this.WebButtonCompararClick = function (Sender) {
-      var Historico = "";
-      var HTML = "";
-      var Linhas = [];
-      var i = 0;
-      var Acertos = 0;
-      var JogoSalvo = [];
-      var ResultadoDia = [];
-      var Semente = 0;
-      var TipoJogo = 0;
-      var Linha = "";
-      var Nome = "";
-      var DataHora = "";
-      var Tipo = "";
-      var TotalPremios = 0.0;
-      var TotalInvestido = 0.0;
-      var TeveGanhador = false;
-      Historico = this.ObterHistorico();
-      if (Historico === "") {
-        this.WebHTMLDivComparacao.FHTML.SetTextStr('<div style="text-align:center; font-family:Arial,sans-serif; color:#C62828; ' + 'padding-top:120px; font-weight:bold;">' + "Nenhum sorteio salvo para comparar.<br>" + '<span style="font-weight:normal;">Faça um sorteio e clique em "Salvar Sorteio".</span>' + "</div>");
-        return;
-      };
-      TipoJogo = this.WebComboBox1.GetItemIndex();
-      Semente = pas.System.Trunc(pas.SysUtils.Now()) + (TipoJogo * 1000);
-      if (TipoJogo === 0) {
-        ResultadoDia = this.GerarJogoMegaSenaComSemente(6,Semente)}
-       else ResultadoDia = this.GerarJogoLotoFacilComSemente(15,Semente);
-      HTML = '<div style="font-family: Arial, sans-serif; text-align:center; padding:6px; ' + "max-height: 520px; overflow-y: auto; overflow-x: hidden; " + 'border: 1px solid #ddd; border-radius: 6px; background: #fff;">';
-      HTML = HTML + '<div style="font-size:15px; font-weight:bold; margin-bottom:6px; color:#333;">' + "Comparação com Jogos Salvos</div>";
-      HTML = HTML + '<div style="font-size:12px; color:#666; margin-bottom:10px;">' + "Resultado do Dia: " + this.FormatarNumeros(ResultadoDia) + "</div>";
-      HTML = HTML + '<hr style="border:none; border-top:1px dashed #999; margin:8px 0;">';
-      TotalPremios = 0;
-      TotalInvestido = 0;
-      TeveGanhador = false;
-      Linhas = pas.SysUtils.TStringHelper.Split$1.call({get: function () {
-          return Historico;
-        }, set: function (v) {
-          Historico = v;
-        }},["\n"]);
-      for (var $l = 0, $end = rtl.length(Linhas) - 1; $l <= $end; $l++) {
-        i = $l;
-        Linha = pas.SysUtils.Trim(Linhas[i]);
-        if (Linha === "") continue;
-        JogoSalvo = this.ExtrairNumerosDaLinha(Linha);
-        if (rtl.length(JogoSalvo) === 0) continue;
-        Nome = this.ExtrairNomeDaLinha(Linha);
-        DataHora = this.ExtrairDataHoraDaLinha(Linha);
-        Tipo = this.ExtrairTipoDaLinha(Linha);
-        Acertos = this.ContarAcertos(JogoSalvo,ResultadoDia);
-        TotalInvestido = TotalInvestido + this.ValorAposta(Tipo,rtl.length(JogoSalvo));
-        if (this.EhGanhador(Tipo,Acertos)) {
-          TeveGanhador = true;
-          TotalPremios = TotalPremios + this.ValorPremioNumerico(Tipo,Acertos);
-        };
-        HTML = HTML + this.GerarHTMLLinhaComparada(Nome,DataHora,Tipo,JogoSalvo,ResultadoDia,Acertos);
-      };
-      HTML = HTML + '<div style="margin-top:10px; padding:8px; border-radius:6px; ' + "background:#ECEFF1; color:#333; font-weight:bold; font-size:13px; " + 'display:inline-block; text-align:center;">' + "💵 Total investido: " + this.FormatarMoeda(TotalInvestido) + " &nbsp;|&nbsp; 🏆 Total de prêmios: " + this.FormatarMoeda(TotalPremios) + " &nbsp;|&nbsp; 📊 Saldo: " + this.FormatarMoeda(TotalPremios - TotalInvestido) + "</div>";
-      if (TeveGanhador) {
-        HTML = HTML + '<div style="margin-top:6px; padding:8px; border-radius:6px; ' + "background:#2E7D32; color:#fff; font-weight:bold; font-size:14px; " + 'display:inline-block;">' + "💰 TOTAL EM PRÊMIOS: " + this.FormatarMoeda(TotalPremios) + "</div>";
-      };
-      HTML = HTML + "</div>";
-      this.WebHTMLDivComparacao.FHTML.SetTextStr(HTML);
-    };
-    this.WebEditNomeChange = function (Sender) {
-      this.SalvarNome(pas.SysUtils.Trim(this.WebEditNome.GetText()));
+      this.SalvarCliente();
     };
     this.WebButtonExcluirClick = function (Sender) {
-      this.ExcluirApostaSelecionada();
+      this.ExcluirCliente();
     };
-    this.GerarJogoMegaSena = function (QuantidadeNumeros) {
-      var Result = [];
-      var Disponiveis = [];
+    this.WebButtonCancelarClick = function (Sender) {
+      this.FEditandoID = 0;
+      this.FSelecionadoID = 0;
+      this.LimparFormulario();
+      this.AtualizarGrid(pas.SysUtils.Trim(this.WebEditBusca.GetText()));
+      this.Log("Operação cancelada.");
+    };
+    this.WebButtonAtualizarClick = function (Sender) {
+      this.CarregarClientes();
+      this.AtualizarGrid(pas.SysUtils.Trim(this.WebEditBusca.GetText()));
+      this.Log("Lista recarregada do armazenamento.");
+    };
+    this.WebEditBuscaChange = function (Sender) {
+      this.AtualizarGrid(this.WebEditBusca.GetText());
+    };
+    this.CarregarClientes = function () {
+      var Raw = "";
+      var Linhas = [];
       var i = 0;
-      var j = 0;
-      var Temp = 0;
-      var S = 0;
-      S = pas.System.Trunc(pas.SysUtils.Now() * 86400000) + pas.System.Random(100000);
-      if (S < 1) S = 1;
-      Disponiveis = rtl.arraySetLength(Disponiveis,0,60);
-      for (i = 0; i <= 59; i++) Disponiveis[i] = i + 1;
-      this.EmbaralharComSemente({get: function () {
-          return Disponiveis;
-        }, set: function (v) {
-          Disponiveis = v;
-        }},{get: function () {
-          return S;
-        }, set: function (v) {
-          S = v;
-        }});
-      Result = rtl.arraySetLength(Result,0,QuantidadeNumeros);
-      for (var $l = 0, $end = QuantidadeNumeros - 1; $l <= $end; $l++) {
-        i = $l;
-        Result[i] = Disponiveis[i];
-      };
-      for (var $l1 = 0, $end1 = QuantidadeNumeros - 2; $l1 <= $end1; $l1++) {
-        i = $l1;
-        for (var $l2 = i + 1, $end2 = QuantidadeNumeros - 1; $l2 <= $end2; $l2++) {
-          j = $l2;
-          if (Result[i] > Result[j]) {
-            Temp = Result[i];
-            Result[i] = Result[j];
-            Result[j] = Temp;
-          };
-        };
-      };
-      return Result;
-    };
-    this.GerarJogoLotoFacil = function (QuantidadeNumeros) {
-      var Result = [];
-      var Disponiveis = [];
-      var i = 0;
-      var j = 0;
-      var Temp = 0;
-      var S = 0;
-      S = pas.System.Trunc(pas.SysUtils.Now() * 86400000) + pas.System.Random(100000);
-      if (S < 1) S = 1;
-      Disponiveis = rtl.arraySetLength(Disponiveis,0,25);
-      for (i = 0; i <= 24; i++) Disponiveis[i] = i + 1;
-      this.EmbaralharComSemente({get: function () {
-          return Disponiveis;
-        }, set: function (v) {
-          Disponiveis = v;
-        }},{get: function () {
-          return S;
-        }, set: function (v) {
-          S = v;
-        }});
-      Result = rtl.arraySetLength(Result,0,QuantidadeNumeros);
-      for (var $l = 0, $end = QuantidadeNumeros - 1; $l <= $end; $l++) {
-        i = $l;
-        Result[i] = Disponiveis[i];
-      };
-      for (var $l1 = 0, $end1 = QuantidadeNumeros - 2; $l1 <= $end1; $l1++) {
-        i = $l1;
-        for (var $l2 = i + 1, $end2 = QuantidadeNumeros - 1; $l2 <= $end2; $l2++) {
-          j = $l2;
-          if (Result[i] > Result[j]) {
-            Temp = Result[i];
-            Result[i] = Result[j];
-            Result[j] = Temp;
-          };
-        };
-      };
-      return Result;
-    };
-    this.GerarJogoMegaSenaComSemente = function (QuantidadeNumeros, Semente) {
-      var Result = [];
-      var Disponiveis = [];
-      var i = 0;
-      var j = 0;
-      var Temp = 0;
-      var S = 0;
-      S = Semente;
-      Disponiveis = rtl.arraySetLength(Disponiveis,0,60);
-      for (i = 0; i <= 59; i++) Disponiveis[i] = i + 1;
-      this.EmbaralharComSemente({get: function () {
-          return Disponiveis;
-        }, set: function (v) {
-          Disponiveis = v;
-        }},{get: function () {
-          return S;
-        }, set: function (v) {
-          S = v;
-        }});
-      Result = rtl.arraySetLength(Result,0,QuantidadeNumeros);
-      for (var $l = 0, $end = QuantidadeNumeros - 1; $l <= $end; $l++) {
-        i = $l;
-        Result[i] = Disponiveis[i];
-      };
-      for (var $l1 = 0, $end1 = QuantidadeNumeros - 2; $l1 <= $end1; $l1++) {
-        i = $l1;
-        for (var $l2 = i + 1, $end2 = QuantidadeNumeros - 1; $l2 <= $end2; $l2++) {
-          j = $l2;
-          if (Result[i] > Result[j]) {
-            Temp = Result[i];
-            Result[i] = Result[j];
-            Result[j] = Temp;
-          };
-        };
-      };
-      return Result;
-    };
-    this.GerarJogoLotoFacilComSemente = function (QuantidadeNumeros, Semente) {
-      var Result = [];
-      var Disponiveis = [];
-      var i = 0;
-      var j = 0;
-      var Temp = 0;
-      var S = 0;
-      S = Semente;
-      Disponiveis = rtl.arraySetLength(Disponiveis,0,25);
-      for (i = 0; i <= 24; i++) Disponiveis[i] = i + 1;
-      this.EmbaralharComSemente({get: function () {
-          return Disponiveis;
-        }, set: function (v) {
-          Disponiveis = v;
-        }},{get: function () {
-          return S;
-        }, set: function (v) {
-          S = v;
-        }});
-      Result = rtl.arraySetLength(Result,0,QuantidadeNumeros);
-      for (var $l = 0, $end = QuantidadeNumeros - 1; $l <= $end; $l++) {
-        i = $l;
-        Result[i] = Disponiveis[i];
-      };
-      for (var $l1 = 0, $end1 = QuantidadeNumeros - 2; $l1 <= $end1; $l1++) {
-        i = $l1;
-        for (var $l2 = i + 1, $end2 = QuantidadeNumeros - 1; $l2 <= $end2; $l2++) {
-          j = $l2;
-          if (Result[i] > Result[j]) {
-            Temp = Result[i];
-            Result[i] = Result[j];
-            Result[j] = Temp;
-          };
-        };
-      };
-      return Result;
-    };
-    this.ProximoAleatorio = function (Semente) {
-      var Result = 0;
-      Semente.set(((Semente.get() * 1103515245) + 12345) & 0x7FFFFFFF);
-      Result = Semente.get();
-      return Result;
-    };
-    this.EmbaralharComSemente = function (Arr, Semente) {
-      var i = 0;
-      var j = 0;
-      var Temp = 0;
       var n = 0;
-      var R = 0;
-      n = rtl.length(Arr.get());
-      for (var $l = n - 1; $l >= 1; $l--) {
-        i = $l;
-        R = this.ProximoAleatorio(Semente);
-        j = R % (i + 1);
-        Temp = Arr.get()[i];
-        Arr.get()[i] = Arr.get()[j];
-        Arr.get()[j] = Temp;
+      var Parts = [];
+      var C = $mod.TCliente.$new();
+      var Lista = [];
+      Lista = rtl.arraySetLength(Lista,$mod.TCliente,0);
+      n = 0;
+      try {
+        Raw = window.localStorage.getItem($impl.STORAGE_KEY);
+      } catch ($e) {
+        Raw = "";
       };
-    };
-    this.ExibirNumeros = function (Numeros, Titulo) {
-      var i = 0;
-      var Linha = "";
-      var Valor = 0.0;
-      this.WebMemo1.FLines.Clear();
-      Linha = "";
-      for (var $l = 0, $end = rtl.length(Numeros) - 1; $l <= $end; $l++) {
-        i = $l;
-        if (i > 0) Linha = Linha + " - ";
-        Linha = Linha + pas.SysUtils.FormatFloat("00",Numeros[i]);
-      };
-      Valor = this.ValorAposta(Titulo,rtl.length(Numeros));
-      this.WebMemo1.FLines.Add("Jogo: " + Titulo);
-      this.WebMemo1.FLines.Add(Linha);
-      this.WebMemo1.FLines.Add("");
-      this.WebMemo1.FLines.Add("Total de dezenas: " + pas.SysUtils.IntToStr(rtl.length(Numeros)));
-      this.WebMemo1.FLines.Add("Valor da aposta: " + this.FormatarMoeda(Valor));
-    };
-    this.AplicarCoresDoJogo = function (TipoJogo) {
-      if (TipoJogo === 0) {
-        this.SetColor(0xE8F5E9);
-        this.WebMemo1.SetColor(0xC8E6C9);
-        this.WebMemo1.FFont.SetColor(0x4D00);
-        this.WebLabel1.FFont.SetColor(0x8000);
-        this.WebLabel5.FFont.SetColor(0x8000);
-        this.WebLabel6.FFont.SetColor(0x8000);
-        this.WebLabel7.FFont.SetColor(0x8000);
-      } else {
-        this.SetColor(0xF3E5F5);
-        this.WebMemo1.SetColor(0xE1BEE7);
-        this.WebMemo1.FFont.SetColor(0x4A148C);
-        this.WebLabel1.FFont.SetColor(0x6A1B9A);
-        this.WebLabel5.FFont.SetColor(0x6A1B9A);
-        this.WebLabel6.FFont.SetColor(0x6A1B9A);
-        this.WebLabel7.FFont.SetColor(0x6A1B9A);
-      };
-    };
-    this.AtualizarResultadoDoDia = function () {
-      var DataAtual = 0.0;
-      var DataFormatada = "";
-      var TipoJogo = 0;
-      var Semente = 0;
-      var Numeros = [];
-      var HTML = "";
-      DataAtual = pas.SysUtils.Now();
-      DataFormatada = pas.SysUtils.FormatDateTime("dd/mm/yyyy",DataAtual);
-      TipoJogo = this.WebComboBox1.GetItemIndex();
-      Semente = pas.System.Trunc(DataAtual) + (TipoJogo * 1000);
-      if (TipoJogo === 0) {
-        Numeros = this.GerarJogoMegaSenaComSemente(6,Semente)}
-       else Numeros = this.GerarJogoLotoFacilComSemente(15,Semente);
-      HTML = '<div style="text-align:center; font-family:Arial,sans-serif; padding:8px;">' + '<div style="font-size:15px; font-weight:bold; margin-bottom:10px; color:#333;">' + "Resultado do Dia - " + this.WebComboBox1.FItems.Get(this.WebComboBox1.GetItemIndex()) + "</div>" + '<div style="font-size:13px; color:#666; margin-bottom:10px;">' + "Data: " + DataFormatada + "</div>" + "<div>" + this.GerarBolinhasHTML(Numeros,Numeros,false) + "</div>" + "</div>";
-      this.WebHTMLDivResultadoDia.FHTML.SetTextStr(HTML);
-    };
-    this.FormatarNumeros = function (Numeros) {
-      var Result = "";
-      var i = 0;
-      Result = "";
-      for (var $l = 0, $end = rtl.length(Numeros) - 1; $l <= $end; $l++) {
-        i = $l;
-        if (i > 0) Result = Result + " - ";
-        Result = Result + pas.SysUtils.FormatFloat("00",Numeros[i]);
-      };
-      return Result;
-    };
-    this.AtualizarContador = function () {
-      var Historico = "";
-      var Total = 0;
-      var P = 0;
-      Historico = this.ObterHistorico();
-      if (Historico === "") {
-        this.WebLabel5.SetCaption("Sorteios salvos: 0");
+      if ((Raw === "") || (Raw === "null") || (Raw === "undefined")) {
+        this.FClientes = [];
         return;
       };
-      Total = 1;
-      for (var $l = 1, $end = Historico.length; $l <= $end; $l++) {
-        P = $l;
-        if (Historico.charAt(P - 1) === "\n") Total += 1;
-      };
-      this.WebLabel5.SetCaption("Sorteios salvos: " + pas.SysUtils.IntToStr(Total));
-    };
-    this.ObterHistorico = function () {
-      var Result = "";
-      var V = "";
-      Result = "";
-      try {
-        V = window.localStorage.getItem("sorteios_salvos");
-      } catch ($e) {
-        return Result;
-      };
-      try {
-        if (V.length === 0) return Result;
-      } catch ($e) {
-        return Result;
-      };
-      if ((V === "null") || (V === "undefined") || (V === "NaN")) return Result;
-      Result = V;
-      return Result;
-    };
-    this.SalvarHistorico = function (Valor) {
-      try {
-        window.localStorage.setItem("sorteios_salvos",Valor);
-      } catch ($e) {
-      };
-    };
-    this.AdicionarJogoAoHistorico = function (Nome, Tipo, DataHora, Numeros) {
-      var Historico = "";
-      var NovoItem = "";
-      var Valor = 0.0;
-      var QtdDezenas = 0;
-      var Partes = [];
-      Historico = this.ObterHistorico();
-      QtdDezenas = 0;
-      if (Numeros !== "") {
-        Partes = pas.SysUtils.TStringHelper.Split$1.call({get: function () {
-            return Numeros;
-          }, set: function (v) {
-            rtl.raiseE("EPropReadOnly");
-          }},["-"]);
-        QtdDezenas = rtl.length(Partes);
-      };
-      Valor = this.ValorAposta(Tipo,QtdDezenas);
-      NovoItem = pas.SysUtils.Format("[%s] %s | %s -> %s (R$ %s)",pas.System.VarRecs(18,DataHora,18,Nome,18,Tipo,18,Numeros,18,pas.SysUtils.FormatFloat("#,##0.00",Valor)));
-      if (Historico === "") {
-        Historico = NovoItem}
-       else Historico = Historico + "\n" + NovoItem;
-      this.SalvarHistorico(Historico);
-    };
-    this.ContarAcertos = function (JogoSalvo, ResultadoDia) {
-      var Result = 0;
-      var i = 0;
-      var j = 0;
-      Result = 0;
-      for (var $l = 0, $end = rtl.length(JogoSalvo) - 1; $l <= $end; $l++) {
+      Linhas = pas.SysUtils.TStringHelper.Split$1.call({get: function () {
+          return Raw;
+        }, set: function (v) {
+          Raw = v;
+        }},["\n"]);
+      for (var $l = 0, $end = rtl.length(Linhas) - 1; $l <= $end; $l++) {
         i = $l;
-        for (var $l1 = 0, $end1 = rtl.length(ResultadoDia) - 1; $l1 <= $end1; $l1++) {
-          j = $l1;
-          if (JogoSalvo[i] === ResultadoDia[j]) {
-            Result += 1;
-            break;
-          };
-        };
+        if (pas.SysUtils.Trim(Linhas[i]) === "") continue;
+        Parts = pas.SysUtils.TStringHelper.Split$1.call({a: i, p: Linhas, get: function () {
+            return this.p[this.a];
+          }, set: function (v) {
+            this.p[this.a] = v;
+          }},["|"]);
+        if (rtl.length(Parts) < 6) continue;
+        C.ID = pas.SysUtils.StrToIntDef(Parts[0],0);
+        if (C.ID <= 0) continue;
+        C.Nome = Parts[1];
+        C.Email = Parts[2];
+        C.Telefone = Parts[3];
+        C.Cidade = Parts[4];
+        C.DataCadastro = Parts[5];
+        Lista = rtl.arraySetLength(Lista,$mod.TCliente,n + 1);
+        Lista[n].$assign(C);
+        n += 1;
       };
-      return Result;
+      this.FClientes = rtl.arrayRef(Lista);
     };
-    this.ExtrairNumerosDaLinha = function (Linha) {
-      var Result = [];
-      var P = 0;
-      var Inicio = 0;
-      var Fim = 0;
-      var n = 0;
-      var S = "";
-      var Token = "";
-      var Lista = [];
-      Lista = rtl.arraySetLength(Lista,0,0);
-      n = 0;
-      P = pas.System.Pos("->",Linha);
-      if (P === 0) {
-        Result = rtl.arraySetLength(Result,0,0);
-        return Result;
+    this.SalvarClientes = function () {
+      var i = 0;
+      var Raw = "";
+      Raw = "";
+      for (var $l = 0, $end = rtl.length(this.FClientes) - 1; $l <= $end; $l++) {
+        i = $l;
+        if (i > 0) Raw = Raw + "\n";
+        Raw = Raw + this.SerializarCliente(this.FClientes[i]);
       };
-      S = pas.SysUtils.Trim(pas.System.Copy(Linha,P + 2,Linha.length));
-      P = pas.System.Pos("(R$",S);
-      if (P > 0) S = pas.SysUtils.Trim(pas.System.Copy(S,1,P - 1));
-      Inicio = 1;
-      while (Inicio <= S.length) {
-        Fim = Inicio;
-        while ((Fim <= S.length) && (S.charAt(Fim - 1) !== "-")) Fim += 1;
-        Token = pas.SysUtils.Trim(pas.System.Copy(S,Inicio,Fim - Inicio));
-        if (Token !== "") {
-          Lista = rtl.arraySetLength(Lista,0,n + 1);
-          Lista[n] = pas.SysUtils.StrToIntDef(Token,0);
+      try {
+        window.localStorage.setItem($impl.STORAGE_KEY,Raw);
+      } catch ($e) {
+        this.Log("ERRO: falha ao salvar no localStorage.");
+      };
+    };
+    this.AtualizarGrid = function (Filtro) {
+      var HTML = "";
+      var FiltroLower = "";
+      var i = 0;
+      var Count = 0;
+      var C = $mod.TCliente.$new();
+      FiltroLower = pas.SysUtils.LowerCase(pas.SysUtils.Trim(Filtro));
+      Count = 0;
+      HTML = '<div style="font-family:Arial,sans-serif; background:#fff; ' + "border:1px solid #ddd; border-radius:6px; padding:8px; " + 'max-height:600px; overflow-y:auto;">' + '<table style="width:100%; border-collapse:collapse; font-size:13px;">' + "<thead>" + '<tr style="background:#37474F; color:#fff;">' + '<th style="padding:6px; text-align:left;">ID</th>' + '<th style="padding:6px; text-align:left;">Nome</th>' + '<th style="padding:6px; text-align:left;">E-mail</th>' + '<th style="padding:6px; text-align:left;">Telefone</th>' + '<th style="padding:6px; text-align:left;">Cidade</th>' + '<th style="padding:6px; text-align:left;">Cadastro</th>' + "</tr>" + "</thead><tbody>";
+      for (var $l = 0, $end = rtl.length(this.FClientes) - 1; $l <= $end; $l++) {
+        i = $l;
+        C.$assign(this.FClientes[i]);
+        if (FiltroLower !== "") if ((pas.System.Pos(FiltroLower,pas.SysUtils.LowerCase(C.Nome)) === 0) && (pas.System.Pos(FiltroLower,pas.SysUtils.LowerCase(C.Email)) === 0) && (pas.System.Pos(FiltroLower,pas.SysUtils.LowerCase(C.Cidade)) === 0)) continue;
+        Count += 1;
+        HTML = HTML + '<tr style="border-bottom:1px solid #eee; cursor:pointer;" ' + 'onclick="window._clickGrid(' + pas.SysUtils.IntToStr(C.ID) + ')" ' + 'onmouseover="this.style.background=\'#F1F8E9\';" ' + 'onmouseout="this.style.background=\'\';">' + '<td style="padding:5px;">' + pas.SysUtils.IntToStr(C.ID) + "</td>" + '<td style="padding:5px; font-weight:bold;">' + this.EscaparHTML(C.Nome) + "</td>" + '<td style="padding:5px;">' + this.EscaparHTML(C.Email) + "</td>" + '<td style="padding:5px;">' + this.EscaparHTML(C.Telefone) + "</td>" + '<td style="padding:5px;">' + this.EscaparHTML(C.Cidade) + "</td>" + '<td style="padding:5px; color:#666; font-size:11px;">' + this.EscaparHTML(C.DataCadastro) + "</td>" + "</tr>";
+      };
+      if (Count === 0) HTML = HTML + '<tr><td colspan="6" style="padding:16px; text-align:center; color:#999; ' + 'font-style:italic;">Nenhum cliente encontrado.</td></tr>';
+      HTML = HTML + "</tbody></table></div>";
+      this.WebHTMLDivGrid.FHTML.SetTextStr(HTML);
+      window._clickGrid = function(id) {
+        pas.Core.Form1.SelecionarClienteJS(id);
+      };
+      this.WebLabelStatus.SetCaption("Total de clientes: " + pas.SysUtils.IntToStr(Count));
+    };
+    this.LimparFormulario = function () {
+      this.WebEditID.SetText("");
+      this.WebEditNome.SetText("");
+      this.WebEditEmail.SetText("");
+      this.WebEditTelefone.SetText("");
+      this.WebEditCidade.SetText("");
+    };
+    this.NovoCliente = function () {
+      this.FEditandoID = 0;
+      this.FSelecionadoID = 0;
+      this.LimparFormulario();
+      this.WebEditNome.SetFocus();
+      this.Log("Modo: NOVO cliente. Preencha os campos e clique em Salvar.");
+    };
+    this.SalvarCliente = function () {
+      var C = $mod.TCliente.$new();
+      var Idx = 0;
+      var Nome = "";
+      var Email = "";
+      Nome = pas.SysUtils.Trim(this.WebEditNome.GetText());
+      Email = pas.SysUtils.Trim(this.WebEditEmail.GetText());
+      if (Nome === "") {
+        this.Log("ERRO: o nome é obrigatório.");
+        this.WebEditNome.SetFocus();
+        return;
+      };
+      if ((Email !== "") && (pas.System.Pos("@",Email) === 0)) {
+        this.Log('ERRO: e-mail inválido (falta "@").');
+        this.WebEditEmail.SetFocus();
+        return;
+      };
+      if (this.FEditandoID === 0) {
+        C.ID = this.ProximoID();
+        C.Nome = Nome;
+        C.Email = Email;
+        C.Telefone = pas.SysUtils.Trim(this.WebEditTelefone.GetText());
+        C.Cidade = pas.SysUtils.Trim(this.WebEditCidade.GetText());
+        C.DataCadastro = pas.SysUtils.FormatDateTime("dd/mm/yyyy hh:nn:ss",pas.SysUtils.Now());
+        this.FClientes = rtl.arraySetLength(this.FClientes,$mod.TCliente,rtl.length(this.FClientes) + 1);
+        this.FClientes[rtl.length(this.FClientes) - 1].$assign(C);
+        this.SalvarClientes();
+        this.Log("Cliente criado: #" + pas.SysUtils.IntToStr(C.ID) + " - " + C.Nome);
+        this.FSelecionadoID = C.ID;
+      } else {
+        Idx = this.IndexDoCliente(this.FEditandoID);
+        if (Idx < 0) {
+          this.Log("ERRO: cliente não encontrado para atualização.");
+          return;
+        };
+        this.FClientes[Idx].Nome = Nome;
+        this.FClientes[Idx].Email = Email;
+        this.FClientes[Idx].Telefone = pas.SysUtils.Trim(this.WebEditTelefone.GetText());
+        this.FClientes[Idx].Cidade = pas.SysUtils.Trim(this.WebEditCidade.GetText());
+        this.SalvarClientes();
+        this.Log("Cliente atualizado: #" + pas.SysUtils.IntToStr(this.FEditandoID) + " - " + Nome);
+        this.FSelecionadoID = this.FEditandoID;
+      };
+      this.FEditandoID = 0;
+      this.LimparFormulario();
+      this.AtualizarGrid(pas.SysUtils.Trim(this.WebEditBusca.GetText()));
+    };
+    this.ExcluirCliente = function () {
+      var Idx = 0;
+      var Alvo = 0;
+      var i = 0;
+      var n = 0;
+      var NomeAlvo = "";
+      var Novos = [];
+      if (this.FSelecionadoID > 0) {
+        Alvo = this.FSelecionadoID}
+       else if (this.FEditandoID > 0) {
+        Alvo = this.FEditandoID}
+       else {
+        this.Log("ERRO: selecione um cliente na lista para excluir.");
+        return;
+      };
+      Idx = this.IndexDoCliente(Alvo);
+      if (Idx < 0) {
+        this.Log("ERRO: cliente não encontrado.");
+        return;
+      };
+      NomeAlvo = this.FClientes[Idx].Nome;
+      Novos = rtl.arraySetLength(Novos,$mod.TCliente,rtl.length(this.FClientes) - 1);
+      n = 0;
+      for (var $l = 0, $end = rtl.length(this.FClientes) - 1; $l <= $end; $l++) {
+        i = $l;
+        if (i !== Idx) {
+          Novos[n].$assign(this.FClientes[i]);
           n += 1;
         };
-        Inicio = Fim + 1;
       };
-      Result = rtl.arraySetLength(Result,0,n);
-      for (var $l = 0, $end = n - 1; $l <= $end; $l++) {
-        P = $l;
-        Result[P] = Lista[P];
-      };
-      return Result;
+      this.FClientes = rtl.arrayRef(Novos);
+      this.SalvarClientes();
+      this.FSelecionadoID = 0;
+      this.FEditandoID = 0;
+      this.LimparFormulario();
+      this.AtualizarGrid(pas.SysUtils.Trim(this.WebEditBusca.GetText()));
+      this.Log("Cliente excluído: #" + pas.SysUtils.IntToStr(Alvo) + " - " + NomeAlvo);
     };
-    this.ExtrairNomeDaLinha = function (Linha) {
-      var Result = "";
-      var P1 = 0;
-      var P2 = 0;
-      Result = "";
-      P1 = pas.System.Pos("]",Linha);
-      if (P1 === 0) return Result;
-      P1 += 1;
-      P2 = pas.System.Pos("|",Linha);
-      if (P2 === 0) return Result;
-      if (P2 > P1) Result = pas.SysUtils.Trim(pas.System.Copy(Linha,P1 + 1,P2 - P1 - 1));
-      return Result;
+    this.SelecionarCliente = function (ID) {
+      var Idx = 0;
+      Idx = this.IndexDoCliente(ID);
+      if (Idx < 0) return;
+      this.FSelecionadoID = ID;
+      this.FEditandoID = ID;
+      this.WebEditID.SetText(pas.SysUtils.IntToStr(this.FClientes[Idx].ID));
+      this.WebEditNome.SetText(this.FClientes[Idx].Nome);
+      this.WebEditEmail.SetText(this.FClientes[Idx].Email);
+      this.WebEditTelefone.SetText(this.FClientes[Idx].Telefone);
+      this.WebEditCidade.SetText(this.FClientes[Idx].Cidade);
+      this.Log("Cliente selecionado: #" + pas.SysUtils.IntToStr(ID) + " - " + this.FClientes[Idx].Nome);
     };
-    this.ExtrairDataHoraDaLinha = function (Linha) {
-      var Result = "";
-      var P = 0;
-      Result = "";
-      P = pas.System.Pos("]",Linha);
-      if ((P > 1) && (Linha.charAt(0) === "[")) Result = pas.System.Copy(Linha,2,P - 2);
-      return Result;
-    };
-    this.ExtrairTipoDaLinha = function (Linha) {
-      var Result = "";
-      var P1 = 0;
-      var P2 = 0;
-      Result = "";
-      P1 = pas.System.Pos("|",Linha);
-      if (P1 === 0) return Result;
-      P2 = pas.System.Pos("->",Linha);
-      if (P2 === 0) return Result;
-      if (P2 > P1) Result = pas.SysUtils.Trim(pas.System.Copy(Linha,P1 + 1,P2 - P1 - 1));
-      return Result;
-    };
-    this.PertenceAoResultado = function (Numero, ResultadoDia) {
-      var Result = false;
+    this.ProximoID = function () {
+      var Result = 0;
       var i = 0;
-      Result = false;
-      for (var $l = 0, $end = rtl.length(ResultadoDia) - 1; $l <= $end; $l++) {
+      var Maior = 0;
+      Maior = 0;
+      for (var $l = 0, $end = rtl.length(this.FClientes) - 1; $l <= $end; $l++) {
         i = $l;
-        if (ResultadoDia[i] === Numero) {
-          Result = true;
-          return Result;
-        };
+        if (this.FClientes[i].ID > Maior) Maior = this.FClientes[i].ID;
       };
+      Result = Maior + 1;
       return Result;
     };
-    this.GerarBolinhasHTML = function (Numeros, ResultadoDia, ModoComparacao) {
-      var Result = "";
+    this.IndexDoCliente = function (ID) {
+      var Result = 0;
       var i = 0;
-      var Cor = "";
-      var NumStr = "";
-      Result = '<div style="white-space: nowrap; overflow-x: auto;">';
-      for (var $l = 0, $end = rtl.length(Numeros) - 1; $l <= $end; $l++) {
+      Result = -1;
+      for (var $l = 0, $end = rtl.length(this.FClientes) - 1; $l <= $end; $l++) {
         i = $l;
-        Cor = this.CorBolinha(Numeros[i],ResultadoDia,ModoComparacao);
-        NumStr = pas.SysUtils.FormatFloat("00",Numeros[i]);
-        Result = Result + '<span style="display:inline-block; width:28px; height:28px; ' + "line-height:28px; border-radius:50%; background:" + Cor + "; " + "color:white; font-weight:bold; font-size:11px; " + 'margin:2px; text-align:center;">' + NumStr + "</span>";
+        if (this.FClientes[i].ID === ID) return i;
       };
-      Result = Result + "</div>";
       return Result;
     };
-    this.GerarHTMLLinhaComparada = function (Nome, DataHora, Tipo, JogoSalvo, ResultadoDia, Acertos) {
+    this.EscaparHTML = function (S) {
       var Result = "";
-      var CorPrefixo = "";
-      var Prefixo = "";
-      var Bolinhas = "";
-      var NomeSeguro = "";
-      var Faixa = "";
-      var Ganhou = false;
-      var Borda = "";
-      var Fundo = "";
-      var FaixaHTML = "";
-      var Valor = "";
-      var ValorApostado = 0.0;
-      var ValorGanho = 0.0;
-      var Saldo = 0.0;
-      var SaldoHTML = "";
-      var SaldoCor = "";
-      Ganhou = this.EhGanhador(Tipo,Acertos);
-      if (Ganhou) {
-        CorPrefixo = "#B8860B";
-        Prefixo = "GANHOU! " + pas.SysUtils.IntToStr(Acertos) + " ACERTOS";
-        Faixa = this.NomeFaixaPremio(Tipo,Acertos);
-        Borda = "3px solid #FFD700";
-        Fundo = "#FFF8DC";
-      } else if (Acertos > 0) {
-        CorPrefixo = "#2E7D32";
-        Prefixo = "ACERTOU " + pas.SysUtils.IntToStr(Acertos);
-        Faixa = "";
-        Borda = "1px solid #ccc";
-        Fundo = "#fafafa";
-      } else {
-        CorPrefixo = "#C62828";
-        Prefixo = "ZERO ACERTOS";
-        Faixa = "";
-        Borda = "1px solid #ccc";
-        Fundo = "#fafafa";
-      };
-      NomeSeguro = Nome;
-      if (NomeSeguro === "") NomeSeguro = "Apostador";
-      Bolinhas = this.GerarBolinhasHTML(JogoSalvo,ResultadoDia,true);
-      Valor = this.ValorPremio(Tipo,Acertos);
-      ValorApostado = this.ValorAposta(Tipo,rtl.length(JogoSalvo));
-      if (Ganhou) {
-        ValorGanho = this.ValorPremioNumerico(Tipo,Acertos)}
-       else ValorGanho = 0;
-      Saldo = ValorGanho - ValorApostado;
-      if (Saldo > 0) {
-        SaldoCor = "#2E7D32"}
-       else if (Saldo < 0) {
-        SaldoCor = "#C62828"}
-       else SaldoCor = "#666";
-      SaldoHTML = '<div style="font-size:11px; color:' + SaldoCor + '; margin-top:3px; text-align:center;">' + "💵 Aposta: " + this.FormatarMoeda(ValorApostado) + "  |  🏆 Prêmio: " + this.FormatarMoeda(ValorGanho) + "  |  📊 Saldo: " + this.FormatarMoeda(Saldo) + "</div>";
-      if (Ganhou && (Faixa !== "")) {
-        FaixaHTML = '<div style="background:#FFD700; color:#000; font-weight:bold; ' + "font-size:14px; padding:4px 8px; border-radius:4px; " + 'display:inline-block; margin-bottom:4px;">' + "🏆 GANHOU - " + Faixa + " 🏆" + "</div>" + '<div style="background:#2E7D32; color:#fff; font-weight:bold; ' + "font-size:13px; padding:3px 8px; border-radius:4px; " + 'display:inline-block; margin-bottom:4px; margin-left:4px;">' + "💰 " + Valor + "</div>"}
-       else if (Ganhou) {
-        FaixaHTML = '<div style="background:#FFD700; color:#000; font-weight:bold; ' + "font-size:14px; padding:4px 8px; border-radius:4px; " + 'display:inline-block; margin-bottom:4px;">' + "🏆 GANHOU! 🏆" + "</div>"}
-       else FaixaHTML = "";
-      Result = '<div style="border:' + Borda + "; border-radius:6px; padding:5px 8px; " + "margin:5px auto; max-width:740px; background:" + Fundo + ';">' + '<div style="font-size:13px; color:#444; font-weight:bold; ' + 'margin-bottom:3px; text-align:center;">' + "👤 " + NomeSeguro + "</div>" + FaixaHTML + '<div style="font-size:12px; color:' + CorPrefixo + "; " + 'font-weight:bold; margin-bottom:3px; text-align:center;">' + Prefixo + " &nbsp;|&nbsp; " + DataHora + "</div>" + Bolinhas + SaldoHTML + "</div>";
+      Result = S;
+      Result = pas.SysUtils.StringReplace(Result,"&","&amp;",rtl.createSet(pas.SysUtils.TStringReplaceFlag.rfReplaceAll));
+      Result = pas.SysUtils.StringReplace(Result,"<","&lt;",rtl.createSet(pas.SysUtils.TStringReplaceFlag.rfReplaceAll));
+      Result = pas.SysUtils.StringReplace(Result,">","&gt;",rtl.createSet(pas.SysUtils.TStringReplaceFlag.rfReplaceAll));
+      Result = pas.SysUtils.StringReplace(Result,'"',"&quot;",rtl.createSet(pas.SysUtils.TStringReplaceFlag.rfReplaceAll));
       return Result;
     };
-    this.CorBolinha = function (Numero, ResultadoDia, ModoComparacao) {
+    this.Log = function (Msg) {
+      var MemoJS = null;
+      if (this.WebMemoLog.FLines.GetCount() > 500) this.WebMemoLog.FLines.Clear();
+      this.WebMemoLog.FLines.Add("[" + pas.SysUtils.FormatDateTime("hh:nn:ss",pas.SysUtils.Now()) + "] " + Msg);
+      MemoJS = document.getElementById("WebMemoLog");
+      if (MemoJS != null) MemoJS.scrollTop = MemoJS.scrollHeight;
+    };
+    this.SerializarCliente = function (C) {
       var Result = "";
-      if (!ModoComparacao) {
-        Result = "#4CAF50";
-        return Result;
-      };
-      if (this.PertenceAoResultado(Numero,ResultadoDia)) {
-        Result = "#2E7D32"}
-       else Result = "#B0BEC5";
+      Result = pas.SysUtils.Format("%d|%s|%s|%s|%s|%s",pas.System.VarRecs(0,C.ID,18,C.Nome,18,C.Email,18,C.Telefone,18,C.Cidade,18,C.DataCadastro));
       return Result;
     };
-    this.ObterNomeSalvo = function () {
-      var Result = "";
-      var V = "";
-      Result = "";
-      try {
-        V = window.localStorage.getItem("sorteio_nome");
-      } catch ($e) {
-        return Result;
-      };
-      try {
-        if (V.length === 0) return Result;
-      } catch ($e) {
-        return Result;
-      };
-      if ((V === "null") || (V === "undefined") || (V === "NaN")) return Result;
-      Result = pas.SysUtils.Trim(V);
-      return Result;
-    };
-    this.SalvarNome = function (Valor) {
-      try {
-        window.localStorage.setItem("sorteio_nome",Valor);
-      } catch ($e) {
-      };
-    };
-    this.PopularListaApostas = function () {
-      var Historico = "";
-      var Linhas = [];
-      var i = 0;
-      var Item = "";
-      this.WebComboBoxApostas.FItems.Clear();
-      Historico = this.ObterHistorico();
-      if (Historico === "") {
-        this.WebButtonExcluir.SetEnabled(false);
-        return;
-      };
-      Linhas = pas.SysUtils.TStringHelper.Split$1.call({get: function () {
-          return Historico;
-        }, set: function (v) {
-          Historico = v;
-        }},["\n"]);
-      for (var $l = 0, $end = rtl.length(Linhas) - 1; $l <= $end; $l++) {
-        i = $l;
-        Item = pas.SysUtils.Trim(Linhas[i]);
-        if (Item !== "") this.WebComboBoxApostas.FItems.Add(Item);
-      };
-      if (this.WebComboBoxApostas.FItems.GetCount() > 0) {
-        this.WebComboBoxApostas.SetItemIndex(0);
-        this.WebButtonExcluir.SetEnabled(true);
-      } else this.WebButtonExcluir.SetEnabled(false);
-    };
-    this.ExcluirApostaSelecionada = function () {
-      var LinhaSelecionada = "";
-      var Removido = false;
-      if (this.WebComboBoxApostas.GetItemIndex() < 0) {
-        this.WebMemo1.FLines.Clear();
-        this.WebMemo1.FLines.Add("Selecione uma aposta na lista para excluir.");
-        return;
-      };
-      LinhaSelecionada = this.WebComboBoxApostas.FItems.Get(this.WebComboBoxApostas.GetItemIndex());
-      Removido = this.RemoverLinhaDoHistorico(LinhaSelecionada);
-      if (!Removido) {
-        this.WebMemo1.FLines.Clear();
-        this.WebMemo1.FLines.Add("Não foi possível excluir a aposta selecionada.");
-        return;
-      };
-      this.PopularListaApostas();
-      this.AtualizarContador();
-      this.WebMemo1.FLines.Clear();
-      this.WebMemo1.FLines.Add("Aposta excluída com sucesso!");
-      this.WebMemo1.FLines.Add("");
-      this.WebMemo1.FLines.Add("Aposta removida:");
-      this.WebMemo1.FLines.Add(LinhaSelecionada);
-    };
-    this.RemoverLinhaDoHistorico = function (LinhaAlvo) {
-      var Result = false;
-      var Historico = "";
-      var Linhas = [];
-      var i = 0;
-      var NovoLote = "";
-      var LinhaAtual = "";
-      var Encontrado = false;
-      Result = false;
-      Historico = this.ObterHistorico();
-      if (Historico === "") return Result;
-      Linhas = pas.SysUtils.TStringHelper.Split$1.call({get: function () {
-          return Historico;
-        }, set: function (v) {
-          Historico = v;
-        }},["\n"]);
-      NovoLote = "";
-      Encontrado = false;
-      for (var $l = 0, $end = rtl.length(Linhas) - 1; $l <= $end; $l++) {
-        i = $l;
-        LinhaAtual = pas.SysUtils.Trim(Linhas[i]);
-        if (LinhaAtual === "") continue;
-        if (!Encontrado && (LinhaAtual === LinhaAlvo)) {
-          Encontrado = true;
-          continue;
-        };
-        if (NovoLote === "") {
-          NovoLote = LinhaAtual}
-         else NovoLote = NovoLote + "\n" + LinhaAtual;
-      };
-      if (!Encontrado) return Result;
-      this.SalvarHistorico(NovoLote);
-      Result = true;
-      return Result;
-    };
-    this.EhGanhador = function (Tipo, Acertos) {
-      var Result = false;
-      var TipoUp = "";
-      TipoUp = pas.SysUtils.UpperCase(Tipo);
-      if (pas.System.Pos("MEGA",TipoUp) > 0) {
-        Result = (Acertos >= 4) && (Acertos <= 6)}
-       else if (pas.System.Pos("LOTO",TipoUp) > 0) {
-        Result = (Acertos >= 11) && (Acertos <= 15)}
-       else Result = false;
-      return Result;
-    };
-    this.NomeFaixaPremio = function (Tipo, Acertos) {
-      var Result = "";
-      var TipoUp = "";
-      Result = "";
-      TipoUp = pas.SysUtils.UpperCase(Tipo);
-      if (pas.System.Pos("MEGA",TipoUp) > 0) {
-        var $tmp = Acertos;
-        if ($tmp === 6) {
-          Result = "SENA"}
-         else if ($tmp === 5) {
-          Result = "QUINA"}
-         else if ($tmp === 4) Result = "QUADRA";
-      } else if (pas.System.Pos("LOTO",TipoUp) > 0) {
-        var $tmp1 = Acertos;
-        if ($tmp1 === 15) {
-          Result = "15 ACERTOS"}
-         else if ($tmp1 === 14) {
-          Result = "14 ACERTOS"}
-         else if ($tmp1 === 13) {
-          Result = "13 ACERTOS"}
-         else if ($tmp1 === 12) {
-          Result = "12 ACERTOS"}
-         else if ($tmp1 === 11) Result = "11 ACERTOS";
-      };
-      return Result;
-    };
-    this.ValorPremio = function (Tipo, Acertos) {
-      var Result = "";
-      var TipoUp = "";
-      Result = "";
-      TipoUp = pas.SysUtils.UpperCase(Tipo);
-      if (pas.System.Pos("MEGA",TipoUp) > 0) {
-        var $tmp = Acertos;
-        if ($tmp === 6) {
-          Result = "R$ 50.000.000,00"}
-         else if ($tmp === 5) {
-          Result = "R$ 40.000,00"}
-         else if ($tmp === 4) Result = "R$ 800,00";
-      } else if (pas.System.Pos("LOTO",TipoUp) > 0) {
-        var $tmp1 = Acertos;
-        if ($tmp1 === 15) {
-          Result = "R$ 1.500.000,00"}
-         else if ($tmp1 === 14) {
-          Result = "R$ 1.200,00"}
-         else if ($tmp1 === 13) {
-          Result = "R$ 35,00"}
-         else if ($tmp1 === 12) {
-          Result = "R$ 14,00"}
-         else if ($tmp1 === 11) Result = "R$ 7,00";
-      };
-      return Result;
-    };
-    this.ValorPremioNumerico = function (Tipo, Acertos) {
-      var Result = 0.0;
-      var TipoUp = "";
-      Result = 0;
-      TipoUp = pas.SysUtils.UpperCase(Tipo);
-      if (pas.System.Pos("MEGA",TipoUp) > 0) {
-        var $tmp = Acertos;
-        if ($tmp === 6) {
-          Result = 50000000}
-         else if ($tmp === 5) {
-          Result = 40000}
-         else if ($tmp === 4) Result = 800;
-      } else if (pas.System.Pos("LOTO",TipoUp) > 0) {
-        var $tmp1 = Acertos;
-        if ($tmp1 === 15) {
-          Result = 1500000}
-         else if ($tmp1 === 14) {
-          Result = 1200}
-         else if ($tmp1 === 13) {
-          Result = 35}
-         else if ($tmp1 === 12) {
-          Result = 14}
-         else if ($tmp1 === 11) Result = 7;
-      };
-      return Result;
-    };
-    this.ValorAposta = function (Tipo, QuantidadeDezenas) {
-      var Result = 0.0;
-      var TipoUp = "";
-      Result = 0;
-      TipoUp = pas.SysUtils.UpperCase(Tipo);
-      if (pas.System.Pos("MEGA",TipoUp) > 0) {
-        var $tmp = QuantidadeDezenas;
-        if ($tmp === 6) {
-          Result = 5.00}
-         else if ($tmp === 7) {
-          Result = 35.00}
-         else if ($tmp === 8) {
-          Result = 140.00}
-         else if ($tmp === 9) {
-          Result = 420.00}
-         else if ($tmp === 10) {
-          Result = 1050.00}
-         else if ($tmp === 11) {
-          Result = 2310.00}
-         else if ($tmp === 12) {
-          Result = 4620.00}
-         else if ($tmp === 13) {
-          Result = 8580.00}
-         else if ($tmp === 14) {
-          Result = 15015.00}
-         else if ($tmp === 15) {
-          Result = 25025.00}
-         else if ($tmp === 16) {
-          Result = 40040.00}
-         else if ($tmp === 17) {
-          Result = 61880.00}
-         else if ($tmp === 18) {
-          Result = 92820.00}
-         else if ($tmp === 19) {
-          Result = 135660.00}
-         else if ($tmp === 20) Result = 193800.00;
-      } else if (pas.System.Pos("LOTO",TipoUp) > 0) {
-        var $tmp1 = QuantidadeDezenas;
-        if ($tmp1 === 15) {
-          Result = 3.50}
-         else if ($tmp1 === 16) {
-          Result = 56.00}
-         else if ($tmp1 === 17) {
-          Result = 476.00}
-         else if ($tmp1 === 18) {
-          Result = 2856.00}
-         else if ($tmp1 === 19) {
-          Result = 13328.00}
-         else if ($tmp1 === 20) Result = 53312.00;
-      };
-      return Result;
-    };
-    this.FormatarMoeda = function (Valor) {
-      var Result = "";
-      Result = "R$ " + pas.SysUtils.FormatFloat("#,##0.00",Valor);
-      return Result;
-    };
-    this.ExtrairValorDaLinha = function (Linha) {
-      var Result = 0.0;
-      var P1 = 0;
-      var P2 = 0;
-      var S = "";
-      Result = 0;
-      P1 = pas.System.Pos("(R$",Linha);
-      if (P1 === 0) return Result;
-      P2 = pas.System.Pos$1(")",Linha,P1);
-      if (P2 === 0) return Result;
-      S = pas.System.Copy(Linha,P1 + 4,P2 - P1 - 4);
-      S = pas.SysUtils.StringReplace(S,".","",rtl.createSet(pas.SysUtils.TStringReplaceFlag.rfReplaceAll));
-      S = pas.SysUtils.StringReplace(S,",",".",rtl.createSet(pas.SysUtils.TStringReplaceFlag.rfReplaceAll));
-      Result = pas.SysUtils.StrToFloatDef(pas.SysUtils.Trim(S),0);
-      return Result;
+    this.SelecionarClienteJS = function (ID) {
+      this.SelecionarCliente(ID);
     };
     this.LoadDFMValues = function () {
       pas["WEBLib.Forms"].TCustomForm.LoadDFMValues.call(this);
-      this.WebLabel1 = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
-      this.WebLabel6 = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
-      this.WebLabel4 = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
-      this.WebLabel2 = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
-      this.WebLabel5 = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
-      this.WebLabel3 = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
-      this.WebLabel7 = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
-      this.WebHTMLDivResultadoDia = pas["WEBLib.WebCtrls"].THTMLDiv.$create("Create$1",[this]);
-      this.WebHTMLDivComparacao = pas["WEBLib.WebCtrls"].THTMLDiv.$create("Create$1",[this]);
+      this.WebLabelTitulo = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
+      this.WebLabelID = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
+      this.WebLabelNome = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
+      this.WebLabelEmail = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
+      this.WebLabelTelefone = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
+      this.WebLabelCidade = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
+      this.WebLabelBusca = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
+      this.WebLabelStatus = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
+      this.WebEditID = pas["WEBLib.StdCtrls"].TEdit.$create("Create$1",[this]);
       this.WebEditNome = pas["WEBLib.StdCtrls"].TEdit.$create("Create$1",[this]);
-      this.WebComboBox1 = pas["WEBLib.StdCtrls"].TComboBox.$create("Create$1",[this]);
-      this.WebEdit1 = pas["WEBLib.StdCtrls"].TEdit.$create("Create$1",[this]);
-      this.WebButton1 = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
+      this.WebEditEmail = pas["WEBLib.StdCtrls"].TEdit.$create("Create$1",[this]);
+      this.WebEditTelefone = pas["WEBLib.StdCtrls"].TEdit.$create("Create$1",[this]);
+      this.WebEditCidade = pas["WEBLib.StdCtrls"].TEdit.$create("Create$1",[this]);
+      this.WebButtonNovo = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
       this.WebButtonSalvar = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
-      this.WebButtonVerSalvos = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
-      this.WebButtonLimpar = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
-      this.WebButtonComparar = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
-      this.WebMemo1 = pas["WEBLib.StdCtrls"].TMemo.$create("Create$1",[this]);
-      this.WebComboBoxApostas = pas["WEBLib.StdCtrls"].TComboBox.$create("Create$1",[this]);
       this.WebButtonExcluir = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
-      this.WebLabel1.BeforeLoadDFMValues();
-      this.WebLabel6.BeforeLoadDFMValues();
-      this.WebLabel4.BeforeLoadDFMValues();
-      this.WebLabel2.BeforeLoadDFMValues();
-      this.WebLabel5.BeforeLoadDFMValues();
-      this.WebLabel3.BeforeLoadDFMValues();
-      this.WebLabel7.BeforeLoadDFMValues();
-      this.WebHTMLDivResultadoDia.BeforeLoadDFMValues();
-      this.WebHTMLDivComparacao.BeforeLoadDFMValues();
+      this.WebButtonCancelar = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
+      this.WebEditBusca = pas["WEBLib.StdCtrls"].TEdit.$create("Create$1",[this]);
+      this.WebButtonAtualizar = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
+      this.WebHTMLDivGrid = pas["WEBLib.WebCtrls"].THTMLDiv.$create("Create$1",[this]);
+      this.WebMemoLog = pas["WEBLib.StdCtrls"].TMemo.$create("Create$1",[this]);
+      this.WebLabelTitulo.BeforeLoadDFMValues();
+      this.WebLabelID.BeforeLoadDFMValues();
+      this.WebLabelNome.BeforeLoadDFMValues();
+      this.WebLabelEmail.BeforeLoadDFMValues();
+      this.WebLabelTelefone.BeforeLoadDFMValues();
+      this.WebLabelCidade.BeforeLoadDFMValues();
+      this.WebLabelBusca.BeforeLoadDFMValues();
+      this.WebLabelStatus.BeforeLoadDFMValues();
+      this.WebEditID.BeforeLoadDFMValues();
       this.WebEditNome.BeforeLoadDFMValues();
-      this.WebComboBox1.BeforeLoadDFMValues();
-      this.WebEdit1.BeforeLoadDFMValues();
-      this.WebButton1.BeforeLoadDFMValues();
+      this.WebEditEmail.BeforeLoadDFMValues();
+      this.WebEditTelefone.BeforeLoadDFMValues();
+      this.WebEditCidade.BeforeLoadDFMValues();
+      this.WebButtonNovo.BeforeLoadDFMValues();
       this.WebButtonSalvar.BeforeLoadDFMValues();
-      this.WebButtonVerSalvos.BeforeLoadDFMValues();
-      this.WebButtonLimpar.BeforeLoadDFMValues();
-      this.WebButtonComparar.BeforeLoadDFMValues();
-      this.WebMemo1.BeforeLoadDFMValues();
-      this.WebComboBoxApostas.BeforeLoadDFMValues();
       this.WebButtonExcluir.BeforeLoadDFMValues();
+      this.WebButtonCancelar.BeforeLoadDFMValues();
+      this.WebEditBusca.BeforeLoadDFMValues();
+      this.WebButtonAtualizar.BeforeLoadDFMValues();
+      this.WebHTMLDivGrid.BeforeLoadDFMValues();
+      this.WebMemoLog.BeforeLoadDFMValues();
       try {
         this.SetName("Form1");
         this.SetWidth(1600);
-        this.SetHeight(1000);
-        this.SetCaption("Sorteador Mega Sena e Loto Fácil - TMS Web Core");
+        this.SetHeight(900);
+        this.SetCaption("CRUD de Clientes - TMS Web Core");
         this.SetColor(15790320);
         this.FFont.FCharset = 1;
         this.FFont.SetColor(65793);
@@ -52802,189 +52140,209 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.FFont.SetStyle({});
         this.SetParentFont(false);
         this.SetEvent(this,"OnCreate","WebFormCreate");
-        this.WebLabel1.SetParentComponent(this);
-        this.WebLabel1.SetName("WebLabel1");
-        this.WebLabel1.SetLeft(200);
-        this.WebLabel1.SetTop(12);
-        this.WebLabel1.SetWidth(524);
-        this.WebLabel1.SetHeight(27);
-        this.WebLabel1.SetAlignment(pas.Classes.TAlignment.taCenter);
-        this.WebLabel1.SetCaption("Sorteador de Números - Mega Sena e Loto Fácil");
-        this.WebLabel1.SetColorEx(15790320);
-        this.WebLabel1.FFont.FCharset = 1;
-        this.WebLabel1.FFont.SetColor(65793);
-        this.WebLabel1.FFont.SetHeight(-22);
-        this.WebLabel1.FFont.SetName("Tahoma");
-        this.WebLabel1.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
-        this.WebLabel1.SetHeightPercent(100.000000000000000000);
-        this.WebLabel1.SetParentFont(false);
-        this.WebLabel1.SetWidthPercent(100.000000000000000000);
-        this.WebLabel6.SetParentComponent(this);
-        this.WebLabel6.SetName("WebLabel6");
-        this.WebLabel6.SetLeft(60);
-        this.WebLabel6.SetTop(405);
-        this.WebLabel6.SetWidth(63);
-        this.WebLabel6.SetHeight(16);
-        this.WebLabel6.SetCaption("Seu nome:");
-        this.WebLabel6.SetColorEx(15790320);
-        this.WebLabel6.FFont.FCharset = 1;
-        this.WebLabel6.FFont.SetColor(65793);
-        this.WebLabel6.FFont.SetHeight(-13);
-        this.WebLabel6.FFont.SetName("Tahoma");
-        this.WebLabel6.FFont.SetStyle({});
-        this.WebLabel6.SetHeightPercent(100.000000000000000000);
-        this.WebLabel6.SetParentFont(false);
-        this.WebLabel6.SetWidthPercent(100.000000000000000000);
-        this.WebLabel4.SetParentComponent(this);
-        this.WebLabel4.SetName("WebLabel4");
-        this.WebLabel4.SetLeft(60);
-        this.WebLabel4.SetTop(465);
-        this.WebLabel4.SetWidth(131);
-        this.WebLabel4.SetHeight(16);
-        this.WebLabel4.SetCaption("Escolha o tipo de jogo:");
-        this.WebLabel4.SetColorEx(15790320);
-        this.WebLabel4.FFont.FCharset = 1;
-        this.WebLabel4.FFont.SetColor(65793);
-        this.WebLabel4.FFont.SetHeight(-13);
-        this.WebLabel4.FFont.SetName("Tahoma");
-        this.WebLabel4.FFont.SetStyle({});
-        this.WebLabel4.SetHeightPercent(100.000000000000000000);
-        this.WebLabel4.SetParentFont(false);
-        this.WebLabel4.SetWidthPercent(100.000000000000000000);
-        this.WebLabel2.SetParentComponent(this);
-        this.WebLabel2.SetName("WebLabel2");
-        this.WebLabel2.SetLeft(400);
-        this.WebLabel2.SetTop(465);
-        this.WebLabel2.SetWidth(139);
-        this.WebLabel2.SetHeight(16);
-        this.WebLabel2.SetCaption("Quantidade de dezenas:");
-        this.WebLabel2.SetColorEx(15790320);
-        this.WebLabel2.FFont.FCharset = 1;
-        this.WebLabel2.FFont.SetColor(65793);
-        this.WebLabel2.FFont.SetHeight(-13);
-        this.WebLabel2.FFont.SetName("Tahoma");
-        this.WebLabel2.FFont.SetStyle({});
-        this.WebLabel2.SetHeightPercent(100.000000000000000000);
-        this.WebLabel2.SetParentFont(false);
-        this.WebLabel2.SetWidthPercent(100.000000000000000000);
-        this.WebLabel5.SetParentComponent(this);
-        this.WebLabel5.SetName("WebLabel5");
-        this.WebLabel5.SetLeft(880);
-        this.WebLabel5.SetTop(545);
-        this.WebLabel5.SetWidth(116);
-        this.WebLabel5.SetHeight(16);
-        this.WebLabel5.SetAlignment(pas.Classes.TAlignment.taCenter);
-        this.WebLabel5.SetCaption("Sorteios salvos: 0");
-        this.WebLabel5.SetColorEx(15790320);
-        this.WebLabel5.FFont.FCharset = 1;
-        this.WebLabel5.FFont.SetColor(65793);
-        this.WebLabel5.FFont.SetHeight(-13);
-        this.WebLabel5.FFont.SetName("Tahoma");
-        this.WebLabel5.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
-        this.WebLabel5.SetHeightPercent(100.000000000000000000);
-        this.WebLabel5.SetParentFont(false);
-        this.WebLabel5.SetWidthPercent(100.000000000000000000);
-        this.WebLabel3.SetParentComponent(this);
-        this.WebLabel3.SetName("WebLabel3");
-        this.WebLabel3.SetLeft(60);
-        this.WebLabel3.SetTop(595);
-        this.WebLabel3.SetWidth(116);
-        this.WebLabel3.SetHeight(16);
-        this.WebLabel3.SetCaption("Números sorteados:");
-        this.WebLabel3.SetColorEx(15790320);
-        this.WebLabel3.FFont.FCharset = 1;
-        this.WebLabel3.FFont.SetColor(65793);
-        this.WebLabel3.FFont.SetHeight(-13);
-        this.WebLabel3.FFont.SetName("Tahoma");
-        this.WebLabel3.FFont.SetStyle({});
-        this.WebLabel3.SetHeightPercent(100.000000000000000000);
-        this.WebLabel3.SetParentFont(false);
-        this.WebLabel3.SetWidthPercent(100.000000000000000000);
-        this.WebLabel7.SetParentComponent(this);
-        this.WebLabel7.SetName("WebLabel7");
-        this.WebLabel7.SetLeft(60);
-        this.WebLabel7.SetTop(765);
-        this.WebLabel7.SetWidth(260);
-        this.WebLabel7.SetHeight(16);
-        this.WebLabel7.SetCaption("Apostas salvas (selecione para excluir):");
-        this.WebLabel7.SetColorEx(15790320);
-        this.WebLabel7.FFont.FCharset = 1;
-        this.WebLabel7.FFont.SetColor(65793);
-        this.WebLabel7.FFont.SetHeight(-13);
-        this.WebLabel7.FFont.SetName("Tahoma");
-        this.WebLabel7.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
-        this.WebLabel7.SetHeightPercent(100.000000000000000000);
-        this.WebLabel7.SetParentFont(false);
-        this.WebLabel7.SetWidthPercent(100.000000000000000000);
-        this.WebHTMLDivResultadoDia.SetParentComponent(this);
-        this.WebHTMLDivResultadoDia.SetName("WebHTMLDivResultadoDia");
-        this.WebHTMLDivResultadoDia.SetLeft(60);
-        this.WebHTMLDivResultadoDia.SetTop(55);
-        this.WebHTMLDivResultadoDia.SetWidth(760);
-        this.WebHTMLDivResultadoDia.SetHeight(340);
-        this.WebHTMLDivResultadoDia.SetRole("");
-        this.WebHTMLDivComparacao.SetParentComponent(this);
-        this.WebHTMLDivComparacao.SetName("WebHTMLDivComparacao");
-        this.WebHTMLDivComparacao.SetLeft(840);
-        this.WebHTMLDivComparacao.SetTop(55);
-        this.WebHTMLDivComparacao.SetWidth(760);
-        this.WebHTMLDivComparacao.SetHeight(340);
-        this.WebHTMLDivComparacao.SetRole("");
+        this.SetEvent(this,"OnShow","WebFormShow");
+        this.WebLabelTitulo.SetParentComponent(this);
+        this.WebLabelTitulo.SetName("WebLabelTitulo");
+        this.WebLabelTitulo.SetLeft(60);
+        this.WebLabelTitulo.SetTop(16);
+        this.WebLabelTitulo.SetWidth(227);
+        this.WebLabelTitulo.SetHeight(27);
+        this.WebLabelTitulo.SetCaption("Cadastro de Clientes");
+        this.WebLabelTitulo.SetColorEx(15790320);
+        this.WebLabelTitulo.FFont.FCharset = 1;
+        this.WebLabelTitulo.FFont.SetColor(65793);
+        this.WebLabelTitulo.FFont.SetHeight(-22);
+        this.WebLabelTitulo.FFont.SetName("Tahoma");
+        this.WebLabelTitulo.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
+        this.WebLabelTitulo.SetHeightPercent(100.000000000000000000);
+        this.WebLabelTitulo.SetParentFont(false);
+        this.WebLabelTitulo.SetWidthPercent(100.000000000000000000);
+        this.WebLabelID.SetParentComponent(this);
+        this.WebLabelID.SetName("WebLabelID");
+        this.WebLabelID.SetLeft(60);
+        this.WebLabelID.SetTop(70);
+        this.WebLabelID.SetWidth(17);
+        this.WebLabelID.SetHeight(16);
+        this.WebLabelID.SetCaption("ID:");
+        this.WebLabelID.SetColorEx(15790320);
+        this.WebLabelID.FFont.FCharset = 1;
+        this.WebLabelID.FFont.SetColor(65793);
+        this.WebLabelID.FFont.SetHeight(-13);
+        this.WebLabelID.FFont.SetName("Tahoma");
+        this.WebLabelID.FFont.SetStyle({});
+        this.WebLabelID.SetHeightPercent(100.000000000000000000);
+        this.WebLabelID.SetParentFont(false);
+        this.WebLabelID.SetWidthPercent(100.000000000000000000);
+        this.WebLabelNome.SetParentComponent(this);
+        this.WebLabelNome.SetName("WebLabelNome");
+        this.WebLabelNome.SetLeft(60);
+        this.WebLabelNome.SetTop(110);
+        this.WebLabelNome.SetWidth(38);
+        this.WebLabelNome.SetHeight(16);
+        this.WebLabelNome.SetCaption("Nome:");
+        this.WebLabelNome.SetColorEx(15790320);
+        this.WebLabelNome.FFont.FCharset = 1;
+        this.WebLabelNome.FFont.SetColor(65793);
+        this.WebLabelNome.FFont.SetHeight(-13);
+        this.WebLabelNome.FFont.SetName("Tahoma");
+        this.WebLabelNome.FFont.SetStyle({});
+        this.WebLabelNome.SetHeightPercent(100.000000000000000000);
+        this.WebLabelNome.SetParentFont(false);
+        this.WebLabelNome.SetWidthPercent(100.000000000000000000);
+        this.WebLabelEmail.SetParentComponent(this);
+        this.WebLabelEmail.SetName("WebLabelEmail");
+        this.WebLabelEmail.SetLeft(60);
+        this.WebLabelEmail.SetTop(150);
+        this.WebLabelEmail.SetWidth(41);
+        this.WebLabelEmail.SetHeight(16);
+        this.WebLabelEmail.SetCaption("E-mail:");
+        this.WebLabelEmail.SetColorEx(15790320);
+        this.WebLabelEmail.FFont.FCharset = 1;
+        this.WebLabelEmail.FFont.SetColor(65793);
+        this.WebLabelEmail.FFont.SetHeight(-13);
+        this.WebLabelEmail.FFont.SetName("Tahoma");
+        this.WebLabelEmail.FFont.SetStyle({});
+        this.WebLabelEmail.SetHeightPercent(100.000000000000000000);
+        this.WebLabelEmail.SetParentFont(false);
+        this.WebLabelEmail.SetWidthPercent(100.000000000000000000);
+        this.WebLabelTelefone.SetParentComponent(this);
+        this.WebLabelTelefone.SetName("WebLabelTelefone");
+        this.WebLabelTelefone.SetLeft(60);
+        this.WebLabelTelefone.SetTop(190);
+        this.WebLabelTelefone.SetWidth(55);
+        this.WebLabelTelefone.SetHeight(16);
+        this.WebLabelTelefone.SetCaption("Telefone:");
+        this.WebLabelTelefone.SetColorEx(15790320);
+        this.WebLabelTelefone.FFont.FCharset = 1;
+        this.WebLabelTelefone.FFont.SetColor(65793);
+        this.WebLabelTelefone.FFont.SetHeight(-13);
+        this.WebLabelTelefone.FFont.SetName("Tahoma");
+        this.WebLabelTelefone.FFont.SetStyle({});
+        this.WebLabelTelefone.SetHeightPercent(100.000000000000000000);
+        this.WebLabelTelefone.SetParentFont(false);
+        this.WebLabelTelefone.SetWidthPercent(100.000000000000000000);
+        this.WebLabelCidade.SetParentComponent(this);
+        this.WebLabelCidade.SetName("WebLabelCidade");
+        this.WebLabelCidade.SetLeft(60);
+        this.WebLabelCidade.SetTop(230);
+        this.WebLabelCidade.SetWidth(44);
+        this.WebLabelCidade.SetHeight(16);
+        this.WebLabelCidade.SetCaption("Cidade:");
+        this.WebLabelCidade.SetColorEx(15790320);
+        this.WebLabelCidade.FFont.FCharset = 1;
+        this.WebLabelCidade.FFont.SetColor(65793);
+        this.WebLabelCidade.FFont.SetHeight(-13);
+        this.WebLabelCidade.FFont.SetName("Tahoma");
+        this.WebLabelCidade.FFont.SetStyle({});
+        this.WebLabelCidade.SetHeightPercent(100.000000000000000000);
+        this.WebLabelCidade.SetParentFont(false);
+        this.WebLabelCidade.SetWidthPercent(100.000000000000000000);
+        this.WebLabelBusca.SetParentComponent(this);
+        this.WebLabelBusca.SetName("WebLabelBusca");
+        this.WebLabelBusca.SetLeft(620);
+        this.WebLabelBusca.SetTop(70);
+        this.WebLabelBusca.SetWidth(43);
+        this.WebLabelBusca.SetHeight(16);
+        this.WebLabelBusca.SetCaption("Buscar:");
+        this.WebLabelBusca.SetColorEx(15790320);
+        this.WebLabelBusca.FFont.FCharset = 1;
+        this.WebLabelBusca.FFont.SetColor(65793);
+        this.WebLabelBusca.FFont.SetHeight(-13);
+        this.WebLabelBusca.FFont.SetName("Tahoma");
+        this.WebLabelBusca.FFont.SetStyle({});
+        this.WebLabelBusca.SetHeightPercent(100.000000000000000000);
+        this.WebLabelBusca.SetParentFont(false);
+        this.WebLabelBusca.SetWidthPercent(100.000000000000000000);
+        this.WebLabelStatus.SetParentComponent(this);
+        this.WebLabelStatus.SetName("WebLabelStatus");
+        this.WebLabelStatus.SetLeft(620);
+        this.WebLabelStatus.SetTop(110);
+        this.WebLabelStatus.SetWidth(123);
+        this.WebLabelStatus.SetHeight(16);
+        this.WebLabelStatus.SetCaption("Total de clientes: 0");
+        this.WebLabelStatus.SetColorEx(15790320);
+        this.WebLabelStatus.FFont.FCharset = 1;
+        this.WebLabelStatus.FFont.SetColor(65793);
+        this.WebLabelStatus.FFont.SetHeight(-13);
+        this.WebLabelStatus.FFont.SetName("Tahoma");
+        this.WebLabelStatus.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
+        this.WebLabelStatus.SetHeightPercent(100.000000000000000000);
+        this.WebLabelStatus.SetParentFont(false);
+        this.WebLabelStatus.SetWidthPercent(100.000000000000000000);
+        this.WebEditID.SetParentComponent(this);
+        this.WebEditID.SetName("WebEditID");
+        this.WebEditID.SetLeft(130);
+        this.WebEditID.SetTop(68);
+        this.WebEditID.SetWidth(100);
+        this.WebEditID.SetHeight(25);
+        this.WebEditID.SetHeightPercent(100.000000000000000000);
+        this.WebEditID.SetReadOnly(true);
+        this.WebEditID.SetText("WebEditID");
+        this.WebEditID.SetWidthPercent(100.000000000000000000);
         this.WebEditNome.SetParentComponent(this);
         this.WebEditNome.SetName("WebEditNome");
-        this.WebEditNome.SetLeft(60);
-        this.WebEditNome.SetTop(427);
-        this.WebEditNome.SetWidth(300);
+        this.WebEditNome.SetLeft(130);
+        this.WebEditNome.SetTop(108);
+        this.WebEditNome.SetWidth(400);
         this.WebEditNome.SetHeight(25);
         this.WebEditNome.SetHeightPercent(100.000000000000000000);
+        this.WebEditNome.SetTabOrder(1);
         this.WebEditNome.SetText("WebEditNome");
         this.WebEditNome.SetWidthPercent(100.000000000000000000);
-        this.SetEvent$1(this.WebEditNome,this,"OnChange","WebEditNomeChange");
-        this.WebComboBox1.SetParentComponent(this);
-        this.WebComboBox1.SetName("WebComboBox1");
-        this.WebComboBox1.SetLeft(60);
-        this.WebComboBox1.SetTop(487);
-        this.WebComboBox1.SetWidth(300);
-        this.WebComboBox1.SetHeight(21);
-        this.WebComboBox1.SetHeightPercent(100.000000000000000000);
-        this.WebComboBox1.SetText("WebComboBox1");
-        this.WebComboBox1.SetWidthPercent(100.000000000000000000);
-        this.SetEvent$1(this.WebComboBox1,this,"OnChange","WebComboBox1Change");
-        this.WebComboBox1.SetItemIndex(-1);
-        this.WebEdit1.SetParentComponent(this);
-        this.WebEdit1.SetName("WebEdit1");
-        this.WebEdit1.SetLeft(400);
-        this.WebEdit1.SetTop(487);
-        this.WebEdit1.SetWidth(100);
-        this.WebEdit1.SetHeight(25);
-        this.WebEdit1.SetHeightPercent(100.000000000000000000);
-        this.WebEdit1.SetTabOrder(1);
-        this.WebEdit1.SetText("WebEdit1");
-        this.WebEdit1.SetWidthPercent(100.000000000000000000);
-        this.WebButton1.SetParentComponent(this);
-        this.WebButton1.SetName("WebButton1");
-        this.WebButton1.SetLeft(60);
-        this.WebButton1.SetTop(530);
-        this.WebButton1.SetWidth(150);
-        this.WebButton1.SetHeight(45);
-        this.WebButton1.SetCaption("Sortear Números");
-        this.WebButton1.FFont.FCharset = 1;
-        this.WebButton1.FFont.SetColor(65793);
-        this.WebButton1.FFont.SetHeight(-13);
-        this.WebButton1.FFont.SetName("Tahoma");
-        this.WebButton1.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
-        this.WebButton1.SetHeightPercent(100.000000000000000000);
-        this.WebButton1.SetParentFont(false);
-        this.WebButton1.SetTabOrder(2);
-        this.WebButton1.SetWidthPercent(100.000000000000000000);
-        this.SetEvent$1(this.WebButton1,this,"OnClick","WebButton1Click");
+        this.WebEditEmail.SetParentComponent(this);
+        this.WebEditEmail.SetName("WebEditEmail");
+        this.WebEditEmail.SetLeft(130);
+        this.WebEditEmail.SetTop(148);
+        this.WebEditEmail.SetWidth(400);
+        this.WebEditEmail.SetHeight(25);
+        this.WebEditEmail.SetHeightPercent(100.000000000000000000);
+        this.WebEditEmail.SetTabOrder(2);
+        this.WebEditEmail.SetText("WebEditEmail");
+        this.WebEditEmail.SetWidthPercent(100.000000000000000000);
+        this.WebEditTelefone.SetParentComponent(this);
+        this.WebEditTelefone.SetName("WebEditTelefone");
+        this.WebEditTelefone.SetLeft(130);
+        this.WebEditTelefone.SetTop(188);
+        this.WebEditTelefone.SetWidth(400);
+        this.WebEditTelefone.SetHeight(25);
+        this.WebEditTelefone.SetHeightPercent(100.000000000000000000);
+        this.WebEditTelefone.SetTabOrder(3);
+        this.WebEditTelefone.SetText("WebEditTelefone");
+        this.WebEditTelefone.SetWidthPercent(100.000000000000000000);
+        this.WebEditCidade.SetParentComponent(this);
+        this.WebEditCidade.SetName("WebEditCidade");
+        this.WebEditCidade.SetLeft(130);
+        this.WebEditCidade.SetTop(228);
+        this.WebEditCidade.SetWidth(400);
+        this.WebEditCidade.SetHeight(25);
+        this.WebEditCidade.SetHeightPercent(100.000000000000000000);
+        this.WebEditCidade.SetTabOrder(4);
+        this.WebEditCidade.SetText("WebEditCidade");
+        this.WebEditCidade.SetWidthPercent(100.000000000000000000);
+        this.WebButtonNovo.SetParentComponent(this);
+        this.WebButtonNovo.SetName("WebButtonNovo");
+        this.WebButtonNovo.SetLeft(60);
+        this.WebButtonNovo.SetTop(280);
+        this.WebButtonNovo.SetWidth(130);
+        this.WebButtonNovo.SetHeight(42);
+        this.WebButtonNovo.SetCaption("Novo");
+        this.WebButtonNovo.FFont.FCharset = 1;
+        this.WebButtonNovo.FFont.SetColor(65793);
+        this.WebButtonNovo.FFont.SetHeight(-13);
+        this.WebButtonNovo.FFont.SetName("Tahoma");
+        this.WebButtonNovo.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
+        this.WebButtonNovo.SetHeightPercent(100.000000000000000000);
+        this.WebButtonNovo.SetParentFont(false);
+        this.WebButtonNovo.SetTabOrder(5);
+        this.WebButtonNovo.SetWidthPercent(100.000000000000000000);
+        this.SetEvent$1(this.WebButtonNovo,this,"OnClick","WebButtonNovoClick");
         this.WebButtonSalvar.SetParentComponent(this);
         this.WebButtonSalvar.SetName("WebButtonSalvar");
-        this.WebButtonSalvar.SetLeft(220);
-        this.WebButtonSalvar.SetTop(530);
-        this.WebButtonSalvar.SetWidth(150);
-        this.WebButtonSalvar.SetHeight(45);
-        this.WebButtonSalvar.SetCaption("Salvar Sorteio");
+        this.WebButtonSalvar.SetLeft(200);
+        this.WebButtonSalvar.SetTop(280);
+        this.WebButtonSalvar.SetWidth(130);
+        this.WebButtonSalvar.SetHeight(42);
+        this.WebButtonSalvar.SetCaption("Salvar");
         this.WebButtonSalvar.FFont.FCharset = 1;
         this.WebButtonSalvar.FFont.SetColor(65793);
         this.WebButtonSalvar.FFont.SetHeight(-13);
@@ -52992,102 +52350,16 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebButtonSalvar.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
         this.WebButtonSalvar.SetHeightPercent(100.000000000000000000);
         this.WebButtonSalvar.SetParentFont(false);
-        this.WebButtonSalvar.SetTabOrder(3);
+        this.WebButtonSalvar.SetTabOrder(6);
         this.WebButtonSalvar.SetWidthPercent(100.000000000000000000);
         this.SetEvent$1(this.WebButtonSalvar,this,"OnClick","WebButtonSalvarClick");
-        this.WebButtonVerSalvos.SetParentComponent(this);
-        this.WebButtonVerSalvos.SetName("WebButtonVerSalvos");
-        this.WebButtonVerSalvos.SetLeft(380);
-        this.WebButtonVerSalvos.SetTop(530);
-        this.WebButtonVerSalvos.SetWidth(150);
-        this.WebButtonVerSalvos.SetHeight(45);
-        this.WebButtonVerSalvos.SetCaption("Ver Salvos");
-        this.WebButtonVerSalvos.FFont.FCharset = 1;
-        this.WebButtonVerSalvos.FFont.SetColor(65793);
-        this.WebButtonVerSalvos.FFont.SetHeight(-13);
-        this.WebButtonVerSalvos.FFont.SetName("Tahoma");
-        this.WebButtonVerSalvos.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
-        this.WebButtonVerSalvos.SetHeightPercent(100.000000000000000000);
-        this.WebButtonVerSalvos.SetParentFont(false);
-        this.WebButtonVerSalvos.SetTabOrder(4);
-        this.WebButtonVerSalvos.SetWidthPercent(100.000000000000000000);
-        this.SetEvent$1(this.WebButtonVerSalvos,this,"OnClick","WebButtonVerSalvosClick");
-        this.WebButtonLimpar.SetParentComponent(this);
-        this.WebButtonLimpar.SetName("WebButtonLimpar");
-        this.WebButtonLimpar.SetLeft(540);
-        this.WebButtonLimpar.SetTop(530);
-        this.WebButtonLimpar.SetWidth(150);
-        this.WebButtonLimpar.SetHeight(45);
-        this.WebButtonLimpar.SetCaption("Limpar Salvos");
-        this.WebButtonLimpar.FFont.FCharset = 1;
-        this.WebButtonLimpar.FFont.SetColor(65793);
-        this.WebButtonLimpar.FFont.SetHeight(-13);
-        this.WebButtonLimpar.FFont.SetName("Tahoma");
-        this.WebButtonLimpar.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
-        this.WebButtonLimpar.SetHeightPercent(100.000000000000000000);
-        this.WebButtonLimpar.SetParentFont(false);
-        this.WebButtonLimpar.SetTabOrder(5);
-        this.WebButtonLimpar.SetWidthPercent(100.000000000000000000);
-        this.SetEvent$1(this.WebButtonLimpar,this,"OnClick","WebButtonLimparClick");
-        this.WebButtonComparar.SetParentComponent(this);
-        this.WebButtonComparar.SetName("WebButtonComparar");
-        this.WebButtonComparar.SetLeft(700);
-        this.WebButtonComparar.SetTop(530);
-        this.WebButtonComparar.SetWidth(160);
-        this.WebButtonComparar.SetHeight(45);
-        this.WebButtonComparar.SetCaption("Comparar com o Dia");
-        this.WebButtonComparar.FFont.FCharset = 1;
-        this.WebButtonComparar.FFont.SetColor(65793);
-        this.WebButtonComparar.FFont.SetHeight(-13);
-        this.WebButtonComparar.FFont.SetName("Tahoma");
-        this.WebButtonComparar.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
-        this.WebButtonComparar.SetHeightPercent(100.000000000000000000);
-        this.WebButtonComparar.SetParentFont(false);
-        this.WebButtonComparar.SetTabOrder(6);
-        this.WebButtonComparar.SetWidthPercent(100.000000000000000000);
-        this.SetEvent$1(this.WebButtonComparar,this,"OnClick","WebButtonCompararClick");
-        this.WebMemo1.SetParentComponent(this);
-        this.WebMemo1.SetName("WebMemo1");
-        this.WebMemo1.SetLeft(60);
-        this.WebMemo1.SetTop(617);
-        this.WebMemo1.SetWidth(1500);
-        this.WebMemo1.SetHeight(130);
-        this.WebMemo1.FFont.FCharset = 1;
-        this.WebMemo1.FFont.SetColor(65793);
-        this.WebMemo1.FFont.SetHeight(-13);
-        this.WebMemo1.FFont.SetName("Tahoma");
-        this.WebMemo1.FFont.SetStyle({});
-        this.WebMemo1.SetHeightPercent(100.000000000000000000);
-        this.WebMemo1.FLines.BeginUpdate();
-        try {
-          this.WebMemo1.FLines.Clear();
-          this.WebMemo1.FLines.Add("WebMemo1");
-        } finally {
-          this.WebMemo1.FLines.EndUpdate();
-        };
-        this.WebMemo1.SetParentFont(false);
-        this.WebMemo1.SetReadOnly(true);
-        this.WebMemo1.SetSelLength(0);
-        this.WebMemo1.SetSelStart(0);
-        this.WebMemo1.SetTabOrder(7);
-        this.WebMemo1.SetWidthPercent(100.000000000000000000);
-        this.WebComboBoxApostas.SetParentComponent(this);
-        this.WebComboBoxApostas.SetName("WebComboBoxApostas");
-        this.WebComboBoxApostas.SetLeft(60);
-        this.WebComboBoxApostas.SetTop(787);
-        this.WebComboBoxApostas.SetWidth(1100);
-        this.WebComboBoxApostas.SetHeight(21);
-        this.WebComboBoxApostas.SetHeightPercent(100.000000000000000000);
-        this.WebComboBoxApostas.SetText("WebComboBoxApostas");
-        this.WebComboBoxApostas.SetWidthPercent(100.000000000000000000);
-        this.WebComboBoxApostas.SetItemIndex(-1);
         this.WebButtonExcluir.SetParentComponent(this);
         this.WebButtonExcluir.SetName("WebButtonExcluir");
-        this.WebButtonExcluir.SetLeft(1180);
-        this.WebButtonExcluir.SetTop(785);
-        this.WebButtonExcluir.SetWidth(200);
-        this.WebButtonExcluir.SetHeight(32);
-        this.WebButtonExcluir.SetCaption("Excluir Aposta");
+        this.WebButtonExcluir.SetLeft(340);
+        this.WebButtonExcluir.SetTop(280);
+        this.WebButtonExcluir.SetWidth(130);
+        this.WebButtonExcluir.SetHeight(42);
+        this.WebButtonExcluir.SetCaption("Excluir");
         this.WebButtonExcluir.FFont.FCharset = 1;
         this.WebButtonExcluir.FFont.SetColor(65793);
         this.WebButtonExcluir.FFont.SetHeight(-13);
@@ -53095,65 +52367,146 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebButtonExcluir.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
         this.WebButtonExcluir.SetHeightPercent(100.000000000000000000);
         this.WebButtonExcluir.SetParentFont(false);
-        this.WebButtonExcluir.SetTabOrder(8);
+        this.WebButtonExcluir.SetTabOrder(7);
         this.WebButtonExcluir.SetWidthPercent(100.000000000000000000);
         this.SetEvent$1(this.WebButtonExcluir,this,"OnClick","WebButtonExcluirClick");
+        this.WebButtonCancelar.SetParentComponent(this);
+        this.WebButtonCancelar.SetName("WebButtonCancelar");
+        this.WebButtonCancelar.SetLeft(480);
+        this.WebButtonCancelar.SetTop(280);
+        this.WebButtonCancelar.SetWidth(130);
+        this.WebButtonCancelar.SetHeight(42);
+        this.WebButtonCancelar.SetCaption("Cancelar");
+        this.WebButtonCancelar.FFont.FCharset = 1;
+        this.WebButtonCancelar.FFont.SetColor(65793);
+        this.WebButtonCancelar.FFont.SetHeight(-13);
+        this.WebButtonCancelar.FFont.SetName("Tahoma");
+        this.WebButtonCancelar.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
+        this.WebButtonCancelar.SetHeightPercent(100.000000000000000000);
+        this.WebButtonCancelar.SetParentFont(false);
+        this.WebButtonCancelar.SetTabOrder(8);
+        this.WebButtonCancelar.SetWidthPercent(100.000000000000000000);
+        this.SetEvent$1(this.WebButtonCancelar,this,"OnClick","WebButtonCancelarClick");
+        this.WebEditBusca.SetParentComponent(this);
+        this.WebEditBusca.SetName("WebEditBusca");
+        this.WebEditBusca.SetLeft(680);
+        this.WebEditBusca.SetTop(68);
+        this.WebEditBusca.SetWidth(400);
+        this.WebEditBusca.SetHeight(25);
+        this.WebEditBusca.SetHeightPercent(100.000000000000000000);
+        this.WebEditBusca.SetTabOrder(9);
+        this.WebEditBusca.SetText("WebEditBusca");
+        this.WebEditBusca.SetWidthPercent(100.000000000000000000);
+        this.SetEvent$1(this.WebEditBusca,this,"OnChange","WebEditBuscaChange");
+        this.WebButtonAtualizar.SetParentComponent(this);
+        this.WebButtonAtualizar.SetName("WebButtonAtualizar");
+        this.WebButtonAtualizar.SetLeft(1090);
+        this.WebButtonAtualizar.SetTop(66);
+        this.WebButtonAtualizar.SetWidth(130);
+        this.WebButtonAtualizar.SetHeight(28);
+        this.WebButtonAtualizar.SetCaption("Atualizar Lista");
+        this.WebButtonAtualizar.FFont.FCharset = 1;
+        this.WebButtonAtualizar.FFont.SetColor(65793);
+        this.WebButtonAtualizar.FFont.SetHeight(-12);
+        this.WebButtonAtualizar.FFont.SetName("Tahoma");
+        this.WebButtonAtualizar.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
+        this.WebButtonAtualizar.SetHeightPercent(100.000000000000000000);
+        this.WebButtonAtualizar.SetParentFont(false);
+        this.WebButtonAtualizar.SetTabOrder(10);
+        this.WebButtonAtualizar.SetWidthPercent(100.000000000000000000);
+        this.SetEvent$1(this.WebButtonAtualizar,this,"OnClick","WebButtonAtualizarClick");
+        this.WebHTMLDivGrid.SetParentComponent(this);
+        this.WebHTMLDivGrid.SetName("WebHTMLDivGrid");
+        this.WebHTMLDivGrid.SetLeft(620);
+        this.WebHTMLDivGrid.SetTop(140);
+        this.WebHTMLDivGrid.SetWidth(930);
+        this.WebHTMLDivGrid.SetHeight(620);
+        this.WebHTMLDivGrid.SetRole("");
+        this.WebMemoLog.SetParentComponent(this);
+        this.WebMemoLog.SetName("WebMemoLog");
+        this.WebMemoLog.SetLeft(60);
+        this.WebMemoLog.SetTop(340);
+        this.WebMemoLog.SetWidth(550);
+        this.WebMemoLog.SetHeight(420);
+        this.WebMemoLog.FFont.FCharset = 1;
+        this.WebMemoLog.FFont.SetColor(65793);
+        this.WebMemoLog.FFont.SetHeight(-12);
+        this.WebMemoLog.FFont.SetName("Consolas");
+        this.WebMemoLog.FFont.SetStyle({});
+        this.WebMemoLog.SetHeightPercent(100.000000000000000000);
+        this.WebMemoLog.FLines.BeginUpdate();
+        try {
+          this.WebMemoLog.FLines.Clear();
+          this.WebMemoLog.FLines.Add("WebMemoLog");
+        } finally {
+          this.WebMemoLog.FLines.EndUpdate();
+        };
+        this.WebMemoLog.SetParentFont(false);
+        this.WebMemoLog.SetReadOnly(true);
+        this.WebMemoLog.SetSelLength(0);
+        this.WebMemoLog.SetSelStart(0);
+        this.WebMemoLog.SetTabOrder(11);
+        this.WebMemoLog.SetWidthPercent(100.000000000000000000);
       } finally {
-        this.WebLabel1.AfterLoadDFMValues();
-        this.WebLabel6.AfterLoadDFMValues();
-        this.WebLabel4.AfterLoadDFMValues();
-        this.WebLabel2.AfterLoadDFMValues();
-        this.WebLabel5.AfterLoadDFMValues();
-        this.WebLabel3.AfterLoadDFMValues();
-        this.WebLabel7.AfterLoadDFMValues();
-        this.WebHTMLDivResultadoDia.AfterLoadDFMValues();
-        this.WebHTMLDivComparacao.AfterLoadDFMValues();
+        this.WebLabelTitulo.AfterLoadDFMValues();
+        this.WebLabelID.AfterLoadDFMValues();
+        this.WebLabelNome.AfterLoadDFMValues();
+        this.WebLabelEmail.AfterLoadDFMValues();
+        this.WebLabelTelefone.AfterLoadDFMValues();
+        this.WebLabelCidade.AfterLoadDFMValues();
+        this.WebLabelBusca.AfterLoadDFMValues();
+        this.WebLabelStatus.AfterLoadDFMValues();
+        this.WebEditID.AfterLoadDFMValues();
         this.WebEditNome.AfterLoadDFMValues();
-        this.WebComboBox1.AfterLoadDFMValues();
-        this.WebEdit1.AfterLoadDFMValues();
-        this.WebButton1.AfterLoadDFMValues();
+        this.WebEditEmail.AfterLoadDFMValues();
+        this.WebEditTelefone.AfterLoadDFMValues();
+        this.WebEditCidade.AfterLoadDFMValues();
+        this.WebButtonNovo.AfterLoadDFMValues();
         this.WebButtonSalvar.AfterLoadDFMValues();
-        this.WebButtonVerSalvos.AfterLoadDFMValues();
-        this.WebButtonLimpar.AfterLoadDFMValues();
-        this.WebButtonComparar.AfterLoadDFMValues();
-        this.WebMemo1.AfterLoadDFMValues();
-        this.WebComboBoxApostas.AfterLoadDFMValues();
         this.WebButtonExcluir.AfterLoadDFMValues();
+        this.WebButtonCancelar.AfterLoadDFMValues();
+        this.WebEditBusca.AfterLoadDFMValues();
+        this.WebButtonAtualizar.AfterLoadDFMValues();
+        this.WebHTMLDivGrid.AfterLoadDFMValues();
+        this.WebMemoLog.AfterLoadDFMValues();
       };
     };
     rtl.addIntf(this,pas.System.IUnknown);
     var $r = this.$rtti;
-    $r.addField("WebButton1",pas["WEBLib.StdCtrls"].$rtti["TButton"]);
-    $r.addField("WebLabel1",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
-    $r.addField("WebLabel2",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
-    $r.addField("WebMemo1",pas["WEBLib.StdCtrls"].$rtti["TMemo"]);
-    $r.addField("WebEdit1",pas["WEBLib.StdCtrls"].$rtti["TEdit"]);
-    $r.addField("WebLabel3",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
-    $r.addField("WebComboBox1",pas["WEBLib.StdCtrls"].$rtti["TComboBox"]);
-    $r.addField("WebLabel4",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
-    $r.addField("WebHTMLDivResultadoDia",pas["WEBLib.WebCtrls"].$rtti["THTMLDiv"]);
-    $r.addField("WebHTMLDivComparacao",pas["WEBLib.WebCtrls"].$rtti["THTMLDiv"]);
-    $r.addField("WebButtonSalvar",pas["WEBLib.StdCtrls"].$rtti["TButton"]);
-    $r.addField("WebButtonVerSalvos",pas["WEBLib.StdCtrls"].$rtti["TButton"]);
-    $r.addField("WebButtonLimpar",pas["WEBLib.StdCtrls"].$rtti["TButton"]);
-    $r.addField("WebButtonComparar",pas["WEBLib.StdCtrls"].$rtti["TButton"]);
-    $r.addField("WebLabel5",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
-    $r.addField("WebLabel6",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
+    $r.addField("WebLabelTitulo",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
+    $r.addField("WebLabelID",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
+    $r.addField("WebLabelNome",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
+    $r.addField("WebLabelEmail",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
+    $r.addField("WebLabelTelefone",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
+    $r.addField("WebLabelCidade",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
+    $r.addField("WebLabelBusca",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
+    $r.addField("WebLabelStatus",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
+    $r.addField("WebEditID",pas["WEBLib.StdCtrls"].$rtti["TEdit"]);
     $r.addField("WebEditNome",pas["WEBLib.StdCtrls"].$rtti["TEdit"]);
-    $r.addField("WebLabel7",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
-    $r.addField("WebComboBoxApostas",pas["WEBLib.StdCtrls"].$rtti["TComboBox"]);
+    $r.addField("WebEditEmail",pas["WEBLib.StdCtrls"].$rtti["TEdit"]);
+    $r.addField("WebEditTelefone",pas["WEBLib.StdCtrls"].$rtti["TEdit"]);
+    $r.addField("WebEditCidade",pas["WEBLib.StdCtrls"].$rtti["TEdit"]);
+    $r.addField("WebEditBusca",pas["WEBLib.StdCtrls"].$rtti["TEdit"]);
+    $r.addField("WebButtonNovo",pas["WEBLib.StdCtrls"].$rtti["TButton"]);
+    $r.addField("WebButtonSalvar",pas["WEBLib.StdCtrls"].$rtti["TButton"]);
     $r.addField("WebButtonExcluir",pas["WEBLib.StdCtrls"].$rtti["TButton"]);
+    $r.addField("WebButtonCancelar",pas["WEBLib.StdCtrls"].$rtti["TButton"]);
+    $r.addField("WebButtonAtualizar",pas["WEBLib.StdCtrls"].$rtti["TButton"]);
+    $r.addField("WebHTMLDivGrid",pas["WEBLib.WebCtrls"].$rtti["THTMLDiv"]);
+    $r.addField("WebMemoLog",pas["WEBLib.StdCtrls"].$rtti["TMemo"]);
     $r.addMethod("WebFormCreate",0,[["Sender",pas.System.$rtti["TObject"]]]);
-    $r.addMethod("WebButton1Click",0,[["Sender",pas.System.$rtti["TObject"]]]);
-    $r.addMethod("WebComboBox1Change",0,[["Sender",pas.System.$rtti["TObject"]]]);
+    $r.addMethod("WebFormShow",0,[["Sender",pas.System.$rtti["TObject"]]]);
+    $r.addMethod("WebButtonNovoClick",0,[["Sender",pas.System.$rtti["TObject"]]]);
     $r.addMethod("WebButtonSalvarClick",0,[["Sender",pas.System.$rtti["TObject"]]]);
-    $r.addMethod("WebButtonVerSalvosClick",0,[["Sender",pas.System.$rtti["TObject"]]]);
-    $r.addMethod("WebButtonLimparClick",0,[["Sender",pas.System.$rtti["TObject"]]]);
-    $r.addMethod("WebButtonCompararClick",0,[["Sender",pas.System.$rtti["TObject"]]]);
-    $r.addMethod("WebEditNomeChange",0,[["Sender",pas.System.$rtti["TObject"]]]);
     $r.addMethod("WebButtonExcluirClick",0,[["Sender",pas.System.$rtti["TObject"]]]);
+    $r.addMethod("WebButtonCancelarClick",0,[["Sender",pas.System.$rtti["TObject"]]]);
+    $r.addMethod("WebButtonAtualizarClick",0,[["Sender",pas.System.$rtti["TObject"]]]);
+    $r.addMethod("WebEditBuscaChange",0,[["Sender",pas.System.$rtti["TObject"]]]);
   });
   this.Form1 = null;
+  $mod.$implcode = function () {
+    $impl.STORAGE_KEY = "crud_clientes";
+  };
 },["Math"]);
 rtl.module("program",["System","WEBLib.Forms","WEBLib.Forms","Unit1"],function () {
   "use strict";
@@ -53166,6 +52519,7 @@ rtl.module("program",["System","WEBLib.Forms","WEBLib.Forms","Unit1"],function (
     pas.System.$rtti["TArray<RTTI.TRttiParameter>"].eltype = pas.RTTI.$rtti["TRttiParameter"];
     pas.System.$rtti["TArray<RTTI.TRttiMethod>"].eltype = pas.RTTI.$rtti["TRttiMethod"];
     pas.System.$rtti["TArray<RTTI.TRttiProperty>"].eltype = pas.RTTI.$rtti["TRttiProperty"];
+    pas.System.$rtti["TArray<Unit1.TCliente>"].eltype = pas.Unit1.$rtti["TCliente"];
   };
   $mod.$main = function () {
     pas["WEBLib.Forms"].Application.Initialize();
