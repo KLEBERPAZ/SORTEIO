@@ -51840,6 +51840,22 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
     this.WebEditBuscaChange = function (Sender) {
       this.AtualizarGrid(this.WebEditBusca.GetText());
     };
+    this.WebHTMLDivGridClick = function (Sender) {
+      var Elemento = null;
+      var DataId = "";
+      var ID = 0;
+      Elemento = this.WebHTMLDivGrid.GetElement();
+      var el = event.target;
+      while (el && el.tagName !== 'TR') {
+        el = el.parentElement;
+      }
+      Elemento = el;
+      if (Elemento != null) {
+        DataId = Elemento.getAttribute("data-id");
+        ID = pas.SysUtils.StrToIntDef(DataId,0);
+        if (ID > 0) this.SelecionarCliente(ID);
+      };
+    };
     this.CarregarClientes = function () {
       var Raw = "";
       var Linhas = [];
@@ -51915,19 +51931,11 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         C.$assign(this.FClientes[i]);
         if (FiltroLower !== "") if ((pas.System.Pos(FiltroLower,pas.SysUtils.LowerCase(C.Nome)) === 0) && (pas.System.Pos(FiltroLower,pas.SysUtils.LowerCase(C.Email)) === 0) && (pas.System.Pos(FiltroLower,pas.SysUtils.LowerCase(C.Cidade)) === 0)) continue;
         Count += 1;
-        HTML = HTML + '<tr style="border-bottom:1px solid #eee; cursor:pointer;" ' + 'onclick="window._clickGrid(' + pas.SysUtils.IntToStr(C.ID) + ')" ' + 'onmouseover="this.style.background=\'#F1F8E9\';" ' + 'onmouseout="this.style.background=\'\';">' + '<td style="padding:5px;">' + pas.SysUtils.IntToStr(C.ID) + "</td>" + '<td style="padding:5px; font-weight:bold;">' + this.EscaparHTML(C.Nome) + "</td>" + '<td style="padding:5px;">' + this.EscaparHTML(C.Email) + "</td>" + '<td style="padding:5px;">' + this.EscaparHTML(C.Telefone) + "</td>" + '<td style="padding:5px;">' + this.EscaparHTML(C.Cidade) + "</td>" + '<td style="padding:5px; color:#666; font-size:11px;">' + this.EscaparHTML(C.DataCadastro) + "</td>" + "</tr>";
+        HTML = HTML + '<tr data-id="' + pas.SysUtils.IntToStr(C.ID) + '" style="border-bottom:1px solid #eee; cursor:pointer;" ' + 'onmouseover="this.style.background=\'#F1F8E9\';" ' + 'onmouseout="this.style.background=\'\';">' + '<td style="padding:5px;">' + pas.SysUtils.IntToStr(C.ID) + "</td>" + '<td style="padding:5px; font-weight:bold;">' + this.EscaparHTML(C.Nome) + "</td>" + '<td style="padding:5px;">' + this.EscaparHTML(C.Email) + "</td>" + '<td style="padding:5px;">' + this.EscaparHTML(C.Telefone) + "</td>" + '<td style="padding:5px;">' + this.EscaparHTML(C.Cidade) + "</td>" + '<td style="padding:5px; color:#666; font-size:11px;">' + this.EscaparHTML(C.DataCadastro) + "</td>" + "</tr>";
       };
       if (Count === 0) HTML = HTML + '<tr><td colspan="6" style="padding:16px; text-align:center; color:#999; ' + 'font-style:italic;">Nenhum cliente encontrado.</td></tr>';
       HTML = HTML + "</tbody></table></div>";
       this.WebHTMLDivGrid.FHTML.SetTextStr(HTML);
-      window._clickGrid = function(id) {
-        // Garante que o formulário está acessível
-        if (window.pas && window.pas.Core && window.pas.Core.Form1) {
-          window.pas.Core.Form1.SelecionarClienteJS(id);
-        } else {
-          console.log('Erro: Objeto Form1 não encontrado no JS');
-        }
-      };
       this.WebLabelStatus.SetCaption("Total de clientes: " + pas.SysUtils.IntToStr(Count));
     };
     this.LimparFormulario = function () {
@@ -52429,6 +52437,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebHTMLDivGrid.SetWidth(930);
         this.WebHTMLDivGrid.SetHeight(620);
         this.WebHTMLDivGrid.SetRole("");
+        this.SetEvent$1(this.WebHTMLDivGrid,this,"OnClick","WebHTMLDivGridClick");
         this.WebMemoLog.SetParentComponent(this);
         this.WebMemoLog.SetName("WebMemoLog");
         this.WebMemoLog.SetLeft(60);
@@ -52509,6 +52518,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
     $r.addMethod("WebButtonCancelarClick",0,[["Sender",pas.System.$rtti["TObject"]]]);
     $r.addMethod("WebButtonAtualizarClick",0,[["Sender",pas.System.$rtti["TObject"]]]);
     $r.addMethod("WebEditBuscaChange",0,[["Sender",pas.System.$rtti["TObject"]]]);
+    $r.addMethod("WebHTMLDivGridClick",0,[["Sender",pas.System.$rtti["TObject"]]]);
   });
   this.Form1 = null;
   $mod.$implcode = function () {
