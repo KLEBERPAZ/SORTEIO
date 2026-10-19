@@ -52413,14 +52413,13 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebEditBusca.SetTabOrder(9);
         this.WebEditBusca.SetText("WebEditBusca");
         this.WebEditBusca.SetWidthPercent(100.000000000000000000);
-        this.SetEvent$1(this.WebEditBusca,this,"OnChange","WebEditBuscaChange");
         this.WebButtonAtualizar.SetParentComponent(this);
         this.WebButtonAtualizar.SetName("WebButtonAtualizar");
         this.WebButtonAtualizar.SetLeft(1090);
         this.WebButtonAtualizar.SetTop(66);
         this.WebButtonAtualizar.SetWidth(130);
         this.WebButtonAtualizar.SetHeight(28);
-        this.WebButtonAtualizar.SetCaption("Buscar");
+        this.WebButtonAtualizar.SetCaption("Atualizar Lista");
         this.WebButtonAtualizar.FFont.FCharset = 1;
         this.WebButtonAtualizar.FFont.SetColor(65793);
         this.WebButtonAtualizar.FFont.SetHeight(-12);
@@ -52436,7 +52435,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebHTMLDivGrid.SetLeft(620);
         this.WebHTMLDivGrid.SetTop(140);
         this.WebHTMLDivGrid.SetWidth(930);
-        this.WebHTMLDivGrid.SetHeight(357);
+        this.WebHTMLDivGrid.SetHeight(620);
         this.WebHTMLDivGrid.SetRole("");
         this.SetEvent$1(this.WebHTMLDivGrid,this,"OnClick","WebHTMLDivGridClick");
         this.WebMemoLog.SetParentComponent(this);
@@ -52444,7 +52443,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebMemoLog.SetLeft(60);
         this.WebMemoLog.SetTop(340);
         this.WebMemoLog.SetWidth(550);
-        this.WebMemoLog.SetHeight(157);
+        this.WebMemoLog.SetHeight(420);
         this.WebMemoLog.FFont.FCharset = 1;
         this.WebMemoLog.FFont.SetColor(65793);
         this.WebMemoLog.FFont.SetHeight(-12);
