@@ -51844,7 +51844,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       var Elemento = null;
       var DataId = "";
       var ID = 0;
-      Elemento = this.WebHTMLDivGrid.GetElement();
+      Elemento = null;
       var el = event.target;
       while (el && el.tagName !== 'TR') {
         el = el.parentElement;
@@ -52033,6 +52033,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       };
       this.FClientes = rtl.arrayRef(Novos);
       this.SalvarClientes();
+      this.CarregarClientes();
       this.FSelecionadoID = 0;
       this.FEditandoID = 0;
       this.LimparFormulario();
