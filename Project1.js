@@ -52506,7 +52506,185 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
     $impl.STORAGE_KEY = "crud_clientes";
   };
 },["Math"]);
-rtl.module("program",["System","WEBLib.Forms","WEBLib.Forms","Unit1"],function () {
+rtl.module("Unit2",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","WEBLib.Controls","WEBLib.Forms","WEBLib.Dialogs","WEBLib.Controls","WEBLib.StdCtrls","WEBLib.StdCtrls"],function () {
+  "use strict";
+  var $mod = this;
+  rtl.createClass(this,"TForm2",pas["WEBLib.Forms"].TForm,function () {
+    this.$init = function () {
+      pas["WEBLib.Forms"].TForm.$init.call(this);
+      this.lblTitulo = null;
+      this.lblUser = null;
+      this.lblPass = null;
+      this.edtUser = null;
+      this.edtPass = null;
+      this.lblMsg = null;
+      this.btnLogin = null;
+    };
+    this.$final = function () {
+      this.lblTitulo = undefined;
+      this.lblUser = undefined;
+      this.lblPass = undefined;
+      this.edtUser = undefined;
+      this.edtPass = undefined;
+      this.lblMsg = undefined;
+      this.btnLogin = undefined;
+      pas["WEBLib.Forms"].TForm.$final.call(this);
+    };
+    this.btnLoginClick = function (Sender) {
+      var LUser = "";
+      var LPass = "";
+      LUser = pas.SysUtils.Trim(this.edtUser.GetText());
+      LPass = pas.SysUtils.Trim(this.edtPass.GetText());
+      if ((LUser === "123") && (LPass === "123")) {
+        window.sessionStorage.setItem("usuario",LUser);
+        if (!(pas.Unit1.Form1 != null)) pas["WEBLib.Forms"].Application.CreateForm(pas.Unit1.TForm1,{p: pas.Unit1, get: function () {
+            return this.p.Form1;
+          }, set: function (v) {
+            this.p.Form1 = v;
+          }});
+        pas.Unit1.Form1.Show$1();
+        pas.Unit1.Form1.BringToFront();
+        this.Hide();
+      } else {
+        this.lblMsg.SetCaption("Usuário ou senha inválidos.");
+        this.lblMsg.SetVisible(true);
+        this.edtPass.SetText("");
+        this.edtPass.SetFocus();
+      };
+    };
+    this.WebFormCreate = function (Sender) {
+      this.lblMsg.SetVisible(false);
+      this.edtUser.SetText("");
+      this.edtPass.SetText("");
+    };
+    this.LoadDFMValues = function () {
+      pas["WEBLib.Forms"].TCustomForm.LoadDFMValues.call(this);
+      this.lblTitulo = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
+      this.lblUser = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
+      this.lblPass = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
+      this.lblMsg = pas["WEBLib.StdCtrls"].TLabel.$create("Create$1",[this]);
+      this.edtUser = pas["WEBLib.StdCtrls"].TEdit.$create("Create$1",[this]);
+      this.edtPass = pas["WEBLib.StdCtrls"].TEdit.$create("Create$1",[this]);
+      this.btnLogin = pas["WEBLib.StdCtrls"].TButton.$create("Create$1",[this]);
+      this.lblTitulo.BeforeLoadDFMValues();
+      this.lblUser.BeforeLoadDFMValues();
+      this.lblPass.BeforeLoadDFMValues();
+      this.lblMsg.BeforeLoadDFMValues();
+      this.edtUser.BeforeLoadDFMValues();
+      this.edtPass.BeforeLoadDFMValues();
+      this.btnLogin.BeforeLoadDFMValues();
+      try {
+        this.SetName("Form2");
+        this.SetWidth(480);
+        this.SetHeight(360);
+        this.SetCaption("Login");
+        this.SetVisible(true);
+        this.SetEvent(this,"OnCreate","WebFormCreate");
+        this.lblTitulo.SetParentComponent(this);
+        this.lblTitulo.SetName("lblTitulo");
+        this.lblTitulo.SetLeft(40);
+        this.lblTitulo.SetTop(30);
+        this.lblTitulo.SetWidth(209);
+        this.lblTitulo.SetHeight(32);
+        this.lblTitulo.SetCaption("Acesso ao Sistema");
+        this.lblTitulo.FFont.FCharset = 1;
+        this.lblTitulo.FFont.SetColor(8388608);
+        this.lblTitulo.FFont.SetHeight(-24);
+        this.lblTitulo.FFont.SetName("Segoe UI");
+        this.lblTitulo.FFont.SetStyle(rtl.createSet(pas["WEBLib.Graphics"].TFontStyle.fsBold));
+        this.lblTitulo.SetHeightPercent(100.000000000000000000);
+        this.lblTitulo.SetParentFont(false);
+        this.lblTitulo.SetWidthPercent(100.000000000000000000);
+        this.lblUser.SetParentComponent(this);
+        this.lblUser.SetName("lblUser");
+        this.lblUser.SetLeft(40);
+        this.lblUser.SetTop(100);
+        this.lblUser.SetWidth(59);
+        this.lblUser.SetHeight(20);
+        this.lblUser.SetCaption("UsuÃ¡rio:");
+        this.lblUser.SetHeightPercent(100.000000000000000000);
+        this.lblUser.SetWidthPercent(100.000000000000000000);
+        this.lblPass.SetParentComponent(this);
+        this.lblPass.SetName("lblPass");
+        this.lblPass.SetLeft(40);
+        this.lblPass.SetTop(150);
+        this.lblPass.SetWidth(43);
+        this.lblPass.SetHeight(20);
+        this.lblPass.SetCaption("Senha:");
+        this.lblPass.SetHeightPercent(100.000000000000000000);
+        this.lblPass.SetWidthPercent(100.000000000000000000);
+        this.lblMsg.SetParentComponent(this);
+        this.lblMsg.SetName("lblMsg");
+        this.lblMsg.SetLeft(140);
+        this.lblMsg.SetTop(270);
+        this.lblMsg.SetWidth(160);
+        this.lblMsg.SetHeight(17);
+        this.lblMsg.SetCaption("Usuário ou senha inválidos.");
+        this.lblMsg.FFont.FCharset = 1;
+        this.lblMsg.FFont.SetColor(255);
+        this.lblMsg.FFont.SetHeight(-13);
+        this.lblMsg.FFont.SetName("Segoe UI");
+        this.lblMsg.FFont.SetStyle({});
+        this.lblMsg.SetHeightPercent(100.000000000000000000);
+        this.lblMsg.SetParentFont(false);
+        this.lblMsg.SetVisible(false);
+        this.lblMsg.SetWidthPercent(100.000000000000000000);
+        this.edtUser.SetParentComponent(this);
+        this.edtUser.SetName("edtUser");
+        this.edtUser.SetLeft(140);
+        this.edtUser.SetTop(96);
+        this.edtUser.SetWidth(280);
+        this.edtUser.SetHeight(28);
+        this.edtUser.SetHeightPercent(100.000000000000000000);
+        this.edtUser.SetTextHint("Digite o nome de usuário");
+        this.edtUser.SetWidthPercent(100.000000000000000000);
+        this.edtPass.SetParentComponent(this);
+        this.edtPass.SetName("edtPass");
+        this.edtPass.SetLeft(140);
+        this.edtPass.SetTop(146);
+        this.edtPass.SetWidth(280);
+        this.edtPass.SetHeight(28);
+        this.edtPass.SetHeightPercent(100.000000000000000000);
+        this.edtPass.SetPasswordChar("*");
+        this.edtPass.SetTabOrder(1);
+        this.edtPass.SetTextHint("Digite a senha");
+        this.edtPass.SetWidthPercent(100.000000000000000000);
+        this.btnLogin.SetParentComponent(this);
+        this.btnLogin.SetName("btnLogin");
+        this.btnLogin.SetLeft(140);
+        this.btnLogin.SetTop(210);
+        this.btnLogin.SetWidth(280);
+        this.btnLogin.SetHeight(42);
+        this.btnLogin.SetCaption("Entrar");
+        this.btnLogin.SetHeightPercent(100.000000000000000000);
+        this.btnLogin.SetTabOrder(2);
+        this.btnLogin.SetWidthPercent(100.000000000000000000);
+        this.SetEvent$1(this.btnLogin,this,"OnClick","btnLoginClick");
+      } finally {
+        this.lblTitulo.AfterLoadDFMValues();
+        this.lblUser.AfterLoadDFMValues();
+        this.lblPass.AfterLoadDFMValues();
+        this.lblMsg.AfterLoadDFMValues();
+        this.edtUser.AfterLoadDFMValues();
+        this.edtPass.AfterLoadDFMValues();
+        this.btnLogin.AfterLoadDFMValues();
+      };
+    };
+    rtl.addIntf(this,pas.System.IUnknown);
+    var $r = this.$rtti;
+    $r.addField("lblTitulo",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
+    $r.addField("lblUser",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
+    $r.addField("lblPass",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
+    $r.addField("edtUser",pas["WEBLib.StdCtrls"].$rtti["TEdit"]);
+    $r.addField("edtPass",pas["WEBLib.StdCtrls"].$rtti["TEdit"]);
+    $r.addField("lblMsg",pas["WEBLib.StdCtrls"].$rtti["TLabel"]);
+    $r.addField("btnLogin",pas["WEBLib.StdCtrls"].$rtti["TButton"]);
+    $r.addMethod("btnLoginClick",0,[["Sender",pas.System.$rtti["TObject"]]]);
+    $r.addMethod("WebFormCreate",0,[["Sender",pas.System.$rtti["TObject"]]]);
+  });
+  this.Form2 = null;
+},["Unit1"]);
+rtl.module("program",["System","WEBLib.Forms","WEBLib.Forms","Unit1","Unit2"],function () {
   "use strict";
   var $mod = this;
   $mod.$implcode = function () {
@@ -52522,6 +52700,11 @@ rtl.module("program",["System","WEBLib.Forms","WEBLib.Forms","Unit1"],function (
   $mod.$main = function () {
     pas["WEBLib.Forms"].Application.Initialize();
     pas["WEBLib.Forms"].Application.FMainFormOnTaskBar = true;
+    pas["WEBLib.Forms"].Application.CreateFormDirect(pas.Unit2.TForm2,{p: pas.Unit2, get: function () {
+        return this.p.Form2;
+      }, set: function (v) {
+        this.p.Form2 = v;
+      }});
     pas["WEBLib.Forms"].Application.CreateFormDirect(pas.Unit1.TForm1,{p: pas.Unit1, get: function () {
         return this.p.Form1;
       }, set: function (v) {
