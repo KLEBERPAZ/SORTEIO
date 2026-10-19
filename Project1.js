@@ -52436,7 +52436,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebHTMLDivGrid.SetLeft(620);
         this.WebHTMLDivGrid.SetTop(140);
         this.WebHTMLDivGrid.SetWidth(930);
-        this.WebHTMLDivGrid.SetHeight(620);
+        this.WebHTMLDivGrid.SetHeight(357);
         this.WebHTMLDivGrid.SetRole("");
         this.SetEvent$1(this.WebHTMLDivGrid,this,"OnClick","WebHTMLDivGridClick");
         this.WebMemoLog.SetParentComponent(this);
@@ -52444,7 +52444,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebMemoLog.SetLeft(60);
         this.WebMemoLog.SetTop(340);
         this.WebMemoLog.SetWidth(550);
-        this.WebMemoLog.SetHeight(420);
+        this.WebMemoLog.SetHeight(157);
         this.WebMemoLog.FFont.FCharset = 1;
         this.WebMemoLog.FFont.SetColor(65793);
         this.WebMemoLog.FFont.SetHeight(-12);
