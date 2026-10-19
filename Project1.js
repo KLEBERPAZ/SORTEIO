@@ -52420,7 +52420,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
         this.WebButtonAtualizar.SetTop(66);
         this.WebButtonAtualizar.SetWidth(130);
         this.WebButtonAtualizar.SetHeight(28);
-        this.WebButtonAtualizar.SetCaption("Atualizar Lista");
+        this.WebButtonAtualizar.SetCaption("Buscar");
         this.WebButtonAtualizar.FFont.FCharset = 1;
         this.WebButtonAtualizar.FFont.SetColor(65793);
         this.WebButtonAtualizar.FFont.SetHeight(-12);
