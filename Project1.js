@@ -51921,7 +51921,12 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       HTML = HTML + "</tbody></table></div>";
       this.WebHTMLDivGrid.FHTML.SetTextStr(HTML);
       window._clickGrid = function(id) {
-        pas.Core.Form1.SelecionarClienteJS(id);
+        // Garante que o formulário está acessível
+        if (window.pas && window.pas.Core && window.pas.Core.Form1) {
+          window.pas.Core.Form1.SelecionarClienteJS(id);
+        } else {
+          console.log('Erro: Objeto Form1 não encontrado no JS');
+        }
       };
       this.WebLabelStatus.SetCaption("Total de clientes: " + pas.SysUtils.IntToStr(Count));
     };
@@ -51993,17 +51998,19 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       var n = 0;
       var NomeAlvo = "";
       var Novos = [];
-      if (this.FSelecionadoID > 0) {
-        Alvo = this.FSelecionadoID}
-       else if (this.FEditandoID > 0) {
-        Alvo = this.FEditandoID}
-       else {
-        this.Log("ERRO: selecione um cliente na lista para excluir.");
+      Alvo = pas.SysUtils.StrToIntDef(pas.SysUtils.Trim(this.WebEditID.GetText()),0);
+      if (Alvo === 0) {
+        if (this.FSelecionadoID > 0) {
+          Alvo = this.FSelecionadoID}
+         else if (this.FEditandoID > 0) Alvo = this.FEditandoID;
+      };
+      if (Alvo === 0) {
+        this.Log("ERRO: selecione um cliente na lista clicando nele antes de excluir.");
         return;
       };
       Idx = this.IndexDoCliente(Alvo);
       if (Idx < 0) {
-        this.Log("ERRO: cliente não encontrado.");
+        this.Log("ERRO: cliente #" + pas.SysUtils.IntToStr(Alvo) + " não encontrado na memória.");
         return;
       };
       NomeAlvo = this.FClientes[Idx].Nome;
@@ -52022,7 +52029,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       this.FEditandoID = 0;
       this.LimparFormulario();
       this.AtualizarGrid(pas.SysUtils.Trim(this.WebEditBusca.GetText()));
-      this.Log("Cliente excluído: #" + pas.SysUtils.IntToStr(Alvo) + " - " + NomeAlvo);
+      this.Log("Cliente excluído com sucesso: #" + pas.SysUtils.IntToStr(Alvo) + " - " + NomeAlvo);
     };
     this.SelecionarCliente = function (ID) {
       var Idx = 0;
@@ -52035,7 +52042,7 @@ rtl.module("Unit1",["System","SysUtils","Classes","JS","Web","WEBLib.Graphics","
       this.WebEditEmail.SetText(this.FClientes[Idx].Email);
       this.WebEditTelefone.SetText(this.FClientes[Idx].Telefone);
       this.WebEditCidade.SetText(this.FClientes[Idx].Cidade);
-      this.Log("Cliente selecionado: #" + pas.SysUtils.IntToStr(ID) + " - " + this.FClientes[Idx].Nome);
+      this.Log("Selecionado: #" + pas.SysUtils.IntToStr(ID) + " - " + this.FClientes[Idx].Nome);
     };
     this.ProximoID = function () {
       var Result = 0;
