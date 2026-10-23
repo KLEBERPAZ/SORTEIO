@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2026/09/02 23:29:05.000.147,=C:\Users\Usuario\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2026/10/16 07:50:25.000.673,=C:\Users\Usuario\Documents\Embarcadero\Studio\Projects\Project1.html</Transaction>
+    <Transaction>2026/10/16 07:50:29.000.786,=C:\Users\Usuario\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2026/10/16 08:05:10.000.053,=C:\Users\Usuario\Documents\Embarcadero\Studio\Projects\Project1.html</Transaction>
+    <Transaction>2026/10/16 08:05:12.000.714,=C:\Users\Usuario\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2026/10/16 13:36:22.000.647,=C:\Users\Usuario\Documents\Embarcadero\Studio\Projects\Project1.html</Transaction>
+    <Transaction>2026/10/16 13:36:26.000.482,=C:\Users\Usuario\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2026/10/19 19:34:45.000.604,=C:\Users\Usuario\Documents\Embarcadero\Studio\Projects\Project1.html</Transaction>
+    <Transaction>2026/10/19 19:34:45.000.697,=C:\Users\Usuario\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2026/10/23 18:43:25.348,=C:\Users\Usuario\Documents\Embarcadero\Studio\Projects\Project1.html</Transaction>
+    <Transaction>2026/10/23 18:43:29.487,=C:\Users\Usuario\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2026/10/23 18:59:01.525,C:\Users\Usuario\Desktop\SORTEIO2\Unit1.html=C:\Users\Usuario\Documents\Embarcadero\Studio\Projects\Unit1.html</Transaction>
+    <Transaction>2026/10/23 18:59:01.525,C:\Users\Usuario\Desktop\SORTEIO2\Unit1.dfm=C:\Users\Usuario\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2026/10/23 18:59:01.525,C:\Users\Usuario\Desktop\SORTEIO2\Unit1.pas=C:\Users\Usuario\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2026/10/23 18:59:09.215,C:\Users\Usuario\Desktop\SORTEIO2\index.html=C:\Users\Usuario\Documents\Embarcadero\Studio\Projects\Project1.html</Transaction>
+    <Transaction>2026/10/23 18:59:15.885,C:\Users\Usuario\Desktop\SORTEIO2\Project1.dproj=C:\Users\Usuario\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+  </Transactions>
+	<ActiveMobileDevice>
+		<NoProfile Android="59217012" Android64="59217012"/>
+	</ActiveMobileDevice>
+</BorlandProject>
