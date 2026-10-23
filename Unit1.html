@@ -2,29 +2,65 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ⭐ viewport-fit=cover: respeita notch/furo em Androids modernos -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2e7d32">
+<meta name="format-detection" content="telephone=no">
 <title>Simulador de Loterias - Mega Sena e Lotofácil</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { -webkit-text-size-adjust: 100%; }
+
+  /* ⭐ BASE — corrige text-size-adjust e rem padrão */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    font-size: 100%; /* força 1rem = 16px base */
+  }
+
   body {
     font-family: Tahoma, Verdana, sans-serif;
     background: linear-gradient(135deg, #e8f5e9 0%, #a5d6a7 100%);
+    /* ⭐ FALLBACK + DYNAMIC VIEWPORT: corrige barra de endereço do Chrome Android */
     min-height: 100vh;
-    padding: 20px;
+    min-height: 100dvh;
+    min-height: 100svh;
     display: flex;
     justify-content: center;
     overflow-x: hidden;
+    /* ⭐ Evita pull-to-refresh acidental no Android */
+    overscroll-behavior-y: contain;
+    /* ⭐ Safe area (notch/furo) — funciona em retrato e paisagem */
+    padding: max(20px, env(safe-area-inset-top))
+             max(20px, env(safe-area-inset-right))
+             max(20px, env(safe-area-inset-bottom))
+             max(20px, env(safe-area-inset-left));
   }
-  .container { width: 100%; max-width: 900px; }
-  h1 { color: #1b5e20; font-size: 1.6rem; text-align: center; margin-bottom: 6px; line-height: 1.25; }
-  .subtitle { text-align: center; color: #555; font-size: .9rem; margin-bottom: 24px; }
+
+  .container { width: 100%; max-width: 900px; min-width: 0; }
+
+  h1 {
+    color: #1b5e20;
+    font-size: 1.6rem;
+    text-align: center;
+    margin-bottom: 6px;
+    line-height: 1.25;
+  }
+  .subtitle {
+    text-align: center;
+    color: #555;
+    font-size: .9rem;
+    margin-bottom: 24px;
+  }
+
   .card {
     background: #fff;
     border-radius: 16px;
     box-shadow: 0 8px 24px rgba(0, 60, 20, .18);
     padding: 24px;
     margin-bottom: 20px;
+    /* ⭐ Evita overflow horizontal em telas estreitas */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
   .card h2 {
     color: #1b5e20;
@@ -51,7 +87,7 @@
   }
   .card h2 .badge-salvo.show { opacity: 1; }
 
-  /* Card de resultado oficial em destaque */
+  /* ---------- Resultado Oficial ---------- */
   .resultado-oficial-card {
     background: linear-gradient(135deg, #ffffff 0%, #f1f8e9 100%);
     border: 2px solid #66bb6a;
@@ -74,7 +110,9 @@
     padding: 16px 18px;
     border-left: 5px solid #43a047;
     box-shadow: 0 2px 8px rgba(0,0,0,.06);
-    min-width: 0; /* evita overflow no grid */
+    min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
   .oficial-bloco.loto { border-left-color: #8e24aa; }
   .oficial-bloco .titulo-jogo {
@@ -141,11 +179,7 @@
   }
   .oficial-tabela tr:last-child td { border-bottom: none; }
   .oficial-tabela .faixa { font-weight: bold; color: #333; width: 30%; }
-  .oficial-tabela .ganhadores {
-    color: #555;
-    text-align: right;
-    width: 30%;
-  }
+  .oficial-tabela .ganhadores { color: #555; text-align: right; width: 30%; }
   .oficial-tabela .premio-unitario {
     color: #2e7d32;
     font-weight: bold;
@@ -159,30 +193,55 @@
     font-size: .78rem;
   }
 
+  /* ---------- Formulário ---------- */
   .form-group { margin-bottom: 14px; }
-  label { display: block; font-size: .85rem; font-weight: bold; color: #1b5e20; margin-bottom: 6px; }
+  label {
+    display: block;
+    font-size: .85rem;
+    font-weight: bold;
+    color: #1b5e20;
+    margin-bottom: 6px;
+  }
   input, select {
-    width: 100%; padding: 10px 14px;
-    border: 2px solid #c8e6c9; border-radius: 10px;
-    font-size: 1rem; font-family: inherit; color: #333;
-    outline: none; background: #fafffa;
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #c8e6c9;
+    border-radius: 10px;
+    /* ⭐ 16px FIXO: impede ZOOM AUTOMÁTICO no Android/iOS ao focar */
+    font-size: 16px;
+    font-family: inherit;
+    color: #333;
+    outline: none;
+    background: #fafffa;
     transition: border-color .2s, box-shadow .2s;
     -webkit-appearance: none;
     appearance: none;
+    min-height: 48px; /* ⭐ alvo de toque Android (Material) */
   }
   select {
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%232e7d32' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 14px center;
     padding-right: 40px;
+    background-color: #fafffa;
   }
   input:focus, select:focus {
     border-color: #43a047;
     box-shadow: 0 0 0 3px rgba(67, 160, 71, .18);
   }
+  /* ⭐ Focus visible (acessibilidade teclado) */
+  input:focus-visible, select:focus-visible {
+    outline: 2px solid #43a047;
+    outline-offset: 2px;
+  }
+  /* Remove setas do input number em todos os browsers */
   input[type="number"] { -moz-appearance: textfield; }
   input[type="number"]::-webkit-outer-spin-button,
-  input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
   .input-row { display: flex; gap: 10px; align-items: flex-end; }
   .input-row .form-group { flex: 1; margin-bottom: 0; min-width: 0; }
   .dica {
@@ -193,21 +252,39 @@
     line-height: 1.45;
     transition: color .2s;
   }
+
+  /* ---------- Botões ---------- */
   button {
     padding: 12px 20px;
-    border: none; border-radius: 10px;
+    border: none;
+    border-radius: 10px;
     background: linear-gradient(135deg, #43a047, #1b5e20);
-    color: #fff; font-size: 1rem; font-weight: bold;
-    font-family: inherit; cursor: pointer;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
     box-shadow: 0 4px 12px rgba(27, 94, 32, .3);
     transition: transform .12s, filter .2s;
     white-space: nowrap;
-    min-height: 44px;
+    /* ⭐ Alvos de toque confortáveis para Android */
+    min-height: 48px;
+    min-width: 48px;
+    /* ⭐ Evita seleção de texto e menus de long-press */
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+    -webkit-appearance: none;
+    appearance: none;
   }
   button:hover { filter: brightness(1.08); }
   button:active { transform: scale(.97); }
+  button:focus-visible {
+    outline: 2px solid #1b5e20;
+    outline-offset: 2px;
+  }
   button.secundario {
     background: linear-gradient(135deg, #6d4c41, #3e2723);
     box-shadow: 0 4px 12px rgba(62, 39, 35, .3);
@@ -223,6 +300,7 @@
   .botoes { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
   .botoes button { flex: 0 1 auto; }
 
+  /* ---------- Lista de apostas ---------- */
   .aposta-item {
     background: #f1f8e9;
     border-left: 4px solid #43a047;
@@ -253,19 +331,28 @@
     margin-left: 6px;
     white-space: nowrap;
   }
-  .aposta-item .acoes { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+  .aposta-item .acoes {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+  }
   .btn-remover {
     background: #ffebee;
     color: #c62828;
     border: 1px solid #ffcdd2;
     border-radius: 8px;
-    padding: 6px 10px;
-    font-size: .85rem;
+    /* ⭐ Alvo 48×48 (Material Design) */
+    padding: 0;
+    font-size: 1rem;
     cursor: pointer;
     transition: background .2s;
     box-shadow: none;
-    min-height: 36px;
-    min-width: 36px;
+    min-height: 48px;
+    min-width: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   .btn-remover:hover { background: #ffcdd2; filter: none; }
   .btn-remover:active { transform: none; }
@@ -281,6 +368,7 @@
     margin-top: 4px;
   }
 
+  /* ---------- Números destacados ---------- */
   .num-acerto {
     display: inline-block;
     color: #ffffff;
@@ -343,6 +431,8 @@
     gap: 8px;
   }
   .resumo-lista strong { color: #e65100; }
+
+  /* ---------- Resultados da conferição ---------- */
   .resultado-item {
     background: #f5f5f5;
     border-radius: 8px;
@@ -409,23 +499,34 @@
   .total-ganho .valor { color: #2e7d32; }
   .total-saldo .valor { color: #1b5e20; }
   .total-saldo .valor.negativo { color: #c62828; }
+
   .vazio { text-align: center; color: #999; font-style: italic; padding: 20px 0; }
-  .nota { font-size: .75rem; color: #888; text-align: center; margin-top: 16px; line-height: 1.5; }
+  .nota {
+    font-size: .75rem;
+    color: #888;
+    text-align: center;
+    margin-top: 16px;
+    line-height: 1.5;
+  }
 
   /* ============================================================
      RESPONSIVIDADE
      ============================================================ */
 
-  /* Tablets e netbooks pequenos */
+  /* ---------- Tablets (700px) ---------- */
   @media (max-width: 700px) {
     .oficial-grid { grid-template-columns: 1fr; gap: 14px; }
     .container { max-width: 100%; }
   }
 
-  /* Celulares grandes / landscape pequeno */
+  /* ---------- Celulares grandes / Android padrão (600px) ---------- */
   @media (max-width: 600px) {
-    body { padding: 12px; }
-    .container { padding: 0; }
+    body {
+      padding: max(12px, env(safe-area-inset-top))
+               max(12px, env(safe-area-inset-right))
+               max(12px, env(safe-area-inset-bottom))
+               max(12px, env(safe-area-inset-left));
+    }
     h1 { font-size: 1.35rem; }
     .subtitle { font-size: .82rem; margin-bottom: 18px; }
     .card { padding: 18px 16px; border-radius: 14px; margin-bottom: 14px; }
@@ -438,12 +539,12 @@
     .oficial-tabela th, .oficial-tabela td { padding: 4px 4px; }
     .oficial-tabela .acumulou { font-size: .72rem; }
 
-    /* Formulário empilhado em coluna */
+    /* Formulário empilhado */
     .input-row { flex-direction: column; align-items: stretch; gap: 12px; }
     .input-row .form-group { width: 100%; margin-bottom: 0; }
     .input-row button { width: 100%; }
 
-    /* Botões de ação em largura total */
+    /* Botões de ação: 2 por linha */
     .botoes { gap: 8px; }
     .botoes button {
       flex: 1 1 calc(50% - 4px);
@@ -451,31 +552,30 @@
       padding: 11px 12px;
     }
 
-    /* Resumo de totais em coluna */
-    .resumo-totais {
-      flex-direction: column;
-      gap: 12px;
-      padding: 16px;
-    }
+    /* Resumo em coluna */
+    .resumo-totais { flex-direction: column; gap: 12px; padding: 16px; }
     .resumo-totais .total-item .valor { font-size: 1.15rem; }
 
-    /* Resultados mais compactos */
     .resultado-item { padding: 12px 14px; }
     .resultado-item .cabecalho strong { font-size: .95rem; }
     .resultado-item .premio { font-size: 1rem; }
     .resultado-item.ganhou .premio { font-size: 1.05rem; }
   }
 
-  /* Celulares pequenos */
+  /* ---------- Android médio / iPhone padrão (480px) ---------- */
   @media (max-width: 480px) {
-    body { padding: 10px; }
+    body {
+      padding: max(10px, env(safe-area-inset-top))
+               max(10px, env(safe-area-inset-right))
+               max(10px, env(safe-area-inset-bottom))
+               max(10px, env(safe-area-inset-left));
+    }
     h1 { font-size: 1.2rem; }
     .subtitle { font-size: .78rem; }
     .card { padding: 16px 12px; margin-bottom: 12px; }
     .card h2 { font-size: .95rem; }
     .resultado-oficial-card h2 { font-size: 1rem; }
 
-    input, select, button { font-size: .95rem; }
     label { font-size: .8rem; }
 
     .oficial-num { width: 30px; height: 30px; font-size: .8rem; }
@@ -506,15 +606,12 @@
     .aposta-item .nome { font-size: .92rem; }
     .aposta-item .jogo-tag { font-size: .7rem; padding: 2px 7px; }
 
-    /* Números mais compactos */
     .numeros { font-size: .82rem; line-height: 1.85; }
     .num-acerto { font-size: .82rem; padding: 2px 6px; margin: 0 1px; border-radius: 6px; }
     .num-erro { font-size: .82rem; padding: 2px 4px; margin: 0 1px; }
 
-    /* Resumo da lista em coluna */
     .resumo-lista { flex-direction: column; gap: 4px; padding: 8px 12px; font-size: .8rem; }
 
-    /* Chip e prêmio */
     .chip-acertos { font-size: .72rem; padding: 2px 8px; margin-left: 4px; }
     .premio { font-size: .95rem; }
     .resultado-item.ganhou .premio { font-size: 1rem; }
@@ -522,9 +619,14 @@
     .nota { font-size: .7rem; }
   }
 
-  /* Celulares muito estreitos (360px e menores) */
+  /* ---------- Android pequeno (360px — Moto G, Galaxy J, etc) ---------- */
   @media (max-width: 360px) {
-    body { padding: 8px; }
+    body {
+      padding: max(8px, env(safe-area-inset-top))
+               max(8px, env(safe-area-inset-right))
+               max(8px, env(safe-area-inset-bottom))
+               max(8px, env(safe-area-inset-left));
+    }
     h1 { font-size: 1.05rem; }
     .subtitle { font-size: .72rem; }
     .card { padding: 14px 10px; }
@@ -539,13 +641,55 @@
     .num-acerto { font-size: .75rem; padding: 2px 5px; }
     .num-erro { font-size: .75rem; padding: 2px 3px; }
 
-    button { font-size: .85rem; padding: 10px 12px; }
+    button { font-size: .9rem; }
   }
 
-  /* Telas de toque: remove hover p/ evitar "grudar" */
+  /* ⭐ Android em LANDSCAPE (paisagem) — evita cabeçalho gigante */
+  @media (max-height: 500px) and (orientation: landscape) {
+    body {
+      padding: max(8px, env(safe-area-inset-top))
+               max(16px, env(safe-area-inset-right))
+               max(8px, env(safe-area-inset-bottom))
+               max(16px, env(safe-area-inset-left));
+      align-items: flex-start;
+    }
+    h1 { font-size: 1.1rem; margin-bottom: 2px; }
+    .subtitle { font-size: .75rem; margin-bottom: 12px; }
+    .card { padding: 14px 16px; margin-bottom: 12px; }
+    .oficial-grid { gap: 10px; }
+    .input-row { flex-direction: row; align-items: flex-end; gap: 10px; }
+    .input-row .form-group { flex: 1; }
+    .input-row button { width: auto; }
+  }
+
+  /* ⭐ Telas de toque: remove hover (evita "grudar" no Android) */
   @media (hover: none) {
     button:hover { filter: none; }
     .btn-remover:hover { background: #ffebee; }
+  }
+
+  /* ⭐ Acessibilidade: respeita preferência de menos movimento */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .01ms !important;
+      scroll-behavior: auto !important;
+    }
+    .resultado-item.ganhou .num-acerto { animation: none; }
+  }
+
+  /* ⭐ Acessibilidade: alto contraste (alguns Androids usam) */
+  @media (prefers-contrast: more) {
+    .num-erro { color: #757575; }
+    input, select { border-color: #2e7d32; }
+  }
+
+  /* ⭐ Impressão */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+    .botoes, #btnSurpresinha, #btnAdicionar, .btn-remover { display: none !important; }
   }
 </style>
 </head>
@@ -554,20 +698,16 @@
   <h1>🍀 Simulador de Loterias</h1>
   <p class="subtitle">Mega Sena &amp; Lotofácil — apostas salvas automaticamente no seu navegador</p>
 
-  <!-- Card de Resultado Oficial -->
   <div class="card resultado-oficial-card">
     <h2>🏆 Resultado Oficial Mais Recente</h2>
-    <div class="oficial-grid" id="oficialGrid">
-      <!-- preenchido via JS -->
-    </div>
+    <div class="oficial-grid" id="oficialGrid"></div>
   </div>
 
-  <!-- Formulário de cadastro -->
   <div class="card">
     <h2>Cadastrar Apostador <span class="badge-salvo" id="badgeSalvo">✓ Salvo</span></h2>
     <div class="form-group">
       <label for="nome">Nome do Apostador:</label>
-      <input type="text" id="nome" placeholder="Digite o nome" autocomplete="off">
+      <input type="text" id="nome" placeholder="Digite o nome" autocomplete="name" inputmode="text">
     </div>
     <div class="input-row">
       <div class="form-group">
@@ -586,7 +726,7 @@
       <label for="numeros">Números (opcional — preencha para criar 1 aposta manual):</label>
       <div class="input-row">
         <div class="form-group">
-          <input type="text" id="numeros" placeholder="Ex: 1, 2, 3, 4, 5, 6">
+          <input type="text" id="numeros" placeholder="Ex: 1, 2, 3, 4, 5, 6" autocomplete="off" inputmode="text">
         </div>
         <button class="surpresinha" id="btnSurpresinha" type="button" title="Gera e salva a quantidade de apostas digitada em Surpresinhas">🎲 +1 Surpresinha</button>
       </div>
@@ -595,7 +735,6 @@
     <button id="btnAdicionar" type="button">➕ Adicionar e Salvar Aposta(s)</button>
   </div>
 
-  <!-- Lista de apostas -->
   <div class="card">
     <h2>Apostas Cadastradas <span style="font-size:.75rem; font-weight:normal; color:#2e7d32;">(números em verde = acertados no concurso oficial)</span></h2>
     <div id="listaApostas">
@@ -611,7 +750,6 @@
     <input type="file" id="inputImport" accept=".json,application/json" style="display: none;">
   </div>
 
-  <!-- Resultados -->
   <div class="card" id="resultadosCard" style="display: none;">
     <h2>Resultados da Conferição</h2>
     <div id="resultados"></div>
@@ -794,7 +932,7 @@
     return n;
   }
 
-  // ---------- Renderização do Resultado Oficial ----------
+  // ---------- Resultado Oficial ----------
   function renderizarResultadoOficial() {
     const blocos = Object.entries(RESULTADOS).map(([chave, cfg]) => {
       const det = cfg.detalhesOficiais;
@@ -816,9 +954,7 @@
           colGanhadores = g > 0
             ? formatarNumeroInteiro(g) + (f.aproximado ? ' (aprox.)' : '')
             : '—';
-          colPremio = f.premio
-            ? formatarBRL(f.premio)
-            : '—';
+          colPremio = f.premio ? formatarBRL(f.premio) : '—';
         }
 
         return `
@@ -846,9 +982,7 @@
                 <th style="text-align:right;">Prêmio unitário</th>
               </tr>
             </thead>
-            <tbody>
-              ${linhasFaixas}
-            </tbody>
+            <tbody>${linhasFaixas}</tbody>
           </table>
         </div>
       `;
@@ -883,7 +1017,7 @@
       : `Gera e salva ${n} apostas aleatórias de uma vez`;
   }
 
-  // ---------- Renderização da Lista ----------
+  // ---------- Lista ----------
   function renderizarLista() {
     if (apostas.length === 0) {
       elLista.innerHTML = '<p class="vazio">Nenhuma aposta cadastrada ainda.</p>';
@@ -904,7 +1038,7 @@
           </div>
           <div class="acoes">
             <div class="custo">${formatarBRL(cfg.custo)}</div>
-            <button class="btn-remover" data-idx="${idx}" title="Remover aposta">✖</button>
+            <button class="btn-remover" data-idx="${idx}" title="Remover aposta" aria-label="Remover aposta">✖</button>
           </div>
         </div>
       `;
