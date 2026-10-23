@@ -180,17 +180,29 @@
   .oficial-tabela tr:last-child td { border-bottom: none; }
   .oficial-tabela .faixa { font-weight: bold; color: #333; width: 30%; }
   .oficial-tabela .ganhadores { color: #555; text-align: right; width: 30%; }
+
+  /* ⭐ CORREÇÃO: permite quebra de linha no prêmio unitário se necessário */
   .oficial-tabela .premio-unitario {
     color: #2e7d32;
     font-weight: bold;
     text-align: right;
-    white-space: nowrap;
     width: 40%;
+    white-space: nowrap;      /* mantém moeda curta numa linha */
+    overflow-wrap: anywhere;  /* mas permite quebra se necessário */
   }
+
+  /* ⭐ CORREÇÃO PRINCIPAL: ENQUADRA o texto "Acumulou para R$ 230.000.000,00" */
   .oficial-tabela .acumulou {
     color: #c62828;
     font-weight: bold;
     font-size: .78rem;
+    display: inline-block;
+    max-width: 100%;
+    white-space: normal;         /* deixa quebrar linha */
+    overflow-wrap: anywhere;     /* quebra até número longo "230.000.000,00" */
+    word-break: break-word;
+    text-align: right;
+    line-height: 1.25;
   }
 
   /* ---------- Formulário ---------- */
