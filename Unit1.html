@@ -1,0 +1,1038 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador de Loterias - Mega Sena e Lotofácil</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Tahoma, Verdana, sans-serif;
+    background: linear-gradient(135deg, #e8f5e9 0%, #a5d6a7 100%);
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  .container { width: 100%; max-width: 900px; }
+  h1 { color: #1b5e20; font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+  .subtitle { text-align: center; color: #555; font-size: .9rem; margin-bottom: 24px; }
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 60, 20, .18);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card h2 {
+    color: #1b5e20;
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #c8e6c9;
+    padding-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .card h2 .badge-salvo {
+    font-size: .75rem;
+    font-weight: normal;
+    color: #2e7d32;
+    background: #e8f5e9;
+    padding: 4px 10px;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity .3s;
+  }
+  .card h2 .badge-salvo.show { opacity: 1; }
+
+  /* ⭐ NOVO: Card de resultado oficial em destaque */
+  .resultado-oficial-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f8e9 100%);
+    border: 2px solid #66bb6a;
+    box-shadow: 0 10px 30px rgba(27, 94, 32, .25);
+  }
+  .resultado-oficial-card h2 {
+    border-bottom-color: #a5d6a7;
+    color: #1b5e20;
+    font-size: 1.2rem;
+  }
+  .oficial-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 4px;
+  }
+  @media (max-width: 650px) {
+    .oficial-grid { grid-template-columns: 1fr; }
+  }
+  .oficial-bloco {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 18px;
+    border-left: 5px solid #43a047;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  }
+  .oficial-bloco.loto { border-left-color: #8e24aa; }
+  .oficial-bloco .titulo-jogo {
+    font-size: .95rem;
+    font-weight: bold;
+    color: #1b5e20;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .oficial-bloco.loto .titulo-jogo { color: #6a1b9a; }
+  .oficial-bloco .info-concurso {
+    font-size: .78rem;
+    color: #777;
+    margin-bottom: 10px;
+  }
+  .oficial-numeros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .oficial-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2e7d32, #1b5e20);
+    color: #fff;
+    font-weight: bold;
+    font-size: .95rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,.25), inset 0 -2px 4px rgba(0,0,0,.2);
+  }
+  .oficial-bloco.loto .oficial-num {
+    background: linear-gradient(135deg, #8e24aa, #6a1b9a);
+  }
+  .oficial-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .8rem;
+    margin-top: 4px;
+  }
+  .oficial-tabela th {
+    text-align: left;
+    color: #555;
+    font-weight: bold;
+    padding: 4px 6px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: .75rem;
+  }
+  .oficial-tabela td {
+    padding: 5px 6px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+  }
+  .oficial-tabela tr:last-child td { border-bottom: none; }
+  .oficial-tabela .faixa {
+    font-weight: bold;
+    color: #333;
+  }
+  .oficial-tabela .ganhadores {
+    color: #555;
+    text-align: right;
+  }
+  .oficial-tabela .premio-unitario {
+    color: #2e7d32;
+    font-weight: bold;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .oficial-tabela .acumulou {
+    color: #c62828;
+    font-weight: bold;
+    font-size: .78rem;
+  }
+
+  .form-group { margin-bottom: 14px; }
+  label { display: block; font-size: .85rem; font-weight: bold; color: #1b5e20; margin-bottom: 6px; }
+  input, select {
+    width: 100%; padding: 10px 14px;
+    border: 2px solid #c8e6c9; border-radius: 10px;
+    font-size: 1rem; font-family: inherit; color: #333;
+    outline: none; background: #fafffa;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  input:focus, select:focus {
+    border-color: #43a047;
+    box-shadow: 0 0 0 3px rgba(67, 160, 71, .18);
+  }
+  input[type="number"] { -moz-appearance: textfield; }
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .input-row { display: flex; gap: 10px; align-items: flex-end; }
+  .input-row .form-group { flex: 1; margin-bottom: 0; }
+  .dica {
+    display: block;
+    font-size: .78rem;
+    color: #666;
+    margin-top: 6px;
+    line-height: 1.45;
+    transition: color .2s;
+  }
+  button {
+    padding: 12px 20px;
+    border: none; border-radius: 10px;
+    background: linear-gradient(135deg, #43a047, #1b5e20);
+    color: #fff; font-size: 1rem; font-weight: bold;
+    font-family: inherit; cursor: pointer;
+    box-shadow: 0 4px 12px rgba(27, 94, 32, .3);
+    transition: transform .12s, filter .2s;
+    white-space: nowrap;
+  }
+  button:hover { filter: brightness(1.08); }
+  button:active { transform: scale(.97); }
+  button.secundario {
+    background: linear-gradient(135deg, #6d4c41, #3e2723);
+    box-shadow: 0 4px 12px rgba(62, 39, 35, .3);
+  }
+  button.surpresinha {
+    background: linear-gradient(135deg, #ff8f00, #e65100);
+    box-shadow: 0 4px 12px rgba(230, 81, 0, .3);
+  }
+  button.perigo {
+    background: linear-gradient(135deg, #e53935, #b71c1c);
+    box-shadow: 0 4px 12px rgba(183, 28, 28, .3);
+  }
+  .botoes { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .aposta-item {
+    background: #f1f8e9;
+    border-left: 4px solid #43a047;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: .9rem;
+  }
+  .aposta-item.nova { animation: destacar .9s ease-out; }
+  @keyframes destacar {
+    0%   { background: #fff9c4; transform: scale(1.02); }
+    100% { background: #f1f8e9; transform: scale(1); }
+  }
+  .aposta-item .nome { font-weight: bold; color: #1b5e20; }
+  .aposta-item .jogo-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: .75rem;
+    font-weight: bold;
+    color: #fff;
+    margin-left: 6px;
+  }
+  .aposta-item .acoes { display: flex; gap: 8px; align-items: center; }
+  .btn-remover {
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ffcdd2;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: .85rem;
+    cursor: pointer;
+    transition: background .2s;
+    box-shadow: none;
+  }
+  .btn-remover:hover { background: #ffcdd2; filter: none; }
+  .btn-remover:active { transform: none; }
+  .tag-mega { background: #2e7d32; }
+  .tag-loto { background: #8e24aa; }
+  .numeros { font-family: monospace; font-size: .95rem; color: #333; line-height: 1.9; }
+
+  .num-acerto {
+    display: inline-block;
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #00e676 0%, #00c853 50%, #00a86b 100%);
+    border-radius: 7px;
+    padding: 3px 8px;
+    margin: 0 2px;
+    box-shadow:
+      0 2px 6px rgba(0, 200, 83, .45),
+      0 0 14px rgba(0, 230, 118, .55),
+      inset 0 1px 0 rgba(255, 255, 255, .35),
+      inset 0 -2px 0 rgba(0, 0, 0, .15);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+    letter-spacing: .5px;
+  }
+  .num-erro {
+    display: inline-block;
+    color: #b0bec5;
+    font-weight: normal;
+    padding: 3px 5px;
+    margin: 0 2px;
+    letter-spacing: .5px;
+  }
+  .resultado-item.ganhou .num-acerto {
+    background: linear-gradient(135deg, #00ff87 0%, #00e676 40%, #00c853 100%);
+    box-shadow:
+      0 3px 10px rgba(0, 230, 118, .65),
+      0 0 22px rgba(0, 255, 135, .6),
+      inset 0 1px 0 rgba(255, 255, 255, .45),
+      inset 0 -2px 0 rgba(0, 0, 0, .18);
+    animation: pulsar 2s ease-in-out infinite;
+  }
+  @keyframes pulsar {
+    0%, 100% { box-shadow:
+      0 3px 10px rgba(0, 230, 118, .65),
+      0 0 22px rgba(0, 255, 135, .6),
+      inset 0 1px 0 rgba(255, 255, 255, .45),
+      inset 0 -2px 0 rgba(0, 0, 0, .18); }
+    50% { box-shadow:
+      0 3px 14px rgba(0, 230, 118, .85),
+      0 0 32px rgba(0, 255, 135, .9),
+      inset 0 1px 0 rgba(255, 255, 255, .55),
+      inset 0 -2px 0 rgba(0, 0, 0, .18); }
+  }
+
+  .custo { font-weight: bold; color: #c62828; font-size: .85rem; }
+  .resumo-lista {
+    background: #fffde7;
+    border: 1px dashed #ffb300;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-top: 10px;
+    font-size: .85rem;
+    color: #5d4037;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .resumo-lista strong { color: #e65100; }
+  .resultado-item {
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    border-left: 4px solid #bdbdbd;
+  }
+  .resultado-item.ganhou {
+    border-left: 6px solid #00c853;
+    background: linear-gradient(90deg, #e8f5e9 0%, #f1f8e9 100%);
+    box-shadow: 0 0 0 1px rgba(0, 200, 83, .25), 0 2px 10px rgba(0, 200, 83, .15);
+  }
+  .resultado-item .cabecalho { display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 8px; }
+  .resultado-item .cabecalho strong { color: #1b5e20; }
+  .acertos { font-size: .9rem; color: #555; }
+
+  .chip-acertos {
+    display: inline-block;
+    background: linear-gradient(135deg, #00e676, #00c853);
+    color: #fff;
+    font-size: .82rem;
+    font-weight: 900;
+    padding: 3px 11px;
+    border-radius: 20px;
+    margin-left: 6px;
+    box-shadow: 0 2px 8px rgba(0, 200, 83, .55), inset 0 1px 0 rgba(255,255,255,.35);
+    text-shadow: 0 1px 1px rgba(0,0,0,.3);
+    letter-spacing: .5px;
+  }
+  .chip-acertos.zero {
+    background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
+    color: #616161;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .15);
+    text-shadow: none;
+  }
+  .premio { font-size: 1.1rem; font-weight: bold; color: #2e7d32; }
+  .premio.zero { color: #999; font-size: .9rem; font-weight: normal; }
+  .resultado-item.ganhou .premio {
+    color: #00695c;
+    text-shadow: 0 0 8px rgba(0, 230, 118, .4);
+    font-size: 1.2rem;
+  }
+  .resumo-totais {
+    background: #e8f5e9;
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 16px;
+    text-align: center;
+  }
+  .resumo-totais .total-item .rotulo { font-size: .8rem; color: #555; }
+  .resumo-totais .total-item .valor { font-size: 1.3rem; font-weight: bold; }
+  .total-gasto .valor { color: #c62828; }
+  .total-ganho .valor { color: #2e7d32; }
+  .total-saldo .valor { color: #1b5e20; }
+  .total-saldo .valor.negativo { color: #c62828; }
+  .vazio { text-align: center; color: #999; font-style: italic; padding: 20px 0; }
+  .nota { font-size: .75rem; color: #888; text-align: center; margin-top: 16px; }
+  @media (max-width: 600px) {
+    .input-row { flex-direction: column; }
+    .resumo-totais { flex-direction: column; gap: 12px; }
+    .num-acerto { font-size: .88rem; padding: 2px 6px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🍀 Simulador de Loterias</h1>
+  <p class="subtitle">Mega Sena &amp; Lotofácil — apostas salvas automaticamente no seu navegador</p>
+
+  <!-- ⭐ NOVO: Card de Resultado Oficial -->
+  <div class="card resultado-oficial-card">
+    <h2>🏆 Resultado Oficial Mais Recente</h2>
+    <div class="oficial-grid" id="oficialGrid">
+      <!-- preenchido via JS -->
+    </div>
+  </div>
+
+  <!-- Formulário de cadastro -->
+  <div class="card">
+    <h2>Cadastrar Apostador <span class="badge-salvo" id="badgeSalvo">✓ Salvo</span></h2>
+    <div class="form-group">
+      <label for="nome">Nome do Apostador:</label>
+      <input type="text" id="nome" placeholder="Digite o nome" autocomplete="off">
+    </div>
+    <div class="input-row">
+      <div class="form-group">
+        <label for="jogo">Tipo de Jogo:</label>
+        <select id="jogo">
+          <option value="megasena">Mega Sena (6 números de 1 a 60)</option>
+          <option value="lotofacil">Lotofácil (15 números de 1 a 25)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="qtd">Quantidade de apostas:</label>
+        <input type="number" id="qtd" min="1" max="50" value="1" step="1">
+      </div>
+    </div>
+    <div class="form-group" style="margin-top:14px;">
+      <label for="numeros">Números (opcional — preencha para criar 1 aposta manual):</label>
+      <div class="input-row">
+        <div class="form-group">
+          <input type="text" id="numeros" placeholder="Ex: 1, 2, 3, 4, 5, 6">
+        </div>
+        <button class="surpresinha" id="btnSurpresinha" type="button" title="Gera e salva a quantidade de apostas digitada em Surpresinhas">🎲 +1 Surpresinha</button>
+      </div>
+      <small class="dica" id="qtdHint">Preencha o nome e clique em 🎲 para adicionar apostas aleatórias.</small>
+    </div>
+    <button id="btnAdicionar" type="button">➕ Adicionar e Salvar Aposta(s)</button>
+  </div>
+
+  <!-- Lista de apostas -->
+  <div class="card">
+    <h2>Apostas Cadastradas <span style="font-size:.75rem; font-weight:normal; color:#2e7d32;">(números em verde = acertados no concurso oficial)</span></h2>
+    <div id="listaApostas">
+      <p class="vazio">Nenhuma aposta cadastrada ainda.</p>
+    </div>
+    <div id="resumoLista"></div>
+    <div class="botoes">
+      <button id="btnVerificar" type="button">🔍 Verificar Resultados</button>
+      <button id="btnExportar" class="secundario" type="button">💾 Exportar Apostas</button>
+      <button id="btnImportar" class="secundario" type="button">📂 Importar Apostas</button>
+      <button id="btnLimpar" class="perigo" type="button">🗑️ Limpar Tudo</button>
+    </div>
+    <input type="file" id="inputImport" accept=".json,application/json" style="display: none;">
+  </div>
+
+  <!-- Resultados -->
+  <div class="card" id="resultadosCard" style="display: none;">
+    <h2>Resultados da Conferição</h2>
+    <div id="resultados"></div>
+    <div class="resumo-totais" id="totais"></div>
+  </div>
+
+  <p class="nota">As apostas são salvas no <strong>localStorage</strong>. Resultados oficiais: Mega Sena 3073 (22/10/2026) e Lotofácil 3811 (22/10/2026).</p>
+</div>
+
+<script>
+(function () {
+  const STORAGE_KEY = 'loteria_apostas_v1';
+  const MAX_APOSTAS_POR_CADASTRO = 50;
+
+  const RESULTADOS = {
+    megasena: {
+      nome: 'Mega Sena',
+      concurso: 3073,
+      data: '22/10/2026',
+      numeros: [4, 13, 23, 28, 41, 58],
+      premios: { 6: 200000000.00, 5: 23138.67, 4: 510.55 },
+      // ⭐ Detalhes para o card oficial
+      detalhesOficiais: {
+        acumulou: true,
+        valorAcumulado: 230000000,
+        faixas: [
+          { acertos: 6, ganhadores: 0, premio: null, texto: 'Acumulou' },
+          { acertos: 5, ganhadores: 203, premio: 23138.67 },
+          { acertos: 4, ganhadores: 13143, premio: 510.55 }
+        ]
+      },
+      custo: 6.00,
+      maxNumero: 60,
+      qtdNumeros: 6,
+      tag: 'tag-mega'
+    },
+    lotofacil: {
+      nome: 'Lotofácil',
+      concurso: 3811,
+      data: '22/10/2026',
+      numeros: [1, 3, 5, 7, 8, 9, 10, 11, 12, 15, 16, 18, 19, 23, 25],
+      premios: { 15: 3832338.98, 14: 1160.69, 13: 35.00, 12: 14.00, 11: 7.00 },
+      detalhesOficiais: {
+        acumulou: false,
+        valorAcumulado: null,
+        faixas: [
+          { acertos: 15, ganhadores: 3, premio: 3832338.98 },
+          { acertos: 14, ganhadores: 871, premio: 1160.69 },
+          { acertos: 13, ganhadores: 25662, premio: 35.00 },
+          { acertos: 12, ganhadores: 291344, premio: 14.00 },
+          { acertos: 11, ganhadores: 1400000, premio: 7.00, aproximado: true }
+        ]
+      },
+      custo: 3.50,
+      maxNumero: 25,
+      qtdNumeros: 15,
+      tag: 'tag-loto'
+    }
+  };
+
+  let apostas = [];
+  let ultimoIdxNovo = -1;
+
+  const elNome       = document.getElementById('nome');
+  const elJogo       = document.getElementById('jogo');
+  const elQtd        = document.getElementById('qtd');
+  const elQtdHint    = document.getElementById('qtdHint');
+  const elNumeros    = document.getElementById('numeros');
+  const elBtnAdd     = document.getElementById('btnAdicionar');
+  const elBtnSurp    = document.getElementById('btnSurpresinha');
+  const elLista      = document.getElementById('listaApostas');
+  const elResumoList = document.getElementById('resumoLista');
+  const elBtnVerif   = document.getElementById('btnVerificar');
+  const elBtnExport  = document.getElementById('btnExportar');
+  const elBtnImport  = document.getElementById('btnImportar');
+  const elInputImp   = document.getElementById('inputImport');
+  const elBtnLimpar  = document.getElementById('btnLimpar');
+  const elResultCard = document.getElementById('resultadosCard');
+  const elResultados = document.getElementById('resultados');
+  const elTotais     = document.getElementById('totais');
+  const elBadgeSalvo = document.getElementById('badgeSalvo');
+  const elOficialGrid = document.getElementById('oficialGrid'); // ⭐ novo
+
+  // ---------- Persistência ----------
+  function salvar(mensagem) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(apostas));
+      mostrarBadgeSalvo(mensagem || '✓ Salvo');
+      return true;
+    } catch (e) {
+      console.error('Erro ao salvar:', e);
+      alert('Não foi possível salvar as apostas (localStorage indisponível ou cheio).');
+      return false;
+    }
+  }
+
+  function carregar() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      const dados = JSON.parse(raw);
+      if (!Array.isArray(dados)) return [];
+      return dados.filter(a =>
+        a && typeof a.nome === 'string' &&
+        RESULTADOS[a.jogo] &&
+        Array.isArray(a.numeros) &&
+        a.numeros.length === RESULTADOS[a.jogo].qtdNumeros
+      );
+    } catch (e) {
+      console.error('Erro ao carregar:', e);
+      return [];
+    }
+  }
+
+  let badgeTimer = null;
+  function mostrarBadgeSalvo(mensagem) {
+    elBadgeSalvo.textContent = mensagem;
+    elBadgeSalvo.classList.add('show');
+    clearTimeout(badgeTimer);
+    badgeTimer = setTimeout(() => elBadgeSalvo.classList.remove('show'), 2200);
+  }
+
+  // ---------- Utilitários ----------
+  function formatarBRL(valor) {
+    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  function formatarNumeroInteiro(n) {
+    return n.toLocaleString('pt-BR');
+  }
+
+  function parseNumeros(texto, jogo) {
+    const cfg = RESULTADOS[jogo];
+    const partes = texto.split(/[\s,;]+/).filter(p => p !== '');
+    const nums = partes.map(p => parseInt(p, 10));
+
+    if (nums.length !== cfg.qtdNumeros) {
+      throw new Error(`A ${cfg.nome} exige exatamente ${cfg.qtdNumeros} números.`);
+    }
+    if (nums.some(n => isNaN(n) || n < 1 || n > cfg.maxNumero)) {
+      throw new Error(`Os números devem estar entre 1 e ${cfg.maxNumero}.`);
+    }
+    if (new Set(nums).size !== nums.length) {
+      throw new Error('Não é permitido repetir números.');
+    }
+    return nums.sort((a, b) => a - b);
+  }
+
+  function gerarSurpresinha(jogo) {
+    const cfg = RESULTADOS[jogo];
+    const pool = Array.from({ length: cfg.maxNumero }, (_, i) => i + 1);
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    return pool.slice(0, cfg.qtdNumeros).sort((a, b) => a - b);
+  }
+
+  function contarAcertos(aposta, resultado) {
+    return aposta.filter(n => resultado.includes(n)).length;
+  }
+
+  function escapeHtml(texto) {
+    return String(texto).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
+  function formatarNumerosComDestaque(numeros, numerosOficiais) {
+    return numeros.map(n => {
+      const str = String(n).padStart(2, '0');
+      const acertou = numerosOficiais.includes(n);
+      return `<span class="${acertou ? 'num-acerto' : 'num-erro'}">${str}</span>`;
+    }).join(' ');
+  }
+
+  function obterQtd() {
+    let n = parseInt(elQtd.value, 10);
+    if (isNaN(n) || n < 1) n = 1;
+    if (n > MAX_APOSTAS_POR_CADASTRO) n = MAX_APOSTAS_POR_CADASTRO;
+    return n;
+  }
+
+  // ---------- ⭐ Renderização do Resultado Oficial ----------
+  function renderizarResultadoOficial() {
+    const blocos = Object.entries(RESULTADOS).map(([chave, cfg]) => {
+      const det = cfg.detalhesOficiais;
+      const classeLoto = chave === 'lotofacil' ? 'loto' : '';
+
+      const numerosHtml = cfg.numeros
+        .map(n => `<span class="oficial-num">${String(n).padStart(2, '0')}</span>`)
+        .join('');
+
+      const linhasFaixas = det.faixas.map(f => {
+        let colGanhadores;
+        let colPremio;
+
+        if (f.acertos === 6 && det.acumulou) {
+          colGanhadores = '<span class="acumulou">—</span>';
+          colPremio = `<span class="acumulou">Acumulou para ${formatarBRL(det.valorAcumulado)}</span>`;
+        } else {
+          const g = f.ganhadores || 0;
+          colGanhadores = g > 0
+            ? formatarNumeroInteiro(g) + (f.aproximado ? ' (aprox.)' : '')
+            : '—';
+          colPremio = f.premio
+            ? formatarBRL(f.premio)
+            : '—';
+        }
+
+        return `
+          <tr>
+            <td class="faixa">${f.acertos} acertos</td>
+            <td class="ganhadores">${colGanhadores}</td>
+            <td class="premio-unitario">${colPremio}</td>
+          </tr>
+        `;
+      }).join('');
+
+      return `
+        <div class="oficial-bloco ${classeLoto}">
+          <div class="titulo-jogo">
+            <span>${cfg.nome}</span>
+            <span style="font-size:.78rem; font-weight:normal; color:#888;">Concurso ${cfg.concurso}</span>
+          </div>
+          <div class="info-concurso">Sorteio em ${cfg.data} — Espaço da Sorte (SP)</div>
+          <div class="oficial-numeros">${numerosHtml}</div>
+          <table class="oficial-tabela">
+            <thead>
+              <tr>
+                <th>Faixa</th>
+                <th style="text-align:right;">Ganhadores</th>
+                <th style="text-align:right;">Prêmio unitário</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${linhasFaixas}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }).join('');
+
+    elOficialGrid.innerHTML = blocos;
+  }
+
+  // ---------- Dica dinâmica ----------
+  function atualizarDicaQtd() {
+    const temNumeros = elNumeros.value.trim() !== '';
+    const cfg = RESULTADOS[elJogo.value];
+    const n = obterQtd();
+
+    if (temNumeros) {
+      elQtdHint.textContent = `⚠️ Números preenchidos — "Adicionar" criará 1 aposta manual. O botão 🎲 continua gerando ${n} Surpresinha(s) aleatória(s) (ignora este campo).`;
+      elQtdHint.style.color = '#e65100';
+    } else {
+      elQtdHint.textContent = `Clique em 🎲 ou em "Adicionar" para gerar ${n} aposta(s) aleatória(s) de ${cfg.nome} (custo ${formatarBRL(n * cfg.custo)}).`;
+      elQtdHint.style.color = '#555';
+    }
+    atualizarBotaoSurpresinha(n);
+  }
+
+  function atualizarBotaoSurpresinha(n) {
+    if (typeof n !== 'number') n = obterQtd();
+    elBtnSurp.textContent = n === 1
+      ? '🎲 +1 Surpresinha'
+      : `🎲 +${n} Surpresinhas`;
+    elBtnSurp.title = n === 1
+      ? 'Gera e salva 1 aposta aleatória'
+      : `Gera e salva ${n} apostas aleatórias de uma vez`;
+  }
+
+  // ---------- Renderização da Lista ----------
+  function renderizarLista() {
+    if (apostas.length === 0) {
+      elLista.innerHTML = '<p class="vazio">Nenhuma aposta cadastrada ainda.</p>';
+      elResumoList.innerHTML = '';
+      return;
+    }
+
+    elLista.innerHTML = apostas.map((a, idx) => {
+      const cfg = RESULTADOS[a.jogo];
+      const numerosFormatados = formatarNumerosComDestaque(a.numeros, cfg.numeros);
+      const classeNova = idx === ultimoIdxNovo ? 'nova' : '';
+      return `
+        <div class="aposta-item ${classeNova}">
+          <div>
+            <span class="nome">${escapeHtml(a.nome)}</span>
+            <span class="jogo-tag ${cfg.tag}">${cfg.nome}</span>
+            <div class="numeros">${numerosFormatados}</div>
+          </div>
+          <div class="acoes">
+            <div class="custo">${formatarBRL(cfg.custo)}</div>
+            <button class="btn-remover" data-idx="${idx}" title="Remover aposta">✖</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const total = apostas.reduce((s, a) => s + RESULTADOS[a.jogo].custo, 0);
+    const qtdMega = apostas.filter(a => a.jogo === 'megasena').length;
+    const qtdLoto = apostas.filter(a => a.jogo === 'lotofacil').length;
+    const apostadores = new Set(apostas.map(a => a.nome.trim().toLowerCase())).size;
+    elResumoList.innerHTML = `
+      <div class="resumo-lista">
+        <span>👥 <strong>${apostadores}</strong> apostador(es) — 📊 <strong>${apostas.length}</strong> aposta(s) (Mega: ${qtdMega} | Loto: ${qtdLoto})</span>
+        <span>💰 Total gasto: <strong>${formatarBRL(total)}</strong></span>
+      </div>
+    `;
+
+    elLista.querySelectorAll('.btn-remover').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const i = parseInt(e.currentTarget.dataset.idx, 10);
+        removerAposta(i);
+      });
+    });
+
+    if (ultimoIdxNovo >= 0) {
+      setTimeout(() => { ultimoIdxNovo = -1; }, 1000);
+    }
+  }
+
+  // ---------- Ações ----------
+  function adicionarAposta() {
+    const nome = elNome.value.trim();
+    const jogo = elJogo.value;
+    const textoNumeros = elNumeros.value.trim();
+
+    if (!nome) {
+      alert('Por favor, informe o nome do apostador.');
+      elNome.focus();
+      return;
+    }
+
+    const novas = [];
+
+    if (textoNumeros === '') {
+      const qtd = obterQtd();
+      for (let i = 0; i < qtd; i++) {
+        novas.push({
+          nome, jogo,
+          numeros: gerarSurpresinha(jogo),
+          criadoEm: new Date().toISOString()
+        });
+      }
+    } else {
+      let numeros;
+      try {
+        numeros = parseNumeros(textoNumeros, jogo);
+      } catch (e) {
+        alert(e.message);
+        return;
+      }
+      novas.push({ nome, jogo, numeros, criadoEm: new Date().toISOString() });
+    }
+
+    const antes = apostas.length;
+    apostas.push(...novas);
+    ultimoIdxNovo = apostas.length - 1;
+
+    const msg = novas.length === 1
+      ? '✓ 1 aposta salva'
+      : `✓ ${novas.length} apostas salvas`;
+
+    if (salvar(msg)) {
+      renderizarLista();
+      elNumeros.value = '';
+      elNome.value = '';
+      elNome.focus();
+      elResultCard.style.display = 'none';
+      atualizarDicaQtd();
+    } else {
+      apostas.length = antes;
+      ultimoIdxNovo = -1;
+    }
+  }
+
+  function adicionarSurpresinha() {
+    const nome = elNome.value.trim();
+    if (!nome) {
+      alert('Informe o nome do apostador antes de clicar em Surpresinha.');
+      elNome.focus();
+      return;
+    }
+
+    const jogo = elJogo.value;
+    const qtd = obterQtd();
+    const novas = [];
+
+    for (let i = 0; i < qtd; i++) {
+      novas.push({
+        nome,
+        jogo,
+        numeros: gerarSurpresinha(jogo),
+        criadoEm: new Date().toISOString()
+      });
+    }
+
+    const antes = apostas.length;
+    apostas.push(...novas);
+    ultimoIdxNovo = apostas.length - 1;
+
+    const msg = qtd === 1
+      ? '✓ 1 Surpresinha salva'
+      : `✓ ${qtd} Surpresinhas salvas`;
+
+    if (salvar(msg)) {
+      elNumeros.value = '';
+      renderizarLista();
+      elResultCard.style.display = 'none';
+      atualizarDicaQtd();
+      elLista.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      apostas.length = antes;
+      ultimoIdxNovo = -1;
+    }
+  }
+
+  function removerAposta(idx) {
+    if (idx < 0 || idx >= apostas.length) return;
+    const alvo = apostas[idx];
+    if (!confirm(`Remover a aposta de "${alvo.nome}" (${RESULTADOS[alvo.jogo].nome})?`)) return;
+    apostas.splice(idx, 1);
+    ultimoIdxNovo = -1;
+    salvar();
+    renderizarLista();
+    elResultCard.style.display = 'none';
+  }
+
+  function verificarResultados() {
+    if (apostas.length === 0) {
+      alert('Nenhuma aposta cadastrada para verificar.');
+      return;
+    }
+
+    let totalGasto = 0, totalGanho = 0;
+    const linhas = [];
+
+    apostas.forEach((a) => {
+      const cfg = RESULTADOS[a.jogo];
+      const acertos = contarAcertos(a.numeros, cfg.numeros);
+      const premio = cfg.premios[acertos] || 0;
+      totalGasto += cfg.custo;
+      totalGanho += premio;
+
+      const ganhou = premio > 0;
+      const numerosFormatados = formatarNumerosComDestaque(a.numeros, cfg.numeros);
+      const chipClasse = acertos > 0 ? 'chip-acertos' : 'chip-acertos zero';
+
+      linhas.push(`
+        <div class="resultado-item ${ganhou ? 'ganhou' : ''}">
+          <div class="cabecalho">
+            <div>
+              <strong>${escapeHtml(a.nome)}</strong>
+              <span class="jogo-tag ${cfg.tag}">${cfg.nome}</span>
+            </div>
+            <div class="custo">Custo: ${formatarBRL(cfg.custo)}</div>
+          </div>
+          <div class="numeros" style="margin-bottom:8px;">${numerosFormatados}</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <span class="acertos">
+              Acertos: <span class="${chipClasse}">${acertos}</span> número(s)
+            </span>
+            <span class="premio ${ganhou ? '' : 'zero'}">
+              ${ganhou ? formatarBRL(premio) : 'Sem prêmio'}
+            </span>
+          </div>
+        </div>
+      `);
+    });
+
+    elResultados.innerHTML = linhas.join('');
+    const saldo = totalGanho - totalGasto;
+    elTotais.innerHTML = `
+      <div class="total-item total-gasto">
+        <div class="rotulo">Total Gasto</div>
+        <div class="valor">${formatarBRL(totalGasto)}</div>
+      </div>
+      <div class="total-item total-ganho">
+        <div class="rotulo">Total em Prêmios</div>
+        <div class="valor">${formatarBRL(totalGanho)}</div>
+      </div>
+      <div class="total-item total-saldo">
+        <div class="rotulo">Saldo (Prêmios − Gastos)</div>
+        <div class="valor ${saldo < 0 ? 'negativo' : ''}">${formatarBRL(saldo)}</div>
+      </div>
+    `;
+
+    elResultCard.style.display = 'block';
+    elResultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function limparTudo() {
+    if (apostas.length === 0) return;
+    if (!confirm('Tem certeza que deseja apagar TODAS as apostas salvas? Esta ação não pode ser desfeita.')) return;
+    apostas = [];
+    ultimoIdxNovo = -1;
+    localStorage.removeItem(STORAGE_KEY);
+    renderizarLista();
+    elResultCard.style.display = 'none';
+  }
+
+  function exportarApostas() {
+    if (apostas.length === 0) {
+      alert('Não há apostas para exportar.');
+      return;
+    }
+    const blob = new Blob([JSON.stringify(apostas, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const data = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `apostas-loteria-${data}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function importarApostas(arquivo) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const dados = JSON.parse(e.target.result);
+        if (!Array.isArray(dados)) throw new Error('Formato inválido.');
+        const validas = dados.filter(a =>
+          a && typeof a.nome === 'string' &&
+          RESULTADOS[a.jogo] &&
+          Array.isArray(a.numeros) &&
+          a.numeros.length === RESULTADOS[a.jogo].qtdNumeros &&
+          a.numeros.every(n => Number.isInteger(n) && n >= 1 && n <= RESULTADOS[a.jogo].maxNumero)
+        );
+        if (validas.length === 0) throw new Error('Nenhuma aposta válida no arquivo.');
+        if (!confirm(`Importar ${validas.length} aposta(s)? As apostas atuais serão mantidas (somadas).`)) return;
+        apostas = apostas.concat(validas.map(a => ({
+          nome: a.nome, jogo: a.jogo, numeros: a.numeros.slice().sort((x, y) => x - y),
+          criadoEm: a.criadoEm || new Date().toISOString()
+        })));
+        ultimoIdxNovo = -1;
+        salvar(`✓ ${validas.length} importada(s)`);
+        renderizarLista();
+        elResultCard.style.display = 'none';
+      } catch (err) {
+        alert('Erro ao importar: ' + err.message);
+      }
+    };
+    reader.readAsText(arquivo);
+  }
+
+  // ---------- Eventos ----------
+  elBtnAdd.addEventListener('click', adicionarAposta);
+  elBtnSurp.addEventListener('click', adicionarSurpresinha);
+  elBtnVerif.addEventListener('click', verificarResultados);
+  elBtnLimpar.addEventListener('click', limparTudo);
+  elBtnExport.addEventListener('click', exportarApostas);
+  elBtnImport.addEventListener('click', () => elInputImp.click());
+  elInputImp.addEventListener('change', (e) => {
+    const f = e.target.files[0];
+    if (f) importarApostas(f);
+    e.target.value = '';
+  });
+
+  elNumeros.addEventListener('input', atualizarDicaQtd);
+  elQtd.addEventListener('input', atualizarDicaQtd);
+  elJogo.addEventListener('change', () => {
+    atualizarDicaQtd();
+    elNumeros.focus();
+  });
+
+  elNumeros.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); adicionarAposta(); }
+  });
+  elNome.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      adicionarSurpresinha();
+    }
+  });
+
+  // ---------- Init ----------
+  apostas = carregar();
+  renderizarLista();
+  atualizarDicaQtd();
+  renderizarResultadoOficial(); // ⭐ renderiza o card oficial
+  if (apostas.length > 0) {
+    console.info(`[Loteria] ${apostas.length} aposta(s) carregada(s) do localStorage.`);
+  }
+})();
+</script>
+</body>
+</html>
